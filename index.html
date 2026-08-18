@@ -1,0 +1,1457 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>APIOU &middot; 完成你的 iPhone 18</title>
+<style>
+  :root {
+    --bg: #F4F1EC;
+    --surface: #FBFAF7;
+    --surface-2: #EEEAE2;
+    --ink: #14130F;
+    --ink-soft: #3B382F;
+    --muted: #7A7568;
+    --line: rgba(20, 19, 15, 0.10);
+    --line-strong: rgba(20, 19, 15, 0.16);
+    --beige: #C2BEB5;
+    --stage-a: #EFEBE3;
+    --stage-b: #E2DCD1;
+    --shadow-lo: rgba(40, 34, 22, 0.06);
+    --shadow-hi: rgba(40, 34, 22, 0.14);
+    --btn-bg: #14130F;
+    --btn-fg: #F7F5F0;
+    --gold: #D9C08A;
+    --good: #4C8A63;
+
+    --fs-display: clamp(2.6rem, 6.4vw, 5.4rem);
+    --fs-h2: clamp(1.55rem, 3vw, 2.35rem);
+    --fs-h3: 1.18rem;
+    --fs-body: 1.0625rem;
+    --fs-label: 0.72rem;
+
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, monospace;
+
+    --r-lg: 26px;
+    --r-md: 16px;
+    --r-sm: 11px;
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #100F0D;
+      --surface: #1A1815;
+      --surface-2: #221F1A;
+      --ink: #F3F0E9;
+      --ink-soft: #D8D3C7;
+      --muted: #9E9789;
+      --line: rgba(255, 255, 255, 0.10);
+      --line-strong: rgba(255, 255, 255, 0.18);
+      --stage-a: #1B1916;
+      --stage-b: #0D0C0A;
+      --shadow-lo: rgba(0, 0, 0, 0.4);
+      --shadow-hi: rgba(0, 0, 0, 0.6);
+      --btn-bg: #F3F0E9;
+      --btn-fg: #14130F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #100F0D; --surface: #1A1815; --surface-2: #221F1A;
+    --ink: #F3F0E9; --ink-soft: #D8D3C7; --muted: #9E9789;
+    --line: rgba(255, 255, 255, 0.10); --line-strong: rgba(255, 255, 255, 0.18);
+    --stage-a: #1B1916; --stage-b: #0D0C0A;
+    --shadow-lo: rgba(0, 0, 0, 0.4); --shadow-hi: rgba(0, 0, 0, 0.6);
+    --btn-bg: #F3F0E9; --btn-fg: #14130F;
+  }
+  :root[data-theme="light"] {
+    --bg: #F4F1EC; --surface: #FBFAF7; --surface-2: #EEEAE2;
+    --ink: #14130F; --ink-soft: #3B382F; --muted: #7A7568;
+    --line: rgba(20, 19, 15, 0.10); --line-strong: rgba(20, 19, 15, 0.16);
+    --stage-a: #EFEBE3; --stage-b: #E2DCD1;
+    --shadow-lo: rgba(40, 34, 22, 0.06); --shadow-hi: rgba(40, 34, 22, 0.14);
+    --btn-bg: #14130F; --btn-fg: #F7F5F0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: var(--fs-label);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: inline-block;
+  }
+  button { font-family: inherit; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+
+  /* ---------- App shell ---------- */
+  .app {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 14px clamp(18px, 4vw, 44px);
+    background: color-mix(in oklab, var(--bg) 82%, transparent);
+    backdrop-filter: saturate(1.4) blur(20px);
+    -webkit-backdrop-filter: saturate(1.4) blur(20px);
+    border-bottom: 1px solid var(--line);
+  }
+  .wordmark {
+    font-weight: 600;
+    font-size: 1.02rem;
+    letter-spacing: 0.42em;
+    padding-left: 0.42em;
+    flex-shrink: 0;
+  }
+  .rail {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 2px;
+  }
+  .rail::-webkit-scrollbar { display: none; }
+  .rail button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    padding: 6px 10px;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    transition: color .35s var(--ease), background .35s var(--ease);
+  }
+  .rail button .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--line-strong);
+    transition: background .35s var(--ease), transform .4s var(--ease-spring);
+  }
+  .rail button .num { display: none; }
+  .rail button:hover { color: var(--ink-soft); }
+  .rail button[data-state="done"] { color: var(--ink-soft); }
+  .rail button[data-state="done"] .dot { background: var(--beige); }
+  .rail button[data-state="active"] { color: var(--ink); background: var(--surface); }
+  .rail button[data-state="active"] .dot { background: var(--ink); transform: scale(1.5); }
+  .rail button:disabled { opacity: .5; cursor: not-allowed; }
+
+  .theme-toggle {
+    flex-shrink: 0;
+    background: none; border: 1px solid var(--line);
+    color: var(--muted);
+    width: 34px; height: 34px; border-radius: 50%;
+    display: grid; place-items: center;
+    transition: color .3s, border-color .3s;
+  }
+  .theme-toggle:hover { color: var(--ink); border-color: var(--line-strong); }
+
+  .main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    min-height: 0;
+  }
+
+  /* ---------- Stage ---------- */
+  .stage {
+    position: sticky;
+    top: 63px;
+    height: calc(100dvh - 63px);
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(120% 90% at 30% 18%, var(--stage-a), transparent 60%),
+      radial-gradient(120% 120% at 78% 96%, color-mix(in oklab, var(--beige) 34%, var(--stage-b)), var(--stage-b));
+    overflow: hidden;
+  }
+  .stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: .035;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+  .stage-inner {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    perspective: 1400px;
+  }
+  .phone-wrap {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 1.1s var(--ease);
+    will-change: transform;
+  }
+  .caption {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(20px, 5vh, 54px);
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 5;
+    width: max-content;
+    max-width: 80%;
+  }
+  .caption .c-name {
+    font-size: 1.35rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition: opacity .4s var(--ease);
+  }
+  .caption .c-sub {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* score ring */
+  .score {
+    position: absolute;
+    top: clamp(18px, 4vh, 40px);
+    right: clamp(18px, 4vw, 46px);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity .6s var(--ease), transform .6s var(--ease);
+    z-index: 6;
+  }
+  .score.show { opacity: 1; transform: none; }
+  .score svg { transform: rotate(-90deg); }
+  .score .ring-bg { stroke: var(--line-strong); }
+  .score .ring-fg {
+    stroke: var(--ink);
+    stroke-linecap: round;
+    transition: stroke-dashoffset .7s var(--ease);
+  }
+  .score .s-num {
+    font-family: var(--mono);
+    font-size: 1.5rem;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .score .s-lab {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ---------- Phone (back view) ---------- */
+  .phone {
+    --w: clamp(214px, 24vw, 288px);
+    --body: #2A2A2E;
+    --case: #2A2A2E;
+    --sheen: rgba(255,255,255,0.0);
+    position: relative;
+    width: var(--w);
+    height: calc(var(--w) * 2.06);
+    border-radius: calc(var(--w) * 0.165);
+    background:
+      linear-gradient(150deg, color-mix(in oklab, var(--body) 78%, #fff 22%), var(--body) 42%, color-mix(in oklab, var(--body) 82%, #000 18%));
+    box-shadow:
+      0 2px 3px rgba(0,0,0,.28),
+      0 30px 60px -18px var(--shadow-hi),
+      0 60px 120px -40px var(--shadow-hi),
+      inset 0 0 0 2px rgba(255,255,255,.06);
+    transition: background .7s var(--ease), box-shadow .7s var(--ease);
+  }
+  /* metal frame edge */
+  .phone::before {
+    content: "";
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(160deg, rgba(255,255,255,.5), rgba(255,255,255,0) 30%, rgba(0,0,0,.28));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* case layer wraps the back */
+  .case {
+    position: absolute;
+    inset: -8px;
+    border-radius: calc(var(--w) * 0.19);
+    background:
+      var(--sheen),
+      linear-gradient(155deg, color-mix(in oklab, var(--case) 82%, #fff 18%), var(--case) 46%, color-mix(in oklab, var(--case) 84%, #000 16%));
+    box-shadow:
+      0 1px 2px rgba(0,0,0,.25),
+      inset 0 0 0 1.5px rgba(255,255,255,.14),
+      inset 0 -20px 44px rgba(0,0,0,.16);
+    opacity: 0;
+    transform: scale(0.985);
+    transition: opacity .55s var(--ease), transform .6s var(--ease-spring), background .7s var(--ease);
+    z-index: 1;
+  }
+  .phone[data-case="on"] .case { opacity: 1; transform: scale(1); }
+  /* mirror finish sheen sweep */
+  .case-sheen {
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity .6s var(--ease);
+    pointer-events: none;
+  }
+  .phone[data-style="mirror"] .case-sheen { opacity: 1; }
+  .case-sheen::before {
+    content: "";
+    position: absolute;
+    top: -30%; left: -60%;
+    width: 60%; height: 160%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent);
+    transform: rotate(8deg);
+    animation: sweep 5.5s var(--ease) infinite;
+  }
+  @keyframes sweep {
+    0%, 100% { left: -60%; opacity: 0; }
+    18% { opacity: .9; }
+    50% { left: 120%; opacity: 0; }
+  }
+
+  /* camera plateau top-left */
+  .camera {
+    position: absolute;
+    top: calc(var(--w) * 0.055);
+    left: calc(var(--w) * 0.055);
+    width: calc(var(--w) * 0.46);
+    height: calc(var(--w) * 0.46);
+    border-radius: calc(var(--w) * 0.15);
+    background: linear-gradient(150deg, color-mix(in oklab, var(--case) 70%, #fff 30%), color-mix(in oklab, var(--case) 88%, #000 12%));
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), 0 2px 8px rgba(0,0,0,.3);
+    z-index: 3;
+    transition: background .7s var(--ease);
+  }
+  .phone[data-case="on"] .camera { background: linear-gradient(150deg, color-mix(in oklab, var(--case) 66%, #000 34%), #0c0c0d); }
+  .lens {
+    position: absolute;
+    width: 34%; height: 34%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 34%, #4a4a52 0 20%, #17171b 55%, #050506 100%);
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.10), 0 1px 2px rgba(0,0,0,.5);
+  }
+  .lens.l1 { top: 12%; left: 12%; }
+  .lens.l2 { bottom: 12%; left: 12%; }
+  .lens.l3 { top: 30%; right: 12%; width: 26%; height: 26%; }
+  .lens::after {
+    content: ""; position: absolute; inset: 30%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 60% 60%, rgba(90,120,160,.6), transparent 70%);
+  }
+  /* lens protector rings */
+  .lens-guard {
+    position: absolute; inset: 0;
+    z-index: 4; opacity: 0;
+    transition: opacity .5s var(--ease);
+    pointer-events: none;
+  }
+  .phone[data-lens="on"] .lens-guard { opacity: 1; }
+  .lens-guard span {
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--beige), 0 0 10px 1px color-mix(in oklab, var(--beige) 60%, transparent);
+  }
+
+  /* magsafe ring */
+  .magsafe {
+    position: absolute;
+    top: 46%; left: 50%;
+    width: calc(var(--w) * 0.42);
+    height: calc(var(--w) * 0.42);
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 1px dashed rgba(255,255,255,.16);
+    z-index: 2;
+    opacity: 0;
+    transition: opacity .5s var(--ease);
+  }
+  .phone[data-case="on"] .magsafe { opacity: .7; }
+
+  /* glass shimmer (screen protector kit item) */
+  .glass-sheen {
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(125deg, rgba(255,255,255,.22), transparent 34%, transparent 66%, rgba(255,255,255,.10));
+    opacity: 0; z-index: 5;
+    transition: opacity .6s var(--ease);
+    pointer-events: none;
+  }
+  .phone[data-glass="on"] .glass-sheen { opacity: 1; }
+
+  /* wallet card holder */
+  .wallet {
+    position: absolute;
+    top: 52%; left: 50%;
+    width: calc(var(--w) * 0.62);
+    height: calc(var(--w) * 0.82);
+    transform: translate(-50%, -46%) scale(0.9);
+    border-radius: calc(var(--w) * 0.09);
+    background: linear-gradient(155deg, color-mix(in oklab, var(--case) 60%, #fff 40%), color-mix(in oklab, var(--case) 78%, #000 22%));
+    box-shadow: 0 8px 20px -6px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.25), inset 0 0 0 1px rgba(255,255,255,.12);
+    z-index: 6;
+    opacity: 0;
+    transition: opacity .5s var(--ease), transform .6s var(--ease-spring);
+  }
+  .wallet::before {
+    content: "";
+    position: absolute; top: 16%; left: 50%;
+    width: 62%; height: 3px; transform: translateX(-50%);
+    border-radius: 3px;
+    background: rgba(0,0,0,.22);
+    box-shadow: 0 8px 0 rgba(0,0,0,.14);
+  }
+  .phone[data-wallet="on"] .wallet { opacity: 1; transform: translate(-50%, -46%) scale(1); }
+
+  /* strap */
+  .strap {
+    position: absolute;
+    top: -46vh; left: 50%;
+    width: calc(var(--w) * 0.14);
+    height: 60vh;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity .6s var(--ease);
+    z-index: 0;
+  }
+  .strap::before, .strap::after {
+    content: "";
+    position: absolute; top: 0; bottom: 0;
+    width: 46%;
+    background: repeating-linear-gradient(45deg, color-mix(in oklab, var(--case) 60%, #000 40%) 0 6px, color-mix(in oklab, var(--case) 74%, #000 26%) 6px 12px);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+    border-radius: 4px;
+  }
+  .strap::before { left: 6%; transform: rotate(4deg); }
+  .strap::after { right: 6%; transform: rotate(-4deg); }
+  .phone[data-strap="on"] .strap { opacity: 1; }
+
+  /* charm for cute style */
+  .charm {
+    position: absolute;
+    bottom: calc(var(--w) * 0.14);
+    right: calc(var(--w) * 0.12);
+    width: calc(var(--w) * 0.14);
+    height: calc(var(--w) * 0.14);
+    border-radius: 50%;
+    background: radial-gradient(circle at 36% 32%, #fff, var(--beige) 60%, color-mix(in oklab, var(--beige) 70%, #000));
+    box-shadow: 0 3px 8px rgba(0,0,0,.3);
+    opacity: 0; transform: scale(.4);
+    transition: opacity .5s var(--ease), transform .6s var(--ease-spring);
+    z-index: 6;
+  }
+  .phone[data-style="cute"][data-case="on"] .charm { opacity: 1; transform: scale(1); }
+
+  /* ---------- Panel ---------- */
+  .panel {
+    position: relative;
+    padding: clamp(28px, 5vh, 60px) clamp(24px, 4vw, 68px) 120px;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100dvh - 63px);
+  }
+  .step { display: none; flex-direction: column; gap: 24px; max-width: 460px; margin-top: auto; margin-bottom: auto; }
+  .step.active { display: flex; animation: stepIn .6s var(--ease) both; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .step-head { display: flex; flex-direction: column; gap: 12px; }
+  .step h1 {
+    font-size: var(--fs-display);
+    font-weight: 200;
+    letter-spacing: -0.04em;
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+  .step h2 {
+    font-size: var(--fs-h2);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    line-height: 1.04;
+    text-wrap: balance;
+  }
+  .step p.lede { color: var(--muted); font-size: var(--fs-body); max-width: 42ch; }
+
+  /* buttons */
+  .btn {
+    appearance: none; border: none;
+    background: var(--btn-bg); color: var(--btn-fg);
+    font-size: 1rem; font-weight: 500;
+    padding: 15px 28px; border-radius: 100px;
+    display: inline-flex; align-items: center; gap: 10px;
+    align-self: flex-start;
+    transition: transform .3s var(--ease-spring), opacity .3s, box-shadow .3s;
+    box-shadow: 0 6px 18px -8px var(--shadow-hi);
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 26px -10px var(--shadow-hi); }
+  .btn:active { transform: translateY(0) scale(.98); }
+  .btn .arr { transition: transform .35s var(--ease-spring); }
+  .btn:hover .arr { transform: translateX(4px); }
+  .btn.ghost { background: transparent; color: var(--ink); box-shadow: none; padding: 15px 8px; }
+  .btn.ghost:hover { transform: none; opacity: .6; }
+  .btn:disabled { opacity: .35; pointer-events: none; }
+  .step-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+  /* color swatches */
+  .swatches { display: flex; gap: 14px; flex-wrap: wrap; }
+  .swatch {
+    width: 52px; height: 52px; border-radius: 50%;
+    border: 1px solid var(--line);
+    position: relative;
+    background: var(--c);
+    transition: transform .35s var(--ease-spring), box-shadow .3s;
+    box-shadow: inset 0 2px 5px rgba(255,255,255,.4), inset 0 -3px 6px rgba(0,0,0,.25);
+  }
+  .swatch:hover { transform: scale(1.08); }
+  .swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--ink); }
+  .swatch[aria-pressed="true"]::after {
+    content: ""; position: absolute; inset: 0; border-radius: 50%;
+    box-shadow: inset 0 2px 5px rgba(255,255,255,.4), inset 0 -3px 6px rgba(0,0,0,.25);
+  }
+
+  /* choice cards */
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .card {
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 18px 18px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+    transition: border-color .3s, transform .35s var(--ease-spring), background .3s;
+  }
+  .card:hover { transform: translateY(-3px); border-color: var(--line-strong); }
+  .card[aria-pressed="true"] { border-color: var(--ink); background: var(--surface); box-shadow: 0 0 0 1px var(--ink); }
+  .card .c-ico { font-family: var(--mono); font-size: 0.7rem; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+  .card .c-t { font-size: 1.12rem; font-weight: 500; letter-spacing: -0.01em; }
+  .card .c-d { font-size: 0.86rem; color: var(--muted); line-height: 1.45; }
+
+  /* chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip {
+    background: var(--surface); border: 1px solid var(--line);
+    color: var(--ink-soft);
+    padding: 10px 17px; border-radius: 100px;
+    font-size: 0.94rem;
+    transition: border-color .3s, background .3s, color .3s, transform .3s var(--ease-spring);
+  }
+  .chip:hover { transform: translateY(-2px); border-color: var(--line-strong); }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  /* recommendations */
+  .recos { display: flex; flex-direction: column; gap: 8px; min-height: 40px; }
+  .reco {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; border-radius: var(--r-sm);
+    background: var(--surface); border: 1px solid var(--line);
+    font-size: 0.92rem;
+    animation: stepIn .45s var(--ease) both;
+  }
+  .reco .r-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--beige); flex-shrink: 0; }
+  .reco .r-why { color: var(--muted); margin-left: auto; font-size: 0.78rem; font-family: var(--mono); letter-spacing: .02em; }
+  .recos .empty { color: var(--muted); font-size: 0.9rem; }
+
+  /* slider */
+  .slider-wrap { display: flex; flex-direction: column; gap: 18px; }
+  .slider-labels { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 4px; border-radius: 4px;
+    background: linear-gradient(to right, var(--ink) 0%, var(--ink) var(--fill, 20%), var(--line-strong) var(--fill, 20%));
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 3px 10px -2px var(--shadow-hi);
+    cursor: grab; transition: transform .2s;
+  }
+  input[type="range"]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.12); }
+  input[type="range"]::-moz-range-thumb {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--surface); border: 1px solid var(--line-strong);
+    box-shadow: 0 3px 10px -2px var(--shadow-hi); cursor: grab;
+  }
+  .tier-list { display: flex; flex-direction: column; gap: 7px; }
+  .tier-row {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.92rem; color: var(--muted);
+    transition: color .35s var(--ease);
+  }
+  .tier-row .t-check {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    display: grid; place-items: center;
+    font-size: 11px; color: transparent;
+    transition: background .35s var(--ease), color .35s var(--ease), border-color .35s;
+    flex-shrink: 0;
+  }
+  .tier-row.on { color: var(--ink); }
+  .tier-row.on .t-check { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+
+  /* bundle card */
+  .bundle {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 24px;
+    box-shadow: 0 20px 50px -30px var(--shadow-hi);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .bundle .b-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .bundle .b-kit { font-size: 1.15rem; font-weight: 500; }
+  .bundle .b-count { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); letter-spacing: .1em; }
+  .b-item {
+    display: flex; align-items: baseline; gap: 10px;
+    padding: 9px 0; border-bottom: 1px solid var(--line);
+    font-size: 0.95rem;
+  }
+  .b-item .bi-name { flex: 1; }
+  .b-item .bi-price { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--muted); }
+  .b-item.free .bi-price { color: var(--good); }
+  .b-sum { display: flex; flex-direction: column; gap: 6px; margin-top: 16px; }
+  .b-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.95rem; }
+  .b-row .v { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .b-row.strike .v { text-decoration: line-through; color: var(--muted); }
+  .b-row.save { color: var(--good); }
+  .b-row.total { font-size: 1.5rem; font-weight: 500; margin-top: 6px; padding-top: 12px; border-top: 1px solid var(--line-strong); }
+  .b-row.total .v { font-size: 1.5rem; }
+
+  /* rewards */
+  .rewards { display: flex; flex-direction: column; gap: 12px; }
+  .reward {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px; border-radius: var(--r-md);
+    background: var(--surface); border: 1px solid var(--line);
+    opacity: .45; filter: saturate(.4);
+    transition: opacity .5s var(--ease), filter .5s var(--ease), border-color .5s, transform .5s var(--ease-spring);
+  }
+  .reward.unlocked { opacity: 1; filter: none; border-color: var(--line-strong); }
+  .reward .rw-medal {
+    width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+    display: grid; place-items: center;
+    background: var(--surface-2);
+    font-family: var(--mono); font-size: 0.7rem; color: var(--muted);
+    transition: background .5s var(--ease), color .5s;
+  }
+  .reward.unlocked .rw-medal { background: linear-gradient(150deg, var(--gold), color-mix(in oklab, var(--gold) 70%, #000)); color: #2a2208; }
+  .reward .rw-t { font-weight: 500; }
+  .reward .rw-s { font-size: 0.84rem; color: var(--muted); }
+  .reward .rw-state { margin-left: auto; font-family: var(--mono); font-size: 0.66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .reward.unlocked .rw-state { color: var(--good); }
+
+  /* showcase (step 6) */
+  .showcase { max-width: 520px; display: flex; flex-direction: column; gap: 14px; }
+  .show-item {
+    border: 1px solid var(--line); border-radius: var(--r-lg);
+    padding: 22px; background: var(--surface);
+    display: flex; flex-direction: column; gap: 8px;
+    opacity: 0; transform: translateY(24px);
+    transition: opacity .7s var(--ease), transform .7s var(--ease), border-color .4s;
+  }
+  .show-item.in { opacity: 1; transform: none; }
+  .show-item .si-eye { font-family: var(--mono); font-size: 0.68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+  .show-item .si-t { font-size: 1.5rem; font-weight: 300; letter-spacing: -0.02em; }
+  .show-item .si-d { color: var(--muted); font-size: 0.94rem; }
+  .show-item .si-media {
+    height: 130px; border-radius: var(--r-md); margin-top: 6px;
+    background: linear-gradient(135deg, var(--stage-a), color-mix(in oklab, var(--beige) 40%, var(--stage-b)));
+    position: relative; overflow: hidden;
+  }
+  .show-item .si-media::after {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(60% 80% at 30% 20%, rgba(255,255,255,.5), transparent 60%);
+  }
+
+  /* final summary overlay */
+  .final-note {
+    margin-top: 14px; padding: 16px 18px;
+    border-radius: var(--r-md); border: 1px solid var(--line);
+    background: var(--surface); font-size: 0.92rem; color: var(--muted);
+    display: none;
+  }
+  .final-note.show { display: block; animation: stepIn .5s var(--ease) both; }
+  .final-note strong { color: var(--ink); font-weight: 500; }
+
+  .helper { font-family: var(--mono); font-size: 0.7rem; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; }
+
+  /* confetti burst */
+  .burst { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 20; }
+  .burst i {
+    position: absolute; top: 46%; left: 50%;
+    width: 8px; height: 8px; border-radius: 2px;
+    opacity: 0;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .main { grid-template-columns: 1fr; }
+    .stage {
+      position: sticky; top: 63px;
+      height: 42dvh; min-height: 300px;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+    }
+    .phone { --w: clamp(120px, 34vw, 168px); }
+    .caption { bottom: 12px; }
+    .caption .c-name { font-size: 1.05rem; }
+    .score { top: 12px; right: 14px; }
+    .score svg { width: 40px; height: 40px; }
+    .score .s-num { font-size: 1.1rem; }
+    .panel { min-height: auto; padding: 30px 22px 100px; }
+    .step { margin: 0; max-width: none; }
+    .rail button .label { display: none; }
+    .rail button { padding: 8px; }
+    .strap { top: -20vh; height: 30vh; }
+  }
+  @media (max-width: 480px) {
+    .cards { grid-template-columns: 1fr; }
+    .wordmark { font-size: 0.92rem; letter-spacing: .3em; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .12s !important; }
+    .case-sheen::before { animation: none; }
+    .phone-wrap { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+
+<div class="app">
+  <header class="topbar">
+    <div class="wordmark">APIOU</div>
+    <nav class="rail" id="rail" aria-label="設定步驟"></nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="切換主題" title="切換主題">&#9680;</button>
+  </header>
+
+  <div class="main">
+    <section class="stage" aria-label="你的 iPhone">
+      <div class="stage-inner">
+        <div class="score" id="score">
+          <svg width="52" height="52" viewBox="0 0 52 52" aria-hidden="true">
+            <circle class="ring-bg" cx="26" cy="26" r="22" fill="none" stroke-width="3"></circle>
+            <circle class="ring-fg" id="ringFg" cx="26" cy="26" r="22" fill="none" stroke-width="3"
+                    stroke-dasharray="138.2" stroke-dashoffset="138.2"></circle>
+          </svg>
+          <div>
+            <div class="s-num" id="scoreNum">0</div>
+            <div class="s-lab">保護力</div>
+          </div>
+        </div>
+
+        <div class="phone-wrap" id="phoneWrap">
+          <div class="strap"></div>
+          <div class="phone" id="phone" data-case="off" data-style="minimal" data-lens="off" data-glass="off" data-wallet="off" data-strap="off">
+            <div class="case">
+              <div class="case-sheen"></div>
+            </div>
+            <div class="magsafe"></div>
+            <div class="camera">
+              <div class="lens l1"></div>
+              <div class="lens l2"></div>
+              <div class="lens l3"></div>
+            </div>
+            <div class="lens-guard" id="lensGuard"></div>
+            <div class="wallet"></div>
+            <div class="charm"></div>
+            <div class="glass-sheen"></div>
+          </div>
+        </div>
+
+        <div class="caption" id="caption">
+          <div class="c-name" id="capName">iPhone 18</div>
+          <div class="c-sub" id="capSub">還沒完成</div>
+        </div>
+        <div class="burst" id="burst" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel">
+      <!-- 0 · Hero -->
+      <div class="step active" data-step="0">
+        <div class="step-head">
+          <span class="eyebrow">APIOU &times; iPhone 18</span>
+          <h1>你的新 iPhone<br>還沒完成。</h1>
+          <p class="lede">照你真正的使用習慣把它設定好——顏色、外殼、保護,還有適合你用法的每一件配件。一條安靜的流程,不用亂猜著加購物車。</p>
+        </div>
+        <button class="btn" data-next>開始設定 <span class="arr">&rarr;</span></button>
+      </div>
+
+      <!-- 1 · Color -->
+      <div class="step" data-step="1">
+        <div class="step-head">
+          <span class="eyebrow">第 1 步 &mdash; 機身色</span>
+          <h2>選擇你的 iPhone 顏色。</h2>
+          <p class="lede">先選底下的機身色。接下來加的每一件,都為它而搭。</p>
+        </div>
+        <div class="swatches" id="swatches"></div>
+        <div class="step-actions">
+          <button class="btn" data-next disabled id="c1next">繼續 <span class="arr">&rarr;</span></button>
+        </div>
+      </div>
+
+      <!-- 2 · Style -->
+      <div class="step" data-step="2">
+        <div class="step-head">
+          <span class="eyebrow">第 2 步 &mdash; 風格</span>
+          <h2>選擇你的風格。</h2>
+          <p class="lede">手機殼的個性。看著它套上去。</p>
+        </div>
+        <div class="cards" id="styleCards"></div>
+        <div class="step-actions">
+          <button class="btn ghost" data-back>返回</button>
+          <button class="btn" data-next disabled id="c2next">繼續 <span class="arr">&rarr;</span></button>
+        </div>
+      </div>
+
+      <!-- 3 · Uses -->
+      <div class="step" data-step="3">
+        <div class="step-head">
+          <span class="eyebrow">第 3 步 &mdash; 生活</span>
+          <h2>你都怎麼用手機?</h2>
+          <p class="lede">符合的都可以選。我們會推薦真正用得上的配件。</p>
+        </div>
+        <div class="chips" id="useChips"></div>
+        <div>
+          <div class="helper" style="margin-bottom:10px">為你推薦</div>
+          <div class="recos" id="recos"><div class="empty">選一下你的使用情境,推薦就會出現在這裡。</div></div>
+        </div>
+        <div class="step-actions">
+          <button class="btn ghost" data-back>返回</button>
+          <button class="btn" data-next>繼續 <span class="arr">&rarr;</span></button>
+        </div>
+      </div>
+
+      <!-- 4 · Protection -->
+      <div class="step" data-step="4">
+        <div class="step-head">
+          <span class="eyebrow">第 4 步 &mdash; 保護</span>
+          <h2>要多少保護?</h2>
+          <p class="lede">從裸機滑到全副武裝。配件會一層層疊上你的手機。</p>
+        </div>
+        <div class="slider-wrap">
+          <input type="range" id="protect" min="0" max="100" value="20" aria-label="保護等級">
+          <div class="slider-labels"><span>最少</span><span>最多</span></div>
+          <div class="tier-list" id="tierList"></div>
+        </div>
+        <div class="step-actions">
+          <button class="btn ghost" data-back>返回</button>
+          <button class="btn" data-next>看我的組合 <span class="arr">&rarr;</span></button>
+        </div>
+      </div>
+
+      <!-- 5 · Kit -->
+      <div class="step" data-step="5">
+        <div class="step-head">
+          <span class="eyebrow">第 5 步 &mdash; 入門組合</span>
+          <h2>你的 APIOU 入門組合。</h2>
+          <p class="lede">由你剛才的每一個選擇組成。一起買,一起算。</p>
+        </div>
+        <div class="bundle" id="bundle"></div>
+        <div class="step-actions">
+          <button class="btn ghost" data-back>返回</button>
+          <button class="btn" data-next>逐一認識 <span class="arr">&rarr;</span></button>
+        </div>
+      </div>
+
+      <!-- 6 · Explore -->
+      <div class="step" data-step="6">
+        <div class="step-head">
+          <span class="eyebrow">第 6 步 &mdash; 每一件</span>
+          <h2>為彼此而生。</h2>
+          <p class="lede">不是商品清單——是一套系統。每一件都繞著下一件設計。</p>
+        </div>
+        <div class="showcase" id="showcase"></div>
+        <div class="step-actions">
+          <button class="btn ghost" data-back>返回</button>
+          <button class="btn" data-next>領取獎勵 <span class="arr">&rarr;</span></button>
+        </div>
+      </div>
+
+      <!-- 7 · Rewards -->
+      <div class="step" data-step="7">
+        <div class="step-head">
+          <span class="eyebrow">第 7 步 &mdash; 上市獎勵</span>
+          <h2>你解鎖的<br>不只是一個殼。</h2>
+          <p class="lede">在上市週完成設定,自動獲得這些。</p>
+        </div>
+        <div class="rewards" id="rewards"></div>
+        <div class="step-actions">
+          <button class="btn ghost" data-back>返回</button>
+          <button class="btn" data-next>完成 <span class="arr">&rarr;</span></button>
+        </div>
+      </div>
+
+      <!-- 8 · Final -->
+      <div class="step" data-step="8">
+        <div class="step-head">
+          <span class="eyebrow">完成</span>
+          <h1>你的新 iPhone,<br>準備好了。</h1>
+          <p class="lede" id="finalLede">完整設定好了——你的顏色、風格、保護、組合。一鍵成真。</p>
+        </div>
+        <button class="btn" id="completeBtn">完成設定 <span class="arr">&rarr;</span></button>
+        <div class="final-note" id="finalNote"></div>
+        <button class="btn ghost" data-restart style="margin-top:4px">重新開始</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---------- Data ----------
+  var COLORS = [
+    { id: "black",    name: "曜石黑",   sub: "鈦金屬", body: "#2A2A2E", case: "#26262A" },
+    { id: "silver",   name: "銀鏡",     sub: "鈦金屬", body: "#DDDEE1", case: "#E6E7EA" },
+    { id: "gold",     name: "香檳金",   sub: "限定",   body: "#D9C08A", case: "#E0C994" },
+    { id: "blue",     name: "天際藍",   sub: "鈦金屬", body: "#8FB2CC", case: "#93B6D0" },
+    { id: "lavender", name: "薰衣草",   sub: "限定",   body: "#C3B6DD", case: "#C7BAE1" },
+    { id: "mint",     name: "薄荷綠",   sub: "限定",   body: "#BAD6C3", case: "#BEDAC7" }
+  ];
+  var STYLES = [
+    { id: "minimal", t: "極簡", ico: "極致簡約", d: "輕薄霧面殼,幾乎什麼都沒有——剛剛好。" },
+    { id: "mirror",  t: "鏡面", ico: "招牌款",   d: "高亮鏡面處理,APIOU 的招牌。" },
+    { id: "cute",    t: "俏皮", ico: "玩心",     d: "柔和色調,加一個 MagSafe 吊飾點。" },
+    { id: "travel",  t: "旅行", ico: "隨身移動", d: "止滑紋理背蓋,可掛繩設計。" }
+  ];
+  var USES = [
+    { id: "work",          t: "工作" },
+    { id: "travel",        t: "旅行" },
+    { id: "photography",   t: "攝影" },
+    { id: "fitness",       t: "健身" },
+    { id: "commuting",     t: "通勤" },
+    { id: "entertainment", t: "娛樂" }
+  ];
+  // accessory id -> label + price
+  var ACC = {
+    lens:   { name: "鏡頭保護貼",   price: 19 },
+    wallet: { name: "MagSafe 卡夾", price: 35 },
+    strap:  { name: "斜背掛繩",     price: 29 },
+    stand:  { name: "MagSafe 支架", price: 45 },
+    glass:  { name: "螢幕玻璃貼",   price: 25 },
+    caseP:  { name: "手機殼",       price: 39 }
+  };
+  // which use recommends which accessory + reason
+  var USE_RECO = {
+    work:          [["stand", "免手持通話"], ["wallet", "卡片隨身"]],
+    travel:        [["strap", "隨身不離手"], ["wallet", "少帶一樣"]],
+    photography:   [["lens", "保護鏡頭"], ["stand", "穩定拍攝"]],
+    fitness:       [["strap", "沒口袋也行"], ["lens", "防汗防摔"]],
+    commuting:     [["strap", "單手好握"], ["wallet", "嗶了就走"]],
+    entertainment: [["stand", "立起來看"], ["glass", "顧好螢幕"]]
+  };
+  // protection tiers by slider value
+  var TIERS = [
+    { min: 0,  key: "case",   label: "輕薄殼",           layer: "case"  },
+    { min: 26, key: "lens",   label: "鏡頭保護貼",       layer: "lens"  },
+    { min: 46, key: "glass",  label: "螢幕玻璃貼",       layer: "glass" },
+    { min: 66, key: "wallet", label: "MagSafe 卡夾握把", layer: "wallet"},
+    { min: 86, key: "strap",  label: "斜背掛繩",         layer: "strap" }
+  ];
+  var TIER_NAMES = ["最少", "輕度", "均衡", "強化", "最高"];
+
+  var STEP_LABELS = ["顏色", "風格", "生活", "保護", "組合", "探索", "獎勵"];
+
+  var SHOWCASE = [
+    { eye: "手機殼", t: "重新想像的殼。", d: "鏡面、霧面或紋理——所有款式共用同一個骨架,配件永遠扣得上。" },
+    { eye: "卡夾", t: "磁吸收納卡片。", d: "放三張,吸上 MagSafe,不想用時一滑就下來。" },
+    { eye: "支架", t: "隨處立起。", d: "摺平、磁吸貼合,直放橫放都行。" },
+    { eye: "掛繩", t: "空出雙手,手機在身邊。", d: "可調式斜背織帶,扣在殼上,不是脆弱的小圈。" },
+    { eye: "鏡頭保護貼", t: "守住最關鍵的鏡片。", d: "藍寶石級透明環,覆蓋每顆鏡頭。看不見,但真的在。" }
+  ];
+
+  // ---------- State ----------
+  var state = { step: 0, color: null, style: null, uses: {}, protect: 20 };
+  var TOTAL_STEPS = 8;
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var phone = $("#phone");
+  var phoneWrap = $("#phoneWrap");
+
+  // ---------- Build rail ----------
+  var rail = $("#rail");
+  STEP_LABELS.forEach(function (lab, i) {
+    var b = document.createElement("button");
+    b.innerHTML = '<span class="dot"></span><span class="label">' + lab + '</span>';
+    b.dataset.goto = String(i + 1);
+    b.addEventListener("click", function () { if (!b.disabled) goto(parseInt(b.dataset.goto, 10)); });
+    rail.appendChild(b);
+  });
+
+  // ---------- Build color swatches ----------
+  var sw = $("#swatches");
+  COLORS.forEach(function (c) {
+    var b = document.createElement("button");
+    b.className = "swatch";
+    b.style.setProperty("--c", c.body);
+    b.setAttribute("aria-pressed", "false");
+    b.setAttribute("aria-label", c.name);
+    b.title = c.name;
+    b.addEventListener("click", function () { pickColor(c); });
+    sw.appendChild(b);
+    c._el = b;
+  });
+
+  // ---------- Build style cards ----------
+  var sc = $("#styleCards");
+  STYLES.forEach(function (s) {
+    var b = document.createElement("button");
+    b.className = "card";
+    b.setAttribute("aria-pressed", "false");
+    b.innerHTML = '<span class="c-ico">' + s.ico + '</span><span class="c-t">' + s.t + '</span><span class="c-d">' + s.d + '</span>';
+    b.addEventListener("click", function () { pickStyle(s); });
+    sc.appendChild(b);
+    s._el = b;
+  });
+
+  // ---------- Build use chips ----------
+  var uc = $("#useChips");
+  USES.forEach(function (u) {
+    var b = document.createElement("button");
+    b.className = "chip";
+    b.textContent = u.t;
+    b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", function () {
+      var on = !state.uses[u.id];
+      state.uses[u.id] = on;
+      b.setAttribute("aria-pressed", String(on));
+      renderRecos();
+    });
+    uc.appendChild(b);
+  });
+
+  // ---------- Build tier list ----------
+  var tl = $("#tierList");
+  TIERS.forEach(function (t) {
+    var row = document.createElement("div");
+    row.className = "tier-row";
+    row.dataset.key = t.key;
+    row.innerHTML = '<span class="t-check">&#10003;</span><span>' + t.label + '</span>';
+    tl.appendChild(row);
+    t._el = row;
+  });
+
+  // ---------- Build showcase ----------
+  var showEl = $("#showcase");
+  SHOWCASE.forEach(function (s) {
+    var d = document.createElement("div");
+    d.className = "show-item";
+    d.innerHTML = '<span class="si-eye">' + s.eye + '</span><span class="si-t">' + s.t + '</span><div class="si-media"></div><span class="si-d">' + s.d + '</span>';
+    showEl.appendChild(d);
+  });
+
+  // ---------- Interactions ----------
+  function pickColor(c) {
+    state.color = c;
+    COLORS.forEach(function (x) { x._el.setAttribute("aria-pressed", String(x === c)); });
+    phone.style.setProperty("--body", c.body);
+    phone.style.setProperty("--case", c.case);
+    $("#capName").innerHTML = "iPhone 18 &middot; " + c.name;
+    $("#capSub").textContent = c.sub;
+    $("#c1next").disabled = false;
+    springPhone();
+  }
+
+  function pickStyle(s) {
+    state.style = s;
+    STYLES.forEach(function (x) { x._el.setAttribute("aria-pressed", String(x === s)); });
+    phone.dataset.style = s.id;
+    phone.dataset.case = "on";
+    $("#capSub").textContent = s.t + "風格";
+    $("#c2next").disabled = false;
+    springPhone();
+  }
+
+  function renderRecos() {
+    var box = $("#recos");
+    var picked = USES.filter(function (u) { return state.uses[u.id]; });
+    if (!picked.length) { box.innerHTML = '<div class="empty">選一下你的使用情境,推薦就會出現在這裡。</div>'; return; }
+    var seen = {}, order = [];
+    picked.forEach(function (u) {
+      (USE_RECO[u.id] || []).forEach(function (pair) {
+        var acc = pair[0];
+        if (!seen[acc]) { seen[acc] = pair[1]; order.push(acc); }
+      });
+    });
+    box.innerHTML = "";
+    order.forEach(function (acc) {
+      var meta = ACC[acc] || ACC.stand;
+      var r = document.createElement("div");
+      r.className = "reco";
+      r.innerHTML = '<span class="r-dot"></span><span>' + meta.name + '</span><span class="r-why">' + seen[acc] + '</span>';
+      box.appendChild(r);
+    });
+  }
+
+  var protect = $("#protect");
+  protect.addEventListener("input", function () {
+    state.protect = parseInt(protect.value, 10);
+    applyProtection();
+  });
+
+  function applyProtection() {
+    var v = state.protect;
+    protect.style.setProperty("--fill", v + "%");
+    // layers: case is always on once we're past step2; tiers add on
+    var active = { case: false, lens: false, glass: false, wallet: false, strap: false };
+    TIERS.forEach(function (t) { if (v >= t.min) active[t.layer] = true; });
+    // if a style was chosen, keep case on regardless
+    if (state.style) active.case = true;
+    phone.dataset.case = active.case ? "on" : "off";
+    phone.dataset.lens = active.lens ? "on" : "off";
+    phone.dataset.glass = active.glass ? "on" : "off";
+    phone.dataset.wallet = active.wallet ? "on" : "off";
+    phone.dataset.strap = active.strap ? "on" : "off";
+    TIERS.forEach(function (t) {
+      var on = active[t.layer] || (t.key === "case" && active.case);
+      t._el.classList.toggle("on", !!on);
+    });
+    positionLensGuards();
+    // score
+    var score = Math.round(20 + v * 0.8); // 20..100
+    setScore(score);
+    var tierName = TIER_NAMES[Math.min(4, Math.floor(v / 20))];
+    $("#capSub").textContent = tierName + "保護";
+  }
+
+  function setScore(n) {
+    $("#score").classList.add("show");
+    var C = 138.2;
+    $("#ringFg").style.strokeDashoffset = String(C - (C * n) / 100);
+    $("#scoreNum").textContent = n;
+  }
+
+  function positionLensGuards() {
+    var g = $("#lensGuard");
+    if (g.dataset.built) return;
+    var cam = $(".camera");
+    // mirror the three lenses
+    [[".l1"], [".l2"], [".l3"]].forEach(function (sel) {
+      var l = $(sel[0], phone);
+      var s = document.createElement("span");
+      var cs = getComputedStyle(l);
+      s.style.top = l.style.top || cs.top;
+      s.style.left = l.style.left || cs.left;
+      s.style.right = l.style.right;
+      s.style.bottom = l.style.bottom;
+      s.style.width = cs.width;
+      s.style.height = cs.height;
+      // place relative to camera
+      g.appendChild(s);
+    });
+    // Simpler: overlay rings sized to camera lens positions via percentages
+    g.innerHTML = "";
+    var rings = [
+      { top: "17%", left: "17%", size: "30%" },
+      { bottom: "17%", left: "17%", size: "30%" },
+      { top: "34%", right: "17%", size: "23%" }
+    ];
+    var camRect = cam.getBoundingClientRect();
+    rings.forEach(function (r) {
+      var s = document.createElement("span");
+      Object.keys(r).forEach(function (k) {
+        if (k === "size") { s.style.width = r.size; s.style.height = r.size; }
+        else s.style[k] = r[k];
+      });
+      // position guard box over camera
+      g.appendChild(s);
+    });
+    g.style.top = cam.offsetTop + "px";
+    g.style.left = cam.offsetLeft + "px";
+    g.style.width = cam.offsetWidth + "px";
+    g.style.height = cam.offsetHeight + "px";
+    g.style.position = "absolute";
+    g.dataset.built = "1";
+  }
+
+  // ---------- Kit computation ----------
+  function computeKit() {
+    var items = [];
+    var add = function (id) { if (items.indexOf(id) < 0) items.push(id); };
+    // base always
+    add("caseP");
+    add("glass");
+    // from protection
+    if (state.protect >= 26) add("lens");
+    if (state.protect >= 66) add("wallet");
+    if (state.protect >= 86) add("strap");
+    // from uses
+    var u = state.uses;
+    if (u.photography || u.entertainment || u.work) add("stand");
+    if (u.travel || u.commuting || u.work) add("wallet");
+    if (u.travel || u.fitness || u.commuting) add("strap");
+    if (u.photography || u.fitness) add("lens");
+
+    var order = ["caseP", "lens", "glass", "wallet", "stand", "strap"];
+    items.sort(function (a, b) { return order.indexOf(a) - order.indexOf(b); });
+
+    var listPrice = items.reduce(function (s, id) { return s + ACC[id].price; }, 0);
+    // bundle: glass free + 15% off the rest
+    var glassPrice = ACC.glass.price;
+    var rest = listPrice - glassPrice;
+    var kitPrice = Math.round(rest * 0.85);
+    var save = listPrice - kitPrice;
+    return { items: items, listPrice: listPrice, kitPrice: kitPrice, save: save, glassPrice: glassPrice };
+  }
+
+  function renderBundle() {
+    var k = computeKit();
+    state._kit = k;
+    var el = $("#bundle");
+    var rows = k.items.map(function (id) {
+      var free = id === "glass";
+      return '<div class="b-item' + (free ? " free" : "") + '"><span class="bi-name">' + ACC[id].name +
+        '</span><span class="bi-price">' + (free ? "免費" : "$" + ACC[id].price) + '</span></div>';
+    }).join("");
+    el.innerHTML =
+      '<div class="b-top"><span class="b-kit">' + (state.color ? state.color.name : "") + ' 入門組合</span>' +
+      '<span class="b-count">' + k.items.length + ' 件</span></div>' +
+      rows +
+      '<div class="b-sum">' +
+      '<div class="b-row strike"><span>分開買</span><span class="v">$' + k.listPrice + '</span></div>' +
+      '<div class="b-row save"><span>組合省下</span><span class="v">&minus; $' + k.save + '</span></div>' +
+      '<div class="b-row total"><span>組合價</span><span class="v">$' + k.kitPrice + '</span></div>' +
+      '</div>';
+  }
+
+  // ---------- Rewards ----------
+  function computeRewards() {
+    var k = state._kit || computeKit();
+    var limited = state.color && state.color.sub === "限定";
+    return [
+      { t: "免費螢幕玻璃貼", s: "每個入門組合都附贈", on: true },
+      { t: "組合折扣", s: "滿 3 件 85 折", on: k.items.length >= 3 },
+      { t: "限定色", s: "保留上市限定配色", on: !!limited },
+      { t: "上市禮", s: "滿 $120 送 MagSafe 吊飾", on: k.listPrice >= 120 }
+    ];
+  }
+
+  function renderRewards() {
+    var box = $("#rewards");
+    var list = computeRewards();
+    box.innerHTML = "";
+    list.forEach(function (r, i) {
+      var d = document.createElement("div");
+      d.className = "reward";
+      d.innerHTML = '<div class="rw-medal">' + (r.on ? "&#9733;" : "&mdash;") + '</div>' +
+        '<div><div class="rw-t">' + r.t + '</div><div class="rw-s">' + r.s + '</div></div>' +
+        '<div class="rw-state">' + (r.on ? "已解鎖" : "未解鎖") + '</div>';
+      box.appendChild(d);
+      if (r.on) {
+        setTimeout(function () { d.classList.add("unlocked"); }, reduce ? 0 : 180 + i * 260);
+      }
+    });
+  }
+
+  // ---------- Navigation ----------
+  function goto(n) {
+    n = Math.max(0, Math.min(TOTAL_STEPS, n));
+    // gate: need color for >=2, style for >=3
+    if (n >= 2 && !state.color) n = 1;
+    if (n >= 3 && !state.style) n = 2;
+    state.step = n;
+    document.querySelectorAll(".step").forEach(function (s) {
+      s.classList.toggle("active", parseInt(s.dataset.step, 10) === n);
+    });
+    updateRail();
+    onEnter(n);
+    var panel = $("#panel");
+    if (window.innerWidth <= 900) window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+    else panel.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  function onEnter(n) {
+    if (n === 0) {
+      $("#score").classList.remove("show");
+      $("#capSub").textContent = "還沒完成";
+    }
+    if (n >= 1) { /* color visible */ }
+    if (n === 4) applyProtection();
+    if (n === 5) renderBundle();
+    if (n === 6) revealShowcase();
+    if (n === 7) renderRewards();
+    if (n === 8) { renderFinalPhone(); }
+    if (n >= 4) $("#score").classList.add("show");
+  }
+
+  function updateRail() {
+    var btns = rail.querySelectorAll("button");
+    btns.forEach(function (b, i) {
+      var stepNo = i + 1;
+      var st = "todo";
+      if (stepNo < state.step) st = "done";
+      if (stepNo === state.step) st = "active";
+      b.dataset.state = st;
+      // lock steps that need prerequisites
+      b.disabled = (stepNo >= 2 && !state.color) || (stepNo >= 3 && !state.style);
+    });
+  }
+
+  function revealShowcase() {
+    var items = showEl.querySelectorAll(".show-item");
+    items.forEach(function (it, i) {
+      it.classList.remove("in");
+      setTimeout(function () { it.classList.add("in"); }, reduce ? 0 : 120 + i * 150);
+    });
+  }
+
+  function renderFinalPhone() {
+    // ensure everything assembled to the level chosen
+    applyProtection();
+    var k = state._kit || computeKit();
+    $("#finalLede").innerHTML = "完整設定好了——<strong>" + (state.color ? state.color.name : "") +
+      "</strong>、<strong>" + (state.style ? state.style.t : "") + "</strong>風格、" +
+      k.items.length + " 件組合。一鍵成真。";
+    $("#capName").innerHTML = "iPhone 18 &middot; 完成";
+    $("#capSub").textContent = "設定完成";
+  }
+
+  // ---------- Effects ----------
+  function springPhone() {
+    if (reduce) return;
+    phoneWrap.animate(
+      [{ transform: "scale(1)" }, { transform: "scale(1.035)" }, { transform: "scale(1)" }],
+      { duration: 520, easing: "cubic-bezier(.34,1.56,.64,1)" }
+    );
+  }
+
+  function celebrate() {
+    var note = $("#finalNote");
+    var k = state._kit || computeKit();
+    note.innerHTML = "設定已儲存。你的 <strong>" + (state.color ? state.color.name : "") +
+      " " + (state.style ? state.style.t : "") + "</strong> 組合——" + k.items.length +
+      " 件,<strong>$" + k.kitPrice + "</strong>——已可加入購物袋。正式店面這裡會接到結帳。";
+    note.classList.add("show");
+    if (reduce) return;
+    var burst = $("#burst");
+    burst.innerHTML = "";
+    var palette = ["#C2BEB5", "#D9C08A", "#8FB2CC", "#C3B6DD", "#BAD6C3"];
+    for (var i = 0; i < 26; i++) {
+      var p = document.createElement("i");
+      p.style.background = palette[i % palette.length];
+      burst.appendChild(p);
+      var ang = (Math.PI * 2 * i) / 26 + 0.3;
+      var dist = 120 + (i % 5) * 26;
+      p.animate(
+        [
+          { transform: "translate(0,0) rotate(0deg)", opacity: 1 },
+          { transform: "translate(" + Math.cos(ang) * dist + "px," + (Math.sin(ang) * dist + 60) + "px) rotate(" + (i * 40) + "deg)", opacity: 0 }
+        ],
+        { duration: 1100 + (i % 5) * 120, easing: "cubic-bezier(.22,1,.36,1)" }
+      );
+    }
+  }
+
+  // ---------- Pointer parallax ----------
+  if (!reduce && window.matchMedia("(pointer:fine)").matches) {
+    var stage = $(".stage");
+    stage.addEventListener("pointermove", function (e) {
+      var r = stage.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width - 0.5;
+      var y = (e.clientY - r.top) / r.height - 0.5;
+      phoneWrap.style.transform = "rotateY(" + (x * 12) + "deg) rotateX(" + (-y * 12) + "deg)";
+    });
+    stage.addEventListener("pointerleave", function () {
+      phoneWrap.style.transform = "rotateY(0) rotateX(0)";
+    });
+  }
+
+  // ---------- Global button wiring ----------
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-next],[data-back],[data-restart]");
+    if (!t) return;
+    if (t.hasAttribute("data-next")) goto(state.step + 1);
+    else if (t.hasAttribute("data-back")) goto(state.step - 1);
+    else if (t.hasAttribute("data-restart")) restart();
+  });
+  $("#completeBtn").addEventListener("click", celebrate);
+
+  function restart() {
+    state = { step: 0, color: null, style: null, uses: {}, protect: 20 };
+    COLORS.forEach(function (c) { c._el.setAttribute("aria-pressed", "false"); });
+    STYLES.forEach(function (s) { s._el.setAttribute("aria-pressed", "false"); });
+    USES.forEach(function (u) {});
+    uc.querySelectorAll(".chip").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+    $("#c1next").disabled = true;
+    $("#c2next").disabled = true;
+    protect.value = 20;
+    phone.dataset.case = "off"; phone.dataset.style = "minimal";
+    phone.dataset.lens = "off"; phone.dataset.glass = "off";
+    phone.dataset.wallet = "off"; phone.dataset.strap = "off";
+    phone.style.setProperty("--body", "#2A2A2E");
+    phone.style.setProperty("--case", "#26262A");
+    $("#capName").textContent = "iPhone 18";
+    $("#finalNote").classList.remove("show");
+    renderRecos();
+    goto(0);
+  }
+
+  // ---------- Theme toggle ----------
+  var root = document.documentElement;
+  $("#themeToggle").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme");
+    var sysDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var next = cur ? (cur === "dark" ? "light" : "dark") : (sysDark ? "light" : "dark");
+    root.setAttribute("data-theme", next);
+  });
+
+  // ---------- Keyboard ----------
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight" && state.step < TOTAL_STEPS) {
+      if ((state.step >= 1 || state.color !== null) && !((state.step === 1 && !state.color) || (state.step === 2 && !state.style))) goto(state.step + 1);
+    }
+    if (e.key === "ArrowLeft" && state.step > 0) goto(state.step - 1);
+  });
+
+  // ---------- Init ----------
+  updateRail();
+  renderRecos();
+})();
+</script>
+
+</body>
+</html>
