@@ -46,9 +46,9 @@
   body[data-lum="light"] .sweep{mix-blend-mode:multiply;opacity:.25}
 
   /* ---------- 3D phone ---------- */
-  .stage{position:fixed;top:0;left:0;right:0;height:52vh;z-index:2;display:grid;place-items:center;perspective:1700px;pointer-events:none}
+  .stage{position:fixed;inset:0;z-index:3;display:grid;place-items:center;perspective:1700px;pointer-events:none}
   .device-wrap{transition:transform 1.2s var(--spring),filter 1.2s var(--ease);will-change:transform;filter:drop-shadow(0 24px 60px rgba(130,190,225,.34))}
-  .device{--w:clamp(124px,15vw,176px);--h:calc(var(--w)*2.03);--d:24px;
+  .device{--w:clamp(134px,15.5vw,186px);--h:calc(var(--w)*2.03);--d:24px;
     position:relative;width:var(--w);height:var(--h);transform-style:preserve-3d;
     animation:spin 22s linear infinite;will-change:transform}
   @keyframes spin{to{transform:rotateY(360deg)}}
@@ -88,8 +88,10 @@
   .topline{font-family:var(--mono);font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--ui-soft);opacity:0;animation:fadeDown 1.2s var(--ease) .3s forwards}
   @keyframes fadeDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 
-  .screen{position:absolute;left:0;right:0;top:50vh;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px 30px;gap:22px;opacity:0;pointer-events:none;transition:opacity .8s var(--ease),transform .8s var(--ease);transform:translateY(10px)}
+  .screen{position:absolute;inset:0;z-index:2;opacity:0;pointer-events:none;transition:opacity .8s var(--ease),transform .8s var(--ease);transform:translateY(10px)}
   .screen.on{opacity:1;pointer-events:auto;transform:none}
+  .centerpiece{position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);width:min(92vw,17ch);text-align:center;z-index:2}
+  .lower{position:absolute;left:0;right:0;bottom:clamp(6vh,8vh,12vh);z-index:4;display:flex;flex-direction:column;align-items:center;gap:20px;padding:0 24px}
 
   .headline{text-align:center;font-weight:200;letter-spacing:-.03em;line-height:1.02;font-size:clamp(2rem,5.4vw,4.4rem);max-width:16ch;text-wrap:balance}
   .headline .rise{display:inline-block;opacity:0;transform:translateY(18px);animation:rise .9s var(--ease) forwards}
@@ -174,35 +176,41 @@
 
 <!-- intro -->
 <div class="screen on" id="s-intro">
-  <h1 class="headline">
+  <h1 class="headline centerpiece">
     <span class="rise" style="animation-delay:.35s">Your new iPhone</span><br>
     <span class="rise" style="animation-delay:.55s">deserves better.</span>
   </h1>
-  <div class="subq rise" style="animation-delay:1.15s">Do you have your iPhone 18 yet?</div>
-  <div class="btn-row rise" style="animation-delay:1.35s">
-    <button class="btn primary" id="yesBtn">Yes, I do.</button>
-    <button class="btn secondary" id="noBtn">Not yet.</button>
+  <div class="lower">
+    <div class="subq rise" style="animation-delay:1.15s">Do you have your iPhone 18 yet?</div>
+    <div class="btn-row rise" style="animation-delay:1.35s">
+      <button class="btn primary" id="yesBtn">Yes, I do.</button>
+      <button class="btn secondary" id="noBtn">Not yet.</button>
+    </div>
   </div>
 </div>
 
 <!-- color -->
 <div class="screen" id="s-color">
-  <h2 class="headline" style="font-size:clamp(1.6rem,3.4vw,2.6rem)">Choose your colour.</h2>
-  <div class="mood" id="mood">Four finishes. Four worlds.</div>
-  <div class="colors" id="colors"></div>
-  <div class="step-actions">
-    <button class="btn ghost" data-goto="intro">Back</button>
-    <button class="btn primary" id="colorNext">Continue</button>
+  <h2 class="headline centerpiece" style="font-size:clamp(1.5rem,3.2vw,2.4rem)">Choose your colour.</h2>
+  <div class="lower">
+    <div class="mood" id="mood">Four finishes. Four worlds.</div>
+    <div class="colors" id="colors"></div>
+    <div class="step-actions">
+      <button class="btn ghost" data-goto="intro">Back</button>
+      <button class="btn primary" id="colorNext">Continue</button>
+    </div>
   </div>
 </div>
 
 <!-- not yet -->
 <div class="screen" id="s-notyet">
-  <h2 class="headline" style="font-size:clamp(1.6rem,3.4vw,2.6rem)">Let's dress the one you have.</h2>
-  <p class="lede">Pick your current iPhone and we'll build a set around it.</p>
-  <div class="btn-row">
-    <a class="btn primary" id="oldLink" href="#" target="_blank" rel="noopener">Choose my model</a>
-    <button class="btn ghost" data-goto="intro">Back</button>
+  <h2 class="headline centerpiece" style="font-size:clamp(1.5rem,3.2vw,2.4rem)">Let's dress the one you have.</h2>
+  <div class="lower">
+    <p class="lede">Pick your current iPhone and we'll build a set around it.</p>
+    <div class="btn-row">
+      <a class="btn primary" id="oldLink" href="#" target="_blank" rel="noopener">Choose my model</a>
+      <button class="btn ghost" data-goto="intro">Back</button>
+    </div>
   </div>
 </div>
 
@@ -258,18 +266,18 @@
     setWorld(c.id);
     // phone reaction: scale + rotate nudge
     if(!reduce){
-      $("#deviceWrap").animate([{transform:"scale(1.08) rotateZ(0)"},{transform:"scale(1.13) rotateZ(-2deg)"},{transform:"scale(1.08) rotateZ(0)"}],{duration:900,easing:"cubic-bezier(.34,1.4,.5,1)"});
+      $("#deviceWrap").animate([{transform:"translateY(-11vh) scale(1)"},{transform:"translateY(-11vh) scale(1.06) rotateZ(-2deg)"},{transform:"translateY(-11vh) scale(1)"}],{duration:900,easing:"cubic-bezier(.34,1.4,.5,1)"});
     }
   }
 
   // screen navigation
   function show(screen){
     document.querySelectorAll(".screen").forEach(function(s){s.classList.toggle("on",s.id==="s-"+screen);});
-    if(screen==="color"){
-      $("#deviceWrap").style.transform="scale(1.08)";
-      if(!state.color)setWorld("black");
+    if(screen==="color"||screen==="notyet"){
+      $("#deviceWrap").style.transform="translateY(-11vh) scale(1)";
+      if(screen==="color"&&!state.color)setWorld("black");
     }else{
-      $("#deviceWrap").style.transform="scale(1)";
+      $("#deviceWrap").style.transform="none";
     }
     if(screen==="intro"){
       // reset to neutral obsidian
