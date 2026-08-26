@@ -46,17 +46,22 @@
   body[data-lum="light"] .sweep{mix-blend-mode:multiply;opacity:.25}
 
   /* ---------- 3D phone ---------- */
-  .stage{position:fixed;inset:0;z-index:2;display:grid;place-items:center;perspective:1700px;pointer-events:none}
-  .device-wrap{transition:transform 1.2s var(--spring),filter 1.2s var(--ease);will-change:transform}
-  .device{--w:clamp(150px,20vw,220px);--h:calc(var(--w)*2.03);--d:24px;
+  .stage{position:fixed;top:0;left:0;right:0;height:52vh;z-index:2;display:grid;place-items:center;perspective:1700px;pointer-events:none}
+  .device-wrap{transition:transform 1.2s var(--spring),filter 1.2s var(--ease);will-change:transform;filter:drop-shadow(0 24px 60px rgba(130,190,225,.34))}
+  .device{--w:clamp(124px,15vw,176px);--h:calc(var(--w)*2.03);--d:24px;
     position:relative;width:var(--w);height:var(--h);transform-style:preserve-3d;
     animation:spin 22s linear infinite;will-change:transform}
   @keyframes spin{to{transform:rotateY(360deg)}}
   .face,.side,.internals{position:absolute;left:50%;top:50%}
-  .face{width:var(--w);height:var(--h);margin-left:calc(var(--w)/-2);margin-top:calc(var(--h)/-2);border-radius:calc(var(--w)*.17);
-    background:linear-gradient(150deg,rgba(255,255,255,.22),rgba(255,255,255,.05) 42%,rgba(255,255,255,.14));
-    box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4),inset 0 0 40px rgba(255,255,255,.06);
+  .face{width:var(--w);height:var(--h);margin-left:calc(var(--w)/-2);margin-top:calc(var(--h)/-2);border-radius:calc(var(--w)*.17);overflow:hidden;
+    background:linear-gradient(150deg,rgba(228,242,248,.60),rgba(190,214,228,.32) 46%,rgba(234,247,251,.52));
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.6),inset 0 14px 44px rgba(255,255,255,.4),inset 0 -22px 54px rgba(150,192,218,.34),0 0 46px rgba(175,214,238,.28);
     backface-visibility:visible}
+  .frost{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:.16;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23f)'/%3E%3C/svg%3E")}
+  .crack{position:absolute;inset:5%;border-radius:inherit;pointer-events:none;opacity:.5;
+    background-repeat:no-repeat;background-size:100% 100%;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-opacity='0.45' stroke-width='0.7'%3E%3Cpath d='M24 0 L37 54 L26 106 L44 200'/%3E%3Cpath d='M68 10 L57 66 L73 128 L64 200'/%3E%3Cpath d='M37 54 L69 80'/%3E%3Cpath d='M26 106 L60 150'/%3E%3Cpath d='M52 0 L56 42'/%3E%3C/g%3E%3C/svg%3E")}
   .face.front{transform:translate(-50%,-50%) translateZ(calc(var(--d)/2))}
   .face.back{transform:translate(-50%,-50%) rotateY(180deg) translateZ(calc(var(--d)/2))}
   .tint{position:absolute;inset:0;border-radius:inherit;background:var(--glass,rgba(140,140,150,.16));transition:background 1.2s var(--ease)}
@@ -69,7 +74,7 @@
   .side.right{transform:translate(-50%,-50%) rotateY(90deg) translateZ(calc(var(--w)/2))}
   .side.left{transform:translate(-50%,-50%) rotateY(-90deg) translateZ(calc(var(--w)/2))}
   /* internals (visible through glass) */
-  .internals{width:var(--w);height:var(--h);margin-left:calc(var(--w)/-2);margin-top:calc(var(--h)/-2);transform:translate(-50%,-50%);opacity:.5}
+  .internals{width:var(--w);height:var(--h);margin-left:calc(var(--w)/-2);margin-top:calc(var(--h)/-2);transform:translate(-50%,-50%);opacity:.28;filter:blur(.6px)}
   .camsq{position:absolute;top:5%;left:6%;width:44%;height:22%;border-radius:22px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.18)}
   .lensz{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.4),rgba(20,20,26,.5))}
   .l-a{top:7%;left:9%;width:16%;height:8%} .l-b{top:16%;left:9%;width:16%;height:8%} .l-c{top:9%;left:30%;width:12%;height:6%}
@@ -83,7 +88,7 @@
   .topline{font-family:var(--mono);font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--ui-soft);opacity:0;animation:fadeDown 1.2s var(--ease) .3s forwards}
   @keyframes fadeDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 
-  .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 24px clamp(40px,9vh,90px);gap:26px;opacity:0;pointer-events:none;transition:opacity .8s var(--ease),transform .8s var(--ease);transform:translateY(10px)}
+  .screen{position:absolute;left:0;right:0;top:50vh;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px 30px;gap:22px;opacity:0;pointer-events:none;transition:opacity .8s var(--ease),transform .8s var(--ease);transform:translateY(10px)}
   .screen.on{opacity:1;pointer-events:auto;transform:none}
 
   .headline{text-align:center;font-weight:200;letter-spacing:-.03em;line-height:1.02;font-size:clamp(2rem,5.4vw,4.4rem);max-width:16ch;text-wrap:balance}
@@ -156,8 +161,8 @@
       </div>
       <div class="side left"></div>
       <div class="side right"></div>
-      <div class="face back"><div class="tint"></div><div class="sheen"></div></div>
-      <div class="face front"><div class="tint"></div><div class="sheen"></div></div>
+      <div class="face back"><div class="tint"></div><div class="crack"></div><div class="frost"></div><div class="sheen"></div></div>
+      <div class="face front"><div class="tint"></div><div class="crack"></div><div class="frost"></div><div class="sheen"></div></div>
     </div>
   </div>
 </div>
@@ -253,7 +258,7 @@
     setWorld(c.id);
     // phone reaction: scale + rotate nudge
     if(!reduce){
-      $("#deviceWrap").animate([{transform:"scale(1.14) rotateZ(0)"},{transform:"scale(1.2) rotateZ(-2deg)"},{transform:"scale(1.14) rotateZ(0)"}],{duration:900,easing:"cubic-bezier(.34,1.4,.5,1)"});
+      $("#deviceWrap").animate([{transform:"scale(1.08) rotateZ(0)"},{transform:"scale(1.13) rotateZ(-2deg)"},{transform:"scale(1.08) rotateZ(0)"}],{duration:900,easing:"cubic-bezier(.34,1.4,.5,1)"});
     }
   }
 
@@ -261,7 +266,7 @@
   function show(screen){
     document.querySelectorAll(".screen").forEach(function(s){s.classList.toggle("on",s.id==="s-"+screen);});
     if(screen==="color"){
-      $("#deviceWrap").style.transform="scale(1.14)";
+      $("#deviceWrap").style.transform="scale(1.08)";
       if(!state.color)setWorld("black");
     }else{
       $("#deviceWrap").style.transform="scale(1)";
