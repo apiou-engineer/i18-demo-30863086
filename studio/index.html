@@ -50,8 +50,8 @@
   .device-wrap{transition:transform 1.2s var(--spring),filter 1.2s var(--ease);will-change:transform;filter:drop-shadow(0 24px 60px rgba(130,190,225,.34))}
   .device{--w:clamp(134px,15.5vw,186px);--h:calc(var(--w)*2.03);--d:24px;
     position:relative;width:var(--w);height:var(--h);transform-style:preserve-3d;
-    animation:spin 22s linear infinite;will-change:transform}
-  @keyframes spin{to{transform:rotateY(360deg)}}
+    animation:spin 14s ease-in-out infinite;will-change:transform}
+  @keyframes spin{0%{transform:rotateY(-50deg)}50%{transform:rotateY(50deg)}100%{transform:rotateY(-50deg)}}
   .face,.side,.internals{position:absolute;left:50%;top:50%}
   .face{width:var(--w);height:var(--h);margin-left:calc(var(--w)/-2);margin-top:calc(var(--h)/-2);border-radius:calc(var(--w)*.17);overflow:hidden;
     background:linear-gradient(150deg,rgba(228,242,248,.60),rgba(190,214,228,.32) 46%,rgba(234,247,251,.52));
