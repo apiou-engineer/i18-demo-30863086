@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>APIOU · Your new iPhone deserves better</title>
+<style>
+  :root{
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+    --ui-ink:#F5F3EE; --ui-soft:rgba(245,243,238,.66); --ui-line:rgba(245,243,238,.22);
+    --btn-bg:#F5F3EE; --btn-fg:#111214;
+    --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
+    --world:#0b0b0d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--sans);background:#0b0b0d;color:var(--ui-ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  body[data-lum="light"]{--ui-ink:#1a1916;--ui-soft:rgba(26,25,22,.62);--ui-line:rgba(26,25,22,.20);--btn-bg:#161512;--btn-fg:#F5F3EE}
+
+  /* ---------- world backgrounds ---------- */
+  .worlds{position:fixed;inset:0;z-index:0}
+  .world{position:absolute;inset:0;opacity:0;transition:opacity 1.4s var(--ease);will-change:opacity}
+  .world.on{opacity:1}
+  .w-black{background:
+    radial-gradient(120% 90% at 30% 20%,#1a1a20,transparent 55%),
+    radial-gradient(120% 120% at 78% 96%,#111116,#08080a)}
+  .w-white{background:
+    radial-gradient(120% 90% at 32% 18%,#ffffff,transparent 55%),
+    radial-gradient(130% 130% at 75% 100%,#e7e4dc,#d7d4cc)}
+  .w-plum{background:
+    radial-gradient(120% 90% at 30% 22%,#4a1c3a,transparent 55%),
+    radial-gradient(130% 130% at 80% 100%,#2a1020,#160812)}
+  .w-blue{background:
+    radial-gradient(120% 90% at 28% 20%,#123a52,transparent 55%),
+    radial-gradient(130% 130% at 82% 100%,#0c2436,#06131f)}
+  .world::after{content:"";position:absolute;inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity:.05;mix-blend-mode:overlay;pointer-events:none}
+  canvas#fx{position:fixed;inset:0;z-index:1;pointer-events:none}
+  /* soft light sweep per world */
+  .sweep{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.5;mix-blend-mode:screen;
+    background:radial-gradient(40% 60% at var(--sx,60%) var(--sy,30%),color-mix(in oklab,var(--world) 60%,#fff 40%),transparent 60%);
+    transition:background 1.4s var(--ease),opacity 1.4s var(--ease)}
+  body[data-lum="light"] .sweep{mix-blend-mode:multiply;opacity:.25}
+
+  /* ---------- 3D phone ---------- */
+  .stage{position:fixed;inset:0;z-index:2;display:grid;place-items:center;perspective:1700px;pointer-events:none}
+  .device-wrap{transition:transform 1.2s var(--spring),filter 1.2s var(--ease);will-change:transform}
+  .device{--w:clamp(150px,20vw,220px);--h:calc(var(--w)*2.03);--d:24px;
+    position:relative;width:var(--w);height:var(--h);transform-style:preserve-3d;
+    animation:spin 22s linear infinite;will-change:transform}
+  @keyframes spin{to{transform:rotateY(360deg)}}
+  .face,.side,.internals{position:absolute;left:50%;top:50%}
+  .face{width:var(--w);height:var(--h);margin-left:calc(var(--w)/-2);margin-top:calc(var(--h)/-2);border-radius:calc(var(--w)*.17);
+    background:linear-gradient(150deg,rgba(255,255,255,.22),rgba(255,255,255,.05) 42%,rgba(255,255,255,.14));
+    box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4),inset 0 0 40px rgba(255,255,255,.06);
+    backface-visibility:visible}
+  .face.front{transform:translate(-50%,-50%) translateZ(calc(var(--d)/2))}
+  .face.back{transform:translate(-50%,-50%) rotateY(180deg) translateZ(calc(var(--d)/2))}
+  .tint{position:absolute;inset:0;border-radius:inherit;background:var(--glass,rgba(140,140,150,.16));transition:background 1.2s var(--ease)}
+  .sheen{position:absolute;inset:0;border-radius:inherit;overflow:hidden}
+  .sheen::before{content:"";position:absolute;top:-30%;left:-60%;width:55%;height:160%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:rotate(10deg);animation:sweepShine 6s var(--ease) infinite}
+  @keyframes sweepShine{0%,100%{left:-60%;opacity:0}20%{opacity:.8}55%{left:130%;opacity:0}}
+  .side{width:var(--d);height:var(--h);margin-left:calc(var(--d)/-2);margin-top:calc(var(--h)/-2);border-radius:6px;
+    background:linear-gradient(var(--glass,rgba(150,150,160,.5)),rgba(255,255,255,.12));box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+  .side.right{transform:translate(-50%,-50%) rotateY(90deg) translateZ(calc(var(--w)/2))}
+  .side.left{transform:translate(-50%,-50%) rotateY(-90deg) translateZ(calc(var(--w)/2))}
+  /* internals (visible through glass) */
+  .internals{width:var(--w);height:var(--h);margin-left:calc(var(--w)/-2);margin-top:calc(var(--h)/-2);transform:translate(-50%,-50%);opacity:.5}
+  .camsq{position:absolute;top:5%;left:6%;width:44%;height:22%;border-radius:22px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.18)}
+  .lensz{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.4),rgba(20,20,26,.5))}
+  .l-a{top:7%;left:9%;width:16%;height:8%} .l-b{top:16%;left:9%;width:16%;height:8%} .l-c{top:9%;left:30%;width:12%;height:6%}
+  .board{position:absolute;top:34%;left:18%;width:64%;height:30%;border-radius:12px;border:1px solid rgba(255,255,255,.18);
+    background:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 2px,transparent 2px 10px)}
+  .batt{position:absolute;bottom:6%;left:18%;width:64%;height:24%;border-radius:14px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.05)}
+  .ring{position:absolute;top:44%;left:50%;width:42%;height:auto;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:1px dashed rgba(255,255,255,.3)}
+
+  /* ---------- UI overlay ---------- */
+  .ui{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:clamp(28px,6vh,64px) 24px;pointer-events:none}
+  .topline{font-family:var(--mono);font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--ui-soft);opacity:0;animation:fadeDown 1.2s var(--ease) .3s forwards}
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 24px clamp(40px,9vh,90px);gap:26px;opacity:0;pointer-events:none;transition:opacity .8s var(--ease),transform .8s var(--ease);transform:translateY(10px)}
+  .screen.on{opacity:1;pointer-events:auto;transform:none}
+
+  .headline{text-align:center;font-weight:200;letter-spacing:-.03em;line-height:1.02;font-size:clamp(2rem,5.4vw,4.4rem);max-width:16ch;text-wrap:balance}
+  .headline .rise{display:inline-block;opacity:0;transform:translateY(18px);animation:rise .9s var(--ease) forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .subq{text-align:center;font-weight:300;font-size:clamp(1.15rem,2.4vw,1.7rem);letter-spacing:-.01em;color:var(--ui-ink)}
+  .lede{text-align:center;color:var(--ui-soft);font-size:1rem;max-width:40ch}
+
+  .btn-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;align-items:center}
+  .btn{pointer-events:auto;appearance:none;border:none;font-family:inherit;font-size:1.02rem;font-weight:500;letter-spacing:.01em;
+    padding:16px 34px;border-radius:100px;cursor:pointer;position:relative;overflow:hidden;
+    transition:transform .5s var(--spring),box-shadow .5s var(--ease),background .5s var(--ease),color .5s var(--ease),opacity .5s}
+  .btn.primary{background:var(--btn-bg);color:var(--btn-fg);box-shadow:0 10px 30px -12px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.1)}
+  .btn.primary::after{content:"";position:absolute;top:0;left:-70%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transition:left .7s var(--ease)}
+  .btn.primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 18px 44px -14px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.16)}
+  .btn.primary:hover::after{left:130%}
+  .btn.primary:active{transform:translateY(-1px) scale(.99)}
+  .btn.secondary{background:transparent;color:var(--ui-ink);box-shadow:inset 0 0 0 1px var(--ui-line)}
+  .btn.secondary:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px var(--ui-ink);background:color-mix(in oklab,var(--ui-ink) 8%,transparent)}
+  .btn.ghost{background:transparent;color:var(--ui-soft);box-shadow:none;padding:12px 18px}
+  .btn.ghost:hover{color:var(--ui-ink);transform:none}
+
+  /* color world selector */
+  .colors{display:flex;gap:clamp(14px,3vw,34px);align-items:flex-end;justify-content:center;flex-wrap:wrap}
+  .color{pointer-events:auto;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:12px;transition:transform .5s var(--spring)}
+  .color:hover{transform:translateY(-6px)}
+  .color .dot{width:clamp(40px,5vw,58px);height:clamp(40px,5vw,58px);border-radius:50%;position:relative;
+    box-shadow:inset 0 2px 6px rgba(255,255,255,.35),inset 0 -4px 10px rgba(0,0,0,.4),0 8px 24px -8px rgba(0,0,0,.5);transition:transform .5s var(--spring)}
+  .color[aria-pressed="true"] .dot{transform:scale(1.06)}
+  .color[aria-pressed="true"] .dot::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:1.5px solid var(--ui-ink)}
+  .color .nm{font-size:.92rem;font-weight:500;letter-spacing:.01em}
+  .color .zh{font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ui-soft)}
+  .d-black{background:radial-gradient(circle at 38% 32%,#3a3a42,#0c0c10)}
+  .d-white{background:radial-gradient(circle at 38% 32%,#ffffff,#d9d6ce)}
+  .d-plum{background:radial-gradient(circle at 38% 32%,#7a3260,#2a1020)}
+  .d-blue{background:radial-gradient(circle at 38% 32%,#3f9fc0,#0c2436)}
+
+  .mood{text-align:center;min-height:1.4em;font-size:1rem;color:var(--ui-soft);letter-spacing:.02em;transition:opacity .5s var(--ease)}
+  .step-actions{display:flex;gap:10px;align-items:center;margin-top:6px}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);z-index:9;
+    background:color-mix(in oklab,var(--world) 60%,#000 40%);color:#fff;border:1px solid rgba(255,255,255,.18);
+    padding:12px 20px;border-radius:100px;font-size:.9rem;opacity:0;transition:opacity .5s var(--ease),transform .5s var(--spring);pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media (prefers-reduced-motion:reduce){.device{animation:none;transform:rotateY(-18deg)}.sheen::before,.btn.primary::after,.world::after{animation:none}*{transition-duration:.15s!important}}
+</style>
+</head>
+<body>
+
+
+<div class="worlds" id="worlds">
+  <div class="world w-black on" data-w="black"></div>
+  <div class="world w-white" data-w="white"></div>
+  <div class="world w-plum" data-w="plum"></div>
+  <div class="world w-blue" data-w="blue"></div>
+</div>
+<canvas id="fx"></canvas>
+<div class="sweep" id="sweep"></div>
+
+<div class="stage">
+  <div class="device-wrap" id="deviceWrap">
+    <div class="device" id="device">
+      <div class="internals">
+        <div class="camsq"></div>
+        <div class="lensz l-a"></div><div class="lensz l-b"></div><div class="lensz l-c"></div>
+        <div class="ring"></div>
+        <div class="board"></div>
+        <div class="batt"></div>
+      </div>
+      <div class="side left"></div>
+      <div class="side right"></div>
+      <div class="face back"><div class="tint"></div><div class="sheen"></div></div>
+      <div class="face front"><div class="tint"></div><div class="sheen"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="ui">
+  <div class="topline">APIOU &middot; iPhone 18 Studio</div>
+  <div></div>
+</div>
+
+<!-- intro -->
+<div class="screen on" id="s-intro">
+  <h1 class="headline">
+    <span class="rise" style="animation-delay:.35s">Your new iPhone</span><br>
+    <span class="rise" style="animation-delay:.55s">deserves better.</span>
+  </h1>
+  <div class="subq rise" style="animation-delay:1.15s">Do you have your iPhone 18 yet?</div>
+  <div class="btn-row rise" style="animation-delay:1.35s">
+    <button class="btn primary" id="yesBtn">Yes, I do.</button>
+    <button class="btn secondary" id="noBtn">Not yet.</button>
+  </div>
+</div>
+
+<!-- color -->
+<div class="screen" id="s-color">
+  <h2 class="headline" style="font-size:clamp(1.6rem,3.4vw,2.6rem)">Choose your colour.</h2>
+  <div class="mood" id="mood">Four finishes. Four worlds.</div>
+  <div class="colors" id="colors"></div>
+  <div class="step-actions">
+    <button class="btn ghost" data-goto="intro">Back</button>
+    <button class="btn primary" id="colorNext">Continue</button>
+  </div>
+</div>
+
+<!-- not yet -->
+<div class="screen" id="s-notyet">
+  <h2 class="headline" style="font-size:clamp(1.6rem,3.4vw,2.6rem)">Let's dress the one you have.</h2>
+  <p class="lede">Pick your current iPhone and we'll build a set around it.</p>
+  <div class="btn-row">
+    <a class="btn primary" id="oldLink" href="#" target="_blank" rel="noopener">Choose my model</a>
+    <button class="btn ghost" data-goto="intro">Back</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+  var $=function(s){return document.querySelector(s);};
+  var root=document.documentElement, body=document.body;
+
+  var WORLDS={
+    black:{lum:"dark",world:"#12121a",glass:"rgba(120,122,135,.16)",mood:"Obsidian · 黑曜石.  煙霧、鈦金屬、深色粒子。",sx:"60%",sy:"26%",p:{color:"180,186,200",n:70,spd:.25,size:1.7,rise:true,blend:"screen"}},
+    white:{lum:"light",world:"#f0eee8",glass:"rgba(255,255,255,.22)",mood:"Cloud · 雲霧白.  白色布料、柔霧光線、乾淨留白。",sx:"50%",sy:"20%",p:{color:"255,255,255",n:55,spd:.18,size:2.4,rise:false,blend:"screen"}},
+    plum:{lum:"dark",world:"#5a2246",glass:"rgba(170,90,140,.20)",mood:"Plum · 李子.  柔光、深紫、溫潤氣息。",sx:"66%",sy:"30%",p:{color:"210,120,175",n:60,spd:.22,size:2,rise:true,blend:"screen"}},
+    blue:{lum:"dark",world:"#1470a0",glass:"rgba(90,170,205,.20)",mood:"Ocean · 海洋藍.  玻璃、流體、冷色光線。",sx:"58%",sy:"24%",p:{color:"110,210,230",n:80,spd:.3,size:1.8,rise:false,blend:"screen"}}
+  };
+  var COLORS=[
+    {id:"black",nm:"Obsidian",zh:"黑曜石",cls:"d-black"},
+    {id:"white",nm:"Cloud",zh:"雲霧白",cls:"d-white"},
+    {id:"plum",nm:"Plum",zh:"李子",cls:"d-plum"},
+    {id:"blue",nm:"Ocean",zh:"海洋藍",cls:"d-blue"}
+  ];
+  var state={color:null};
+
+  // build color swatches
+  var cEl=$("#colors");
+  COLORS.forEach(function(c){
+    var b=document.createElement("button");b.className="color";b.setAttribute("aria-pressed","false");
+    b.innerHTML='<span class="dot '+c.cls+'"></span><span class="nm">'+c.nm+'</span><span class="zh">'+c.zh+'</span>';
+    b.addEventListener("click",function(){pickColor(c);});
+    cEl.appendChild(b);c._el=b;
+  });
+
+  function setWorld(id){
+    var w=WORLDS[id];if(!w)return;
+    document.querySelectorAll(".world").forEach(function(el){el.classList.toggle("on",el.dataset.w===id);});
+    root.style.setProperty("--world",w.world);
+    root.style.setProperty("--glass",w.glass);
+    document.querySelectorAll(".tint").forEach(function(t){t.style.setProperty("--glass",w.glass);t.style.background=w.glass;});
+    document.querySelectorAll(".side").forEach(function(s){s.style.background="linear-gradient("+w.glass+",rgba(255,255,255,.12))";});
+    body.dataset.lum=w.lum;
+    var sw=$("#sweep");sw.style.setProperty("--sx",w.sx);sw.style.setProperty("--sy",w.sy);
+    fx.setPalette(w.p);
+    $("#mood").style.opacity=0;
+    setTimeout(function(){$("#mood").textContent=w.mood;$("#mood").style.opacity=1;},260);
+  }
+
+  function pickColor(c){
+    state.color=c;
+    COLORS.forEach(function(x){x._el.setAttribute("aria-pressed",String(x===c));});
+    setWorld(c.id);
+    // phone reaction: scale + rotate nudge
+    if(!reduce){
+      $("#deviceWrap").animate([{transform:"scale(1.14) rotateZ(0)"},{transform:"scale(1.2) rotateZ(-2deg)"},{transform:"scale(1.14) rotateZ(0)"}],{duration:900,easing:"cubic-bezier(.34,1.4,.5,1)"});
+    }
+  }
+
+  // screen navigation
+  function show(screen){
+    document.querySelectorAll(".screen").forEach(function(s){s.classList.toggle("on",s.id==="s-"+screen);});
+    if(screen==="color"){
+      $("#deviceWrap").style.transform="scale(1.14)";
+      if(!state.color)setWorld("black");
+    }else{
+      $("#deviceWrap").style.transform="scale(1)";
+    }
+    if(screen==="intro"){
+      // reset to neutral obsidian
+      setWorld("black");
+      COLORS.forEach(function(x){x._el.setAttribute("aria-pressed","false");});state.color=null;
+    }
+  }
+
+  $("#yesBtn").addEventListener("click",function(){show("color");});
+  $("#noBtn").addEventListener("click",function(){show("notyet");});
+  document.querySelectorAll("[data-goto]").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.goto);});});
+  $("#colorNext").addEventListener("click",function(){
+    if(!state.color){toast("先選一個顏色 · Pick a colour first");return;}
+    toast("階段 2:MagSafe 磁吸組裝(製作中) · Assembly coming next");
+  });
+  $("#oldLink").addEventListener("click",function(e){e.preventDefault();toast("這裡會連到「現役機型 + 配件」頁(待接連結)");});
+
+  var toastT;
+  function toast(msg){var t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},2600);}
+
+  // ---------- particle field ----------
+  var fx=(function(){
+    var cv=$("#fx"),ctx=cv.getContext("2d"),W=0,H=0,dpr=Math.min(2,window.devicePixelRatio||1);
+    var ps=[],cfg={color:"180,186,200",n:70,spd:.25,size:1.7,rise:true,blend:"screen"};
+    function resize(){W=cv.width=innerWidth*dpr;H=cv.height=innerHeight*dpr;cv.style.width=innerWidth+"px";cv.style.height=innerHeight+"px";}
+    function rnd(a,b){return a+Math.random()*(b-a);}
+    function make(){ps=[];for(var i=0;i<cfg.n;i++){ps.push({x:rnd(0,W),y:rnd(0,H),r:rnd(.5,cfg.size)*dpr,vx:rnd(-.15,.15)*dpr,vy:(cfg.rise?-1:1)*rnd(.05,cfg.spd)*dpr,a:rnd(.1,.6)});}}
+    function setPalette(p){cfg=Object.assign({},cfg,p);make();}
+    function tick(){
+      ctx.clearRect(0,0,W,H);ctx.globalCompositeOperation=cfg.blend||"screen";
+      for(var i=0;i<ps.length;i++){var d=ps[i];d.x+=d.vx;d.y+=d.vy;
+        if(d.y<-10)d.y=H+10;if(d.y>H+10)d.y=-10;if(d.x<-10)d.x=W+10;if(d.x>W+10)d.x=-10;
+        ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,6.283);ctx.fillStyle="rgba("+cfg.color+","+d.a+")";ctx.fill();}
+      if(!reduce)requestAnimationFrame(tick);
+    }
+    resize();make();if(!reduce)requestAnimationFrame(tick);else tick();
+    addEventListener("resize",function(){resize();make();});
+    return {setPalette:setPalette};
+  })();
+
+  // parallax on pointer (subtle)
+  if(!reduce&&window.matchMedia("(pointer:fine)").matches){
+    addEventListener("pointermove",function(e){
+      var x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;
+      $(".stage").style.transform="translate("+(x*14)+"px,"+(y*14)+"px)";
+    });
+  }
+
+  setWorld("black");
+})();
+</script>
+
+</body>
+</html>
