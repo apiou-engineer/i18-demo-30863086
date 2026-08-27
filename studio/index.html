@@ -48,20 +48,20 @@
   /* ---------- 3D phone ---------- */
   .stage{position:fixed;inset:0;z-index:3;display:grid;place-items:center;perspective:1700px;pointer-events:none}
   .device-wrap{transition:transform 1.2s var(--spring),filter 1.2s var(--ease);will-change:transform;filter:drop-shadow(0 24px 60px rgba(130,190,225,.34))}
-  .device{--w:clamp(134px,15.5vw,186px);--h:calc(var(--w)*2.03);--d:24px;
+  .device{--w:clamp(150px,17vw,208px);--h:calc(var(--w)*1.62);--d:26px;--pw:calc(var(--w)*.72);--ph:calc(var(--pw)*2.03);--phonecolor:#2c2c30;
     position:relative;width:var(--w);height:var(--h);transform-style:preserve-3d;
     animation:spin 14s ease-in-out infinite;will-change:transform}
   @keyframes spin{0%{transform:rotateY(-50deg)}50%{transform:rotateY(50deg)}100%{transform:rotateY(-50deg)}}
-  .face,.side,.internals{position:absolute;left:50%;top:50%}
-  .face{width:var(--w);height:var(--h);margin-left:calc(var(--w)/-2);margin-top:calc(var(--h)/-2);border-radius:calc(var(--w)*.17);overflow:hidden;
-    background:linear-gradient(150deg,rgba(228,242,248,.60),rgba(190,214,228,.32) 46%,rgba(234,247,251,.52));
-    box-shadow:inset 0 0 0 2px rgba(255,255,255,.6),inset 0 14px 44px rgba(255,255,255,.4),inset 0 -22px 54px rgba(150,192,218,.34),0 0 46px rgba(175,214,238,.28);
+  .face,.side,.iphone{position:absolute;left:50%;top:50%}
+  .face{width:var(--w);height:var(--h);margin-left:calc(var(--w)/-2);margin-top:calc(var(--h)/-2);border-radius:calc(var(--w)*.22);overflow:hidden;
+    background:radial-gradient(58% 66% at 50% 44%,rgba(226,242,250,.10),rgba(200,224,238,.30) 78%,rgba(222,240,248,.44));
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.55),inset 0 14px 44px rgba(255,255,255,.32),inset 0 -22px 54px rgba(150,192,218,.30),0 0 48px rgba(175,214,238,.28);
     backface-visibility:visible}
-  .frost{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:.16;mix-blend-mode:overlay;
+  .frost{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:.11;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23f)'/%3E%3C/svg%3E")}
-  .crack{position:absolute;inset:5%;border-radius:inherit;pointer-events:none;opacity:.5;
+  .crack{position:absolute;inset:6%;border-radius:inherit;pointer-events:none;opacity:.4;
     background-repeat:no-repeat;background-size:100% 100%;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-opacity='0.45' stroke-width='0.7'%3E%3Cpath d='M24 0 L37 54 L26 106 L44 200'/%3E%3Cpath d='M68 10 L57 66 L73 128 L64 200'/%3E%3Cpath d='M37 54 L69 80'/%3E%3Cpath d='M26 106 L60 150'/%3E%3Cpath d='M52 0 L56 42'/%3E%3C/g%3E%3C/svg%3E")}
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 160' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-opacity='0.45' stroke-width='0.7'%3E%3Cpath d='M20 0 L33 44 L24 86 L38 160'/%3E%3Cpath d='M72 6 L58 52 L74 102 L66 160'/%3E%3Cpath d='M33 44 L70 66'/%3E%3Cpath d='M24 86 L60 120'/%3E%3C/g%3E%3C/svg%3E")}
   .face.front{transform:translate(-50%,-50%) translateZ(calc(var(--d)/2))}
   .face.back{transform:translate(-50%,-50%) rotateY(180deg) translateZ(calc(var(--d)/2))}
   .tint{position:absolute;inset:0;border-radius:inherit;background:var(--glass,rgba(140,140,150,.16));transition:background 1.2s var(--ease)}
@@ -73,15 +73,17 @@
     background:linear-gradient(var(--glass,rgba(150,150,160,.5)),rgba(255,255,255,.12));box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
   .side.right{transform:translate(-50%,-50%) rotateY(90deg) translateZ(calc(var(--w)/2))}
   .side.left{transform:translate(-50%,-50%) rotateY(-90deg) translateZ(calc(var(--w)/2))}
-  /* internals (visible through glass) */
-  .internals{width:var(--w);height:var(--h);margin-left:calc(var(--w)/-2);margin-top:calc(var(--h)/-2);transform:translate(-50%,-50%);opacity:.28;filter:blur(.6px)}
-  .camsq{position:absolute;top:5%;left:6%;width:44%;height:22%;border-radius:22px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.18)}
-  .lensz{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.4),rgba(20,20,26,.5))}
-  .l-a{top:7%;left:9%;width:16%;height:8%} .l-b{top:16%;left:9%;width:16%;height:8%} .l-c{top:9%;left:30%;width:12%;height:6%}
-  .board{position:absolute;top:34%;left:18%;width:64%;height:30%;border-radius:12px;border:1px solid rgba(255,255,255,.18);
-    background:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 2px,transparent 2px 10px)}
-  .batt{position:absolute;bottom:6%;left:18%;width:64%;height:24%;border-radius:14px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.05)}
-  .ring{position:absolute;top:44%;left:50%;width:42%;height:auto;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:1px dashed rgba(255,255,255,.3)}
+  /* iPhone 17 Pro frozen inside the ice */
+  .iphone{width:var(--pw);height:var(--ph);margin-left:calc(var(--pw)/-2);margin-top:calc(var(--ph)/-2);transform:translate(-50%,-50%);border-radius:calc(var(--pw)*.2);
+    background:linear-gradient(150deg,color-mix(in oklab,var(--phonecolor) 74%,#fff 26%),var(--phonecolor) 46%,color-mix(in oklab,var(--phonecolor) 82%,#000 18%));
+    box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.18),0 6px 18px rgba(0,0,0,.5);transition:background .9s var(--ease)}
+  .iphone .cam{position:absolute;top:5.5%;left:7%;width:42%;aspect-ratio:1;border-radius:calc(var(--pw)*.13);
+    background:linear-gradient(150deg,color-mix(in oklab,var(--phonecolor) 60%,#000 40%),#0b0b0d);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),0 2px 6px rgba(0,0,0,.45)}
+  .iphone .ln{position:absolute;border-radius:50%;background:radial-gradient(circle at 38% 34%,#5b5b66 0 16%,#15151a 58%,#050506);box-shadow:inset 0 0 0 2px rgba(255,255,255,.1),0 1px 2px rgba(0,0,0,.5)}
+  .iphone .ln.a{top:12%;left:12%;width:32%;height:32%}
+  .iphone .ln.b{bottom:12%;left:12%;width:32%;height:32%}
+  .iphone .ln.c{top:33%;right:14%;width:24%;height:24%}
+  .iphone .ms{position:absolute;top:52%;left:50%;width:34%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(255,255,255,.10)}
 
   /* ---------- UI overlay ---------- */
   .ui{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:clamp(28px,6vh,64px) 24px;pointer-events:none}
@@ -154,16 +156,13 @@
 <div class="stage">
   <div class="device-wrap" id="deviceWrap">
     <div class="device" id="device">
-      <div class="internals">
-        <div class="camsq"></div>
-        <div class="lensz l-a"></div><div class="lensz l-b"></div><div class="lensz l-c"></div>
-        <div class="ring"></div>
-        <div class="board"></div>
-        <div class="batt"></div>
-      </div>
       <div class="side left"></div>
       <div class="side right"></div>
       <div class="face back"><div class="tint"></div><div class="crack"></div><div class="frost"></div><div class="sheen"></div></div>
+      <div class="iphone">
+        <div class="cam"><div class="ln a"></div><div class="ln b"></div><div class="ln c"></div></div>
+        <div class="ms"></div>
+      </div>
       <div class="face front"><div class="tint"></div><div class="crack"></div><div class="frost"></div><div class="sheen"></div></div>
     </div>
   </div>
@@ -224,10 +223,10 @@
   var root=document.documentElement, body=document.body;
 
   var WORLDS={
-    black:{lum:"dark",world:"#12121a",glass:"rgba(120,122,135,.16)",mood:"Obsidian · 黑曜石.  煙霧、鈦金屬、深色粒子。",sx:"60%",sy:"26%",p:{color:"180,186,200",n:70,spd:.25,size:1.7,rise:true,blend:"screen"}},
-    white:{lum:"light",world:"#f0eee8",glass:"rgba(255,255,255,.22)",mood:"Cloud · 雲霧白.  白色布料、柔霧光線、乾淨留白。",sx:"50%",sy:"20%",p:{color:"255,255,255",n:55,spd:.18,size:2.4,rise:false,blend:"screen"}},
-    plum:{lum:"dark",world:"#5a2246",glass:"rgba(170,90,140,.20)",mood:"Plum · 李子.  柔光、深紫、溫潤氣息。",sx:"66%",sy:"30%",p:{color:"210,120,175",n:60,spd:.22,size:2,rise:true,blend:"screen"}},
-    blue:{lum:"dark",world:"#1470a0",glass:"rgba(90,170,205,.20)",mood:"Ocean · 海洋藍.  玻璃、流體、冷色光線。",sx:"58%",sy:"24%",p:{color:"110,210,230",n:80,spd:.3,size:1.8,rise:false,blend:"screen"}}
+    black:{lum:"dark",world:"#12121a",phone:"#2c2c30",glass:"rgba(120,122,135,.16)",mood:"Obsidian · 黑曜石.  煙霧、鈦金屬、深色粒子。",sx:"60%",sy:"26%",p:{color:"180,186,200",n:70,spd:.25,size:1.7,rise:true,blend:"screen"}},
+    white:{lum:"light",world:"#f0eee8",phone:"#e7e5df",glass:"rgba(255,255,255,.22)",mood:"Cloud · 雲霧白.  白色布料、柔霧光線、乾淨留白。",sx:"50%",sy:"20%",p:{color:"255,255,255",n:55,spd:.18,size:2.4,rise:false,blend:"screen"}},
+    plum:{lum:"dark",world:"#5a2246",phone:"#7a5068",glass:"rgba(170,90,140,.20)",mood:"Plum · 李子.  柔光、深紫、溫潤氣息。",sx:"66%",sy:"30%",p:{color:"210,120,175",n:60,spd:.22,size:2,rise:true,blend:"screen"}},
+    blue:{lum:"dark",world:"#1470a0",phone:"#4d6f86",glass:"rgba(90,170,205,.20)",mood:"Ocean · 海洋藍.  玻璃、流體、冷色光線。",sx:"58%",sy:"24%",p:{color:"110,210,230",n:80,spd:.3,size:1.8,rise:false,blend:"screen"}}
   };
   var COLORS=[
     {id:"black",nm:"Obsidian",zh:"黑曜石",cls:"d-black"},
@@ -250,6 +249,7 @@
     var w=WORLDS[id];if(!w)return;
     document.querySelectorAll(".world").forEach(function(el){el.classList.toggle("on",el.dataset.w===id);});
     root.style.setProperty("--world",w.world);
+    root.style.setProperty("--phonecolor",w.phone);
     root.style.setProperty("--glass",w.glass);
     document.querySelectorAll(".tint").forEach(function(t){t.style.setProperty("--glass",w.glass);t.style.background=w.glass;});
     document.querySelectorAll(".side").forEach(function(s){s.style.background="linear-gradient("+w.glass+",rgba(255,255,255,.12))";});
