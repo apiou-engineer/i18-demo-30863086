@@ -30,24 +30,20 @@
   .headline .rise{display:inline-block;opacity:0;transform:translateY(20px);animation:rise 1s var(--ease) forwards}
   @keyframes rise{to{opacity:1;transform:none}}
 
-  /* video stage — natural colour, tap to thaw */
-  .stage{flex:1 1 auto;min-height:0;display:grid;place-items:center;position:relative;width:100%;cursor:pointer}
-  .ice-wrap{position:relative;height:100%;display:grid;place-items:center;animation:float 8s var(--ease) infinite;will-change:transform}
+  /* image-sequence stage — interactive crack scrubbing */
+  .stage{flex:1 1 auto;min-height:0;display:grid;place-items:center;position:relative;width:100%;cursor:ew-resize;touch-action:none}
+  .frames{position:relative;height:100%;display:grid;place-items:center;animation:float 8s var(--ease) infinite;will-change:transform}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-  .ice{display:block;height:100%;max-height:100%;width:auto;max-width:100%;object-fit:contain;border-radius:14px;
-    box-shadow:0 30px 60px -26px rgba(70,100,120,.4)}
-  /* wide screens: cap the portrait video so it doesn't overflow and crowd the CTA */
-  @media (min-aspect-ratio:1/1){ .ice{height:auto;max-height:100%;width:auto;max-width:min(46vh,420px)} }
+  .frames img{display:block;height:100%;max-height:100%;width:auto;max-width:100%;object-fit:contain;border-radius:14px;
+    box-shadow:0 30px 60px -26px rgba(70,100,120,.4);pointer-events:none}
+  @media (min-aspect-ratio:1/1){ .frames img{height:auto;max-height:100%;width:auto;max-width:min(46vh,420px)} }
 
-  /* tap hint */
-  .hint{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;
+  .hint{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:9px;
     pointer-events:none;transition:opacity .6s var(--ease)}
-  .hint .ring{width:46px;height:46px;border-radius:50%;border:1.5px solid rgba(40,50,60,.5);position:relative}
-  .hint .ring::after{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(40,50,60,.5);animation:ripple 2.2s var(--ease) infinite}
-  @keyframes ripple{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.9);opacity:0}}
-  .hint .dot{position:absolute;top:50%;left:50%;width:7px;height:7px;border-radius:50%;background:rgba(40,50,60,.7);transform:translate(-50%,-50%)}
+  .hint .arrows{display:flex;align-items:center;gap:8px;font-size:1rem;color:rgba(40,50,60,.55);animation:sway 2.4s var(--ease) infinite}
+  @keyframes sway{0%,100%{transform:translateX(-4px)}50%{transform:translateX(4px)}}
   .hint .txt{font-family:var(--mono);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--soft)}
-  .stage.thawed .hint{opacity:0}
+  .stage.touched .hint{opacity:0}
 
   .lower{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:clamp(12px,2.2vh,20px);text-align:center}
   .subq{font-weight:300;font-size:clamp(1.1rem,2.3vw,1.55rem);letter-spacing:-.01em;color:var(--ink);opacity:0;animation:fade .9s var(--ease) 1.2s forwards}
@@ -68,7 +64,7 @@
     opacity:0;transition:opacity .5s var(--ease),transform .5s var(--spring);pointer-events:none}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-  @media (prefers-reduced-motion:reduce){.ice-wrap,.hint .ring::after{animation:none}*{transition-duration:.15s!important}}
+  @media (prefers-reduced-motion:reduce){.frames,.hint .arrows{animation:none}*{transition-duration:.15s!important}}
 </style>
 </head>
 <body>
@@ -80,11 +76,9 @@
     </h1>
 
     <div class="stage" id="stage">
-      <div class="ice-wrap">
-        <video class="ice" id="ice" src="ice-crack.mp4" poster="ice-silver.jpg" muted playsinline preload="auto"></video>
-      </div>
+      <div class="frames"><img id="frame" src="frames/f_000.jpg" alt="iPhone frozen in ice"></div>
       <div class="hint" id="hint">
-        <div class="ring"><span class="dot"></span></div>
+        <div class="arrows">&#8592;&nbsp;&#8594;</div>
         <div class="txt">Move to melt</div>
       </div>
     </div>
@@ -102,61 +96,50 @@
 
 <script>
 (function(){
-  var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
-  var vid=document.getElementById("ice"), stage=document.getElementById("stage");
+  var N=48;
+  var stage=document.getElementById("stage"), frame=document.getElementById("frame");
 
-  // ---- interactive scrubbing: user movement drives the crack progress ----
-  // target/current are 0..1 progress along the clip. We ease current → target
-  // and map it onto video.currentTime, so cracks appear step-by-step as you move.
-  var target=0, current=0, dur=0, ready=false, touched=false;
-  vid.addEventListener("loadedmetadata",function(){ dur=vid.duration||0; try{vid.pause();}catch(e){} });
-  vid.addEventListener("loadeddata",function(){ ready=true; try{vid.pause(); vid.currentTime=0;}catch(e){} });
-  vid.pause();
+  // preload all frames into cache so src swaps are instant
+  var srcs=[];
+  for(var i=0;i<N;i++){
+    var s="frames/f_"+String(i).padStart(3,"0")+".jpg";
+    srcs.push(s);
+    var im=new Image(); im.src=s; // warm the cache
+  }
 
-  // horizontal position across the ice = how melted it is (left frozen → right cracked)
-  function setTargetFromPointer(clientX){
+  // progress 0..1 → frame index; ease current toward target for smoothness
+  var target=0, current=0, shown=0, touched=false, dragging=false;
+  function setFromX(clientX){
     var r=stage.getBoundingClientRect();
-    var t=(clientX-r.left)/r.width;
-    target=Math.max(0,Math.min(1,t));
-    touched=true; stage.classList.add("thawed");
+    target=Math.max(0,Math.min(1,(clientX-r.left)/r.width));
+    if(!touched){ touched=true; stage.classList.add("touched"); }
   }
-  if(window.matchMedia("(pointer:fine)").matches){
-    stage.addEventListener("pointermove",function(e){ setTargetFromPointer(e.clientX); });
-    stage.addEventListener("pointerleave",function(){ /* keep last state, idle heal below */ });
-  }
-  // touch / drag (mobile): drag across to melt
-  var dragging=false;
-  stage.addEventListener("pointerdown",function(e){ dragging=true; setTargetFromPointer(e.clientX); });
+  var fine=window.matchMedia("(pointer:fine)").matches;
+  if(fine){ stage.addEventListener("pointermove",function(e){ setFromX(e.clientX); }); }
+  stage.addEventListener("pointerdown",function(e){ dragging=true; setFromX(e.clientX); });
   window.addEventListener("pointerup",function(){ dragging=false; });
-  window.addEventListener("pointermove",function(e){ if(dragging) setTargetFromPointer(e.clientX); });
+  window.addEventListener("pointermove",function(e){ if(dragging) setFromX(e.clientX); });
+  document.addEventListener("keydown",function(e){
+    if(e.key==="ArrowRight"){ target=Math.min(1,target+0.08); touched=true; stage.classList.add("touched"); }
+    if(e.key==="ArrowLeft"){ target=Math.max(0,target-0.08); }
+  });
 
-  // gentle idle behaviour: if untouched, slowly breathe a hint of cracking; once
-  // touched, when idle it eases very slightly back toward frozen (feels alive)
-  var lastMove=0;
-  ["pointermove","pointerdown"].forEach(function(ev){ stage.addEventListener(ev,function(){ lastMove=perfNow(); }); });
-  function perfNow(){ return (window.__t=(window.__t||0)+16); } // monotonic-ish w/o Date
-
+  function show(idx){
+    idx=Math.max(0,Math.min(N-1,Math.round(idx)));
+    if(idx===shown)return;
+    frame.src=srcs[idx];
+    shown=idx;
+  }
   function loop(){
-    if(dur){
-      // ease current toward target
-      current+=(target-current)*0.12;
-      // subtle auto-heal when idle & touched (drifts back toward frozen slowly)
-      if(touched && !dragging){ target+=(0-target)*0.004; }
-      if(current<0.0005)current=0;
-      var tt=current*Math.max(0,dur-0.05);
-      if(ready && Math.abs((vid.currentTime||0)-tt)>0.02){
-        try{ if(vid.fastSeek){vid.fastSeek(tt);} else {vid.currentTime=tt;} }catch(e){}
-      }
-    }
+    // ease toward target
+    current+=(target-current)*0.16;
+    // gentle idle heal when not dragging (drifts slightly toward frozen)
+    if(touched && !dragging){ target+=(0-target)*0.006; }
+    if(current<0.001)current=0;
+    show(current*(N-1));
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
-
-  // keyboard accessibility: arrow keys nudge the crack
-  document.addEventListener("keydown",function(e){
-    if(e.key==="ArrowRight"){ target=Math.min(1,target+0.12); touched=true; stage.classList.add("thawed"); }
-    if(e.key==="ArrowLeft"){ target=Math.max(0,target-0.12); }
-  });
 
   var toastT;
   function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},3000);}
