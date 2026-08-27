@@ -107,39 +107,39 @@
     var im=new Image(); im.src=s; // warm the cache
   }
 
-  // progress 0..1 → frame index; ease current toward target for smoothness
-  var target=0, current=0, shown=0, touched=false, dragging=false;
-  function setFromX(clientX){
-    var r=stage.getBoundingClientRect();
-    target=Math.max(0,Math.min(1,(clientX-r.left)/r.width));
-    if(!touched){ touched=true; stage.classList.add("touched"); }
-  }
-  var fine=window.matchMedia("(pointer:fine)").matches;
-  if(fine){ stage.addEventListener("pointermove",function(e){ setFromX(e.clientX); }); }
-  stage.addEventListener("pointerdown",function(e){ dragging=true; setFromX(e.clientX); });
-  window.addEventListener("pointerup",function(){ dragging=false; });
-  window.addEventListener("pointermove",function(e){ if(dragging) setFromX(e.clientX); });
-  document.addEventListener("keydown",function(e){
-    if(e.key==="ArrowRight"){ target=Math.min(1,target+0.08); touched=true; stage.classList.add("touched"); }
-    if(e.key==="ArrowLeft"){ target=Math.max(0,target-0.08); }
-  });
-
+  // progress 0..1 → frame index. Update the frame DIRECTLY on movement (no rAF
+  // dependency), so it works everywhere and feels instant.
+  var progress=0, shown=0, touched=false, dragging=false;
   function show(idx){
     idx=Math.max(0,Math.min(N-1,Math.round(idx)));
     if(idx===shown)return;
     frame.src=srcs[idx];
     shown=idx;
   }
-  function loop(){
-    // ease toward target
-    current+=(target-current)*0.16;
-    // gentle idle heal when not dragging (drifts slightly toward frozen)
-    if(touched && !dragging){ target+=(0-target)*0.006; }
-    if(current<0.001)current=0;
-    show(current*(N-1));
-    requestAnimationFrame(loop);
+  function setProgress(p){
+    progress=Math.max(0,Math.min(1,p));
+    show(progress*(N-1));
   }
-  requestAnimationFrame(loop);
+  function setFromX(clientX){
+    var r=stage.getBoundingClientRect();
+    setProgress((clientX-r.left)/r.width);
+    if(!touched){ touched=true; stage.classList.add("touched"); }
+  }
+  // hover (desktop) — attach always; on touch, pointermove only fires while pressed
+  stage.addEventListener("pointermove",function(e){ setFromX(e.clientX); });
+  stage.addEventListener("pointerdown",function(e){ dragging=true; setFromX(e.clientX); });
+  window.addEventListener("pointerup",function(){ dragging=false; });
+  window.addEventListener("pointermove",function(e){ if(dragging) setFromX(e.clientX); });
+  document.addEventListener("keydown",function(e){
+    if(e.key==="ArrowRight"){ setProgress(progress+0.08); touched=true; stage.classList.add("touched"); }
+    if(e.key==="ArrowLeft"){ setProgress(progress-0.08); }
+  });
+
+  // gentle idle heal: when not interacting, slowly drift back toward frozen.
+  // setInterval (not rAF) so it keeps working reliably.
+  setInterval(function(){
+    if(touched && !dragging && progress>0){ setProgress(progress-progress*0.06-0.004); }
+  },60);
 
   var toastT;
   function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},3000);}
