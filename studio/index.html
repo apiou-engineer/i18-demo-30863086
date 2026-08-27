@@ -30,7 +30,7 @@
   .glow{position:absolute;width:60vh;height:60vh;border-radius:50%;background:radial-gradient(circle,rgba(180,215,235,.5),transparent 62%);filter:blur(20px);animation:pulse 7s var(--ease) infinite;will-change:transform,opacity}
   @keyframes pulse{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.8;transform:scale(1.06)}}
   .ice-wrap{position:relative;transition:transform .5s var(--ease);will-change:transform}
-  .ice{display:block;height:min(90vh,780px);width:auto;object-fit:contain;
+  .ice{display:block;height:min(92vh,820px);width:auto;object-fit:contain;
     filter:drop-shadow(0 40px 60px rgba(80,110,130,.28));animation:float 7s var(--ease) infinite;will-change:transform}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
 
@@ -75,7 +75,7 @@
 
   <div class="stage">
     <div class="glow" id="glow"></div>
-    <div class="ice-wrap" id="iceWrap"><img class="ice" id="ice" src="ice-silver.jpg" alt="iPhone frozen in ice"></div>
+    <div class="ice-wrap" id="iceWrap"><video class="ice" id="ice" src="ice-crack.mp4" poster="ice-silver.jpg" autoplay muted playsinline preload="auto"></video></div>
   </div>
 
   <div class="topline">APIOU &middot; iPhone 18 Studio</div>
@@ -99,6 +99,25 @@
   var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
   var iceWrap=document.getElementById("iceWrap"), glow=document.getElementById("glow");
   var bg=document.querySelector(".bg");
+  var vid=document.getElementById("ice");
+  // boomerang: forward → reverse → forward, so cracking loops smoothly without a hard cut
+  var dir=1;
+  vid.addEventListener("loadedmetadata",function(){ if(vid.playbackRate)vid.playbackRate=1; });
+  vid.addEventListener("ended",function(){ reverse(); });
+  function reverse(){
+    dir=-1; vid.pause();
+    var step=function(){
+      if(dir!==-1)return;
+      vid.currentTime=Math.max(0,vid.currentTime-0.033);
+      if(vid.currentTime<=0.033){ dir=1; vid.currentTime=0; vid.play(); return; }
+      requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  // some browsers don't fire 'ended' with loop off reliably at exact end — guard with timeupdate
+  vid.addEventListener("timeupdate",function(){
+    if(dir===1 && vid.duration && vid.currentTime>=vid.duration-0.05){ vid.pause(); reverse(); }
+  });
   var toastT;
   function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},3000);}
   document.getElementById("yesBtn").addEventListener("click",function(){toast("下一步:顏色世界(等其他顏色冰塊素材到位就接上)");});
