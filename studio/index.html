@@ -73,6 +73,27 @@
     opacity:0;transition:opacity .5s var(--ease),transform .5s var(--spring);pointer-events:none}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+  /* iOS-style notification banner */
+  .ios-note{position:fixed;top:max(14px,env(safe-area-inset-top));left:50%;transform:translate(-50%,-160%);z-index:20;
+    width:min(92vw,420px);display:flex;gap:12px;align-items:flex-start;
+    padding:13px 14px;border-radius:20px;pointer-events:auto;
+    background:rgba(245,245,247,.72);backdrop-filter:saturate(1.8) blur(24px);-webkit-backdrop-filter:saturate(1.8) blur(24px);
+    box-shadow:0 12px 40px -10px rgba(0,0,0,.35),inset 0 0 0 .5px rgba(255,255,255,.6);
+    opacity:0;transition:transform .7s var(--spring),opacity .5s var(--ease)}
+  .ios-note.show{transform:translate(-50%,0);opacity:1}
+  .ios-note .ic{flex:0 0 auto;width:40px;height:40px;border-radius:10px;overflow:hidden;
+    background:linear-gradient(150deg,#1b1b1d,#3a3a3f);display:grid;place-items:center;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.16)}
+  .ios-note .ic span{font-weight:700;font-size:.86rem;letter-spacing:.02em;color:#f4f4f2}
+  .ios-note .bd{flex:1 1 auto;min-width:0;color:#111}
+  .ios-note .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .ios-note .title{font-weight:600;font-size:.92rem;letter-spacing:-.01em}
+  .ios-note .time{flex:0 0 auto;font-size:.72rem;color:rgba(0,0,0,.42)}
+  .ios-note .msg{font-size:.88rem;line-height:1.32;color:rgba(0,0,0,.82);margin-top:1px}
+  @media (prefers-color-scheme:dark){
+    .ios-note{background:rgba(38,38,40,.66);box-shadow:0 12px 40px -10px rgba(0,0,0,.6),inset 0 0 0 .5px rgba(255,255,255,.14)}
+    .ios-note .bd{color:#f2f2f4}.ios-note .msg{color:rgba(255,255,255,.82)}.ios-note .time{color:rgba(255,255,255,.45)}
+  }
+
   /* MOBILE (portrait): show whole frame (smaller phone) on a matching beige, dark UI text */
   @media (max-aspect-ratio:1/1){
     body{background:radial-gradient(78% 60% at 50% 30%,#c3bfb4,#adab9f)}
@@ -95,6 +116,14 @@
 
   <div class="invite" id="invite">
     <span class="halo"></span><span class="halo2"></span><span class="core"></span>
+  </div>
+
+  <div class="ios-note" id="iosNote">
+    <div class="ic"><span>APIOU</span></div>
+    <div class="bd">
+      <div class="row"><span class="title">APIOU</span><span class="time">now</span></div>
+      <div class="msg">購買 iPhone 18 系列保護殼，即贈鋼化膜</div>
+    </div>
   </div>
 
   <div class="ui">
@@ -166,12 +195,16 @@
     frame.src=srcs[idx];
     shown=idx;
   }
+  var noteShown=false;
   function heal(amount){
     if(progress>=1)return;
     progress=Math.min(1,progress+amount);
     show(progress*(N-1));
     if(!touched){ touched=true; stage.classList.add("touched"); invite.classList.add("gone"); }
-    yesBtn.classList.toggle("ready", progress>=0.999);
+    if(progress>=0.999){
+      yesBtn.classList.add("ready");
+      if(!noteShown){ noteShown=true; setTimeout(function(){ document.getElementById("iosNote").classList.add("show"); }, 450); }
+    }
   }
   function move(x,y){
     if(!inHot(x,y)){ lastX=null; lastY=null; return; } // outside the screen → ignore
