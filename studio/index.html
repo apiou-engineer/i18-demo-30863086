@@ -115,36 +115,54 @@
   // DEFAULT = broken (frame 0)
   frame.src=srcs[0];
 
-  // progress 0..1 (0 broken → 1 healed). Two-way: moving right/down heals,
-  // moving left/up cracks again. Slower, more contemplative sensitivity.
+  // phone-SCREEN region as fractions of the SOURCE image (x0,y0,x1,y1).
+  // Interaction only counts inside this region.
+  var HOT = (DIR==="frames-desktop")
+    ? {x0:0.435,y0:0.16,x1:0.565,y1:0.86}   // 16:9 desktop clip: tall centred phone
+    : {x0:0.34, y0:0.18, x1:0.66, y1:0.60};  // 9:16 portrait clip: phone screen area
+
+  // map image-fraction → viewport rect through object-fit:cover
+  function hotRect(){
+    var CW=innerWidth, CH=innerHeight;
+    var IW=frame.naturalWidth||16, IH=frame.naturalHeight||9;
+    var scale=Math.max(CW/IW, CH/IH);
+    var rw=IW*scale, rh=IH*scale, ox=(CW-rw)/2, oy=(CH-rh)/2;
+    return { x0:ox+HOT.x0*rw, y0:oy+HOT.y0*rh, x1:ox+HOT.x1*rw, y1:oy+HOT.y1*rh };
+  }
+  function inHot(x,y){ var h=hotRect(); return x>=h.x0&&x<=h.x1&&y>=h.y0&&y<=h.y1; }
+  function placeInvite(){ var h=hotRect(); invite.style.left=((h.x0+h.x1)/2)+"px"; invite.style.top=((h.y0+h.y1)/2)+"px"; }
+  frame.addEventListener("load",placeInvite); addEventListener("resize",placeInvite); placeInvite();
+
+  // progress 0..1 (0 broken → 1 healed). Direction-agnostic: ANY movement inside
+  // the screen heals. One-way (won't re-crack). Faster.
   var progress=0, shown=0, touched=false, lastX=null, lastY=null;
-  var SENS=0.9; // lower = need to move more to change (was ~1.6)
+  var SENS=2.6;
   function show(idx){
     idx=Math.max(0,Math.min(N-1,Math.round(idx)));
     if(idx===shown)return;
     frame.src=srcs[idx];
     shown=idx;
   }
-  function nudge(delta){
-    progress=Math.max(0,Math.min(1,progress+delta));
+  function heal(amount){
+    if(progress>=1)return;
+    progress=Math.min(1,progress+amount);
     show(progress*(N-1));
     if(!touched){ touched=true; stage.classList.add("touched"); invite.classList.add("gone"); }
     yesBtn.classList.toggle("ready", progress>=0.999);
   }
-  // signed movement → heal or re-crack. Use horizontal as primary, vertical as helper.
   function move(x,y){
+    if(!inHot(x,y)){ lastX=null; lastY=null; return; } // outside the screen → ignore
     if(lastX!=null){
       var dx=x-lastX, dy=y-lastY;
-      var r=stage.getBoundingClientRect();
-      var signed=(dx+dy*0.5)/Math.max(r.width,r.height); // right/down = +, left/up = −
-      nudge(signed*SENS);
+      var dist=Math.sqrt(dx*dx+dy*dy);
+      heal( (dist/Math.max(innerWidth,innerHeight)) * SENS );
     }
     lastX=x; lastY=y;
   }
   stage.addEventListener("pointermove",function(e){ move(e.clientX,e.clientY); });
-  stage.addEventListener("pointerdown",function(e){ lastX=e.clientX; lastY=e.clientY; });
+  stage.addEventListener("pointerdown",function(e){ if(inHot(e.clientX,e.clientY)){ lastX=e.clientX; lastY=e.clientY; } });
   stage.addEventListener("pointerleave",function(){ lastX=null; lastY=null; });
-  document.addEventListener("keydown",function(e){ if(e.key==="ArrowRight"){nudge(0.06);} if(e.key==="ArrowLeft"){nudge(-0.06);} });
+  document.addEventListener("keydown",function(e){ if(e.key==="ArrowRight"||e.key==="ArrowLeft"||e.key===" "){ heal(0.08); } });
 
   var toastT;
   function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},3000);}
