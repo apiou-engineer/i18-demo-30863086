@@ -26,8 +26,8 @@
   .phone{position:relative;width:min(58vh,520px);max-width:88vw;animation:float 9s var(--ease) infinite;will-change:transform}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
   .phone img{display:block;width:100%;height:auto;
-    -webkit-mask-image:radial-gradient(58% 62% at 50% 52%,#000 58%,transparent 82%);
-            mask-image:radial-gradient(58% 62% at 50% 52%,#000 58%,transparent 82%);
+    -webkit-mask-image:radial-gradient(72% 78% at 50% 50%,#000 72%,transparent 100%);
+            mask-image:radial-gradient(72% 78% at 50% 50%,#000 72%,transparent 100%);
     filter:drop-shadow(0 40px 70px rgba(0,0,0,.5))}
 
   .ui{position:fixed;inset:0;z-index:3;pointer-events:none}
@@ -143,11 +143,12 @@
     // base fill
     ctx.fillStyle=rgb(cur.base); ctx.fillRect(0,0,W,H);
     // soft light bloom following the cursor
-    var bx=lx*W, by=ly*H, R=Math.max(W,H)*0.75;
+    var bx=lx*W, by=ly*H, R=Math.max(W,H)*1.15;
     var g=ctx.createRadialGradient(bx,by,0,bx,by,R);
     var b=cur.bloom;
-    g.addColorStop(0,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+",0.42)");
-    g.addColorStop(0.35,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+",0.12)");
+    g.addColorStop(0,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+",0.34)");
+    g.addColorStop(0.28,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+",0.14)");
+    g.addColorStop(0.6,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+",0.04)");
     g.addColorStop(1,"rgba(0,0,0,0)");
     ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
     // subtle counter-bloom bottom-right for depth
