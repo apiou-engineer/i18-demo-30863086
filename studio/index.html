@@ -75,8 +75,8 @@
 
   /* MOBILE (portrait): show whole frame (smaller phone) on a matching beige, dark UI text */
   @media (max-aspect-ratio:1/1){
-    body{background:radial-gradient(78% 60% at 50% 34%,#c3bfb4,#adab9f)}
-    #frame{object-fit:contain}
+    body{background:radial-gradient(78% 60% at 50% 30%,#c3bfb4,#adab9f)}
+    #frame{object-fit:contain;transform:translateY(-6vh) scale(1.1);transform-origin:center}
     .scrim{display:none}
     .topline{color:rgba(28,27,24,.55)}
     .subq{color:#1c1b18;text-shadow:none}
@@ -134,13 +134,23 @@
     ? {x0:0.435,y0:0.16,x1:0.565,y1:0.86}   // 16:9 desktop clip: tall centred phone
     : {x0:0.29, y0:0.27, x1:0.71, y1:0.74};  // portrait centred crop: phone screen area
 
-  // map image-fraction → viewport rect through the actual object-fit used
+  // mobile: enlarge + shift the frame up (must match the CSS transform below)
+  var MOB_SCALE = IS_DESKTOP ? 1 : 1.1;
+  function mobTY(){ return IS_DESKTOP ? 0 : -0.06*innerHeight; } // -6vh
+
+  // map image-fraction → viewport rect through the actual object-fit + mobile transform
   function hotRect(){
     var CW=innerWidth, CH=innerHeight;
     var IW=frame.naturalWidth||16, IH=frame.naturalHeight||9;
     var scale = FIT==="cover" ? Math.max(CW/IW, CH/IH) : Math.min(CW/IW, CH/IH);
     var rw=IW*scale, rh=IH*scale, ox=(CW-rw)/2, oy=(CH-rh)/2;
-    return { x0:ox+HOT.x0*rw, y0:oy+HOT.y0*rh, x1:ox+HOT.x1*rw, y1:oy+HOT.y1*rh };
+    var r={ x0:ox+HOT.x0*rw, y0:oy+HOT.y0*rh, x1:ox+HOT.x1*rw, y1:oy+HOT.y1*rh };
+    if(!IS_DESKTOP){ // apply CSS transform: scale about center, then translateY
+      var cx=CW/2, cy=CH/2, s=MOB_SCALE, ty=mobTY();
+      r.x0=cx+(r.x0-cx)*s; r.x1=cx+(r.x1-cx)*s;
+      r.y0=cy+(r.y0-cy)*s+ty; r.y1=cy+(r.y1-cy)*s+ty;
+    }
+    return r;
   }
   function inHot(x,y){ var h=hotRect(); return x>=h.x0&&x<=h.x1&&y>=h.y0&&y<=h.y1; }
   function placeInvite(){ var h=hotRect(); invite.style.left=((h.x0+h.x1)/2)+"px"; invite.style.top=((h.y0+h.y1)/2)+"px"; }
