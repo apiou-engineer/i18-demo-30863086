@@ -79,7 +79,7 @@
       <div class="frames"><img id="frame" src="frames/f_000.jpg" alt="iPhone frozen in ice"></div>
       <div class="hint" id="hint">
         <div class="arrows">&#8592;&nbsp;&#8594;</div>
-        <div class="txt">Move to melt</div>
+        <div class="txt">Move to heal</div>
       </div>
     </div>
 
@@ -135,11 +135,12 @@
     if(e.key==="ArrowLeft"){ setProgress(progress-0.08); }
   });
 
-  // gentle idle heal: when not interacting, slowly drift back toward frozen.
-  // setInterval (not rAF) so it keeps working reliably.
+  // repair concept: start broken (frame 0), hold whatever the user has healed.
+  // if left almost-broken and idle, drift very gently back to fully broken so the
+  // "move to heal" invitation still makes sense — but never undo real progress.
   setInterval(function(){
-    if(touched && !dragging && progress>0){ setProgress(progress-progress*0.06-0.004); }
-  },60);
+    if(touched && !dragging && progress>0 && progress<0.12){ setProgress(progress-0.01); }
+  },80);
 
   var toastT;
   function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},3000);}
