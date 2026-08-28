@@ -119,7 +119,7 @@
   // Interaction only counts inside this region.
   var HOT = (DIR==="frames-desktop")
     ? {x0:0.435,y0:0.16,x1:0.565,y1:0.86}   // 16:9 desktop clip: tall centred phone
-    : {x0:0.34, y0:0.18, x1:0.66, y1:0.60};  // 9:16 portrait clip: phone screen area
+    : {x0:0.29, y0:0.27, x1:0.71, y1:0.74};  // 9:18 portrait clip (re-cropped, phone centred)
 
   // map image-fraction → viewport rect through object-fit:cover
   function hotRect(){
