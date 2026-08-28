@@ -9,82 +9,92 @@
   :root{
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",Roboto,sans-serif;
     --mono:ui-monospace,"SF Mono",Menlo,monospace;
-    --ink:#1b1c1e; --soft:rgba(27,28,30,.58); --line:rgba(27,28,30,.18);
-    --btn-bg:#161719; --btn-fg:#f6f7f8;
+    --btn-bg:#f4f4f2; --btn-fg:#141414;
     --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
-  body{font-family:var(--sans);color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased;
-    background:radial-gradient(80% 70% at 50% 22%,#f4f5f6,#e6e8ea 70%,#dfe1e3)}
+  body{font-family:var(--sans);color:#f3f2ef;background:#1a1a1a;overflow:hidden;-webkit-font-smoothing:antialiased}
 
-  .hero{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;
-    padding:clamp(16px,3vh,34px) 24px clamp(24px,5vh,52px);gap:clamp(10px,2vh,20px)}
+  /* fullscreen frame sequence, edge to edge */
+  .stage{position:fixed;inset:0;z-index:0;cursor:pointer;touch-action:none;overflow:hidden}
+  #frame{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;user-select:none;-webkit-user-drag:none;pointer-events:none}
+  /* subtle vignette + top/bottom scrims so overlaid text stays legible on any frame */
+  .scrim{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:
+      linear-gradient(180deg,rgba(0,0,0,.42),transparent 26%,transparent 62%,rgba(0,0,0,.5)),
+      radial-gradient(120% 90% at 50% 40%,transparent 55%,rgba(0,0,0,.28))}
 
-  .topline{font-family:var(--mono);font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--soft);
-    opacity:0;animation:fade 1.2s var(--ease) .2s forwards;flex:0 0 auto}
+  .ui{position:fixed;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+    padding:clamp(22px,5vh,54px) 24px clamp(28px,6vh,64px);pointer-events:none;text-align:center}
+
+  .top{display:flex;flex-direction:column;align-items:center;gap:clamp(14px,3vh,26px)}
+  .topline{font-family:var(--mono);font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:rgba(243,242,239,.66);
+    opacity:0;animation:fade 1.2s var(--ease) .2s forwards}
   @keyframes fade{to{opacity:1}}
-
-  .headline{flex:0 0 auto;text-align:center;font-weight:200;letter-spacing:-.035em;line-height:1.0;
-    font-size:clamp(1.9rem,5vw,4rem);max-width:16ch;text-wrap:balance;margin-top:clamp(4px,1.5vh,14px)}
+  .headline{font-weight:200;letter-spacing:-.035em;line-height:1.0;font-size:clamp(2.1rem,5.6vw,4.6rem);max-width:15ch;text-wrap:balance;
+    text-shadow:0 2px 40px rgba(0,0,0,.55),0 1px 3px rgba(0,0,0,.4)}
   .headline .rise{display:inline-block;opacity:0;transform:translateY(20px);animation:rise 1s var(--ease) forwards}
   @keyframes rise{to{opacity:1;transform:none}}
 
-  /* image-sequence stage — interactive crack scrubbing */
-  .stage{flex:1 1 auto;min-height:0;display:grid;place-items:center;position:relative;width:100%;cursor:ew-resize;touch-action:none}
-  .frames{position:relative;height:100%;display:grid;place-items:center;animation:float 8s var(--ease) infinite;will-change:transform}
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-  .frames img{display:block;height:100%;max-height:100%;width:auto;max-width:100%;object-fit:contain;border-radius:14px;
-    box-shadow:0 30px 60px -26px rgba(70,100,120,.4);pointer-events:none}
-  /* wide screens use the 16:9 desktop clip → size by width, keep it within height */
-  @media (min-aspect-ratio:1/1){ .frames img{height:auto;max-height:100%;width:min(78vw,880px);max-width:880px} }
+  /* interaction invite: a soft pulsing point of light over the phone */
+  .invite{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;width:76px;height:76px;pointer-events:none;
+    transition:opacity .8s var(--ease)}
+  .invite .core{position:absolute;inset:34%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,255,255,.2) 60%,transparent 72%);
+    box-shadow:0 0 24px 6px rgba(255,255,255,.5);animation:corePulse 2.6s var(--ease) infinite}
+  .invite .halo,.invite .halo2{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(255,255,255,.7)}
+  .invite .halo{animation:halo 2.6s var(--ease) infinite}
+  .invite .halo2{animation:halo 2.6s var(--ease) 1.3s infinite}
+  @keyframes halo{0%{transform:scale(.4);opacity:.8}100%{transform:scale(1.5);opacity:0}}
+  @keyframes corePulse{0%,100%{transform:scale(.9);opacity:.85}50%{transform:scale(1.15);opacity:1}}
+  .stage.touched ~ .invite, .invite.gone{opacity:0}
 
-  .hint{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:9px;
-    pointer-events:none;transition:opacity .6s var(--ease)}
-  .hint .arrows{display:flex;align-items:center;gap:8px;font-size:1rem;color:rgba(40,50,60,.55);animation:sway 2.4s var(--ease) infinite}
-  @keyframes sway{0%,100%{transform:translateX(-4px)}50%{transform:translateX(4px)}}
-  .hint .txt{font-family:var(--mono);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--soft)}
-  .stage.touched .hint{opacity:0}
-
-  .lower{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:clamp(12px,2.2vh,20px);text-align:center}
-  .subq{font-weight:300;font-size:clamp(1.1rem,2.3vw,1.55rem);letter-spacing:-.01em;color:var(--ink);opacity:0;animation:fade .9s var(--ease) 1.2s forwards}
+  .bottom{display:flex;flex-direction:column;align-items:center;gap:clamp(12px,2.4vh,22px)}
+  .subq{font-weight:300;font-size:clamp(1.05rem,2.3vw,1.5rem);letter-spacing:-.01em;color:#f3f2ef;
+    text-shadow:0 1px 20px rgba(0,0,0,.6);opacity:0;animation:fade .9s var(--ease) 1.2s forwards}
   .btn-row{display:flex;gap:15px;flex-wrap:wrap;justify-content:center;opacity:0;animation:fade .9s var(--ease) 1.4s forwards}
-  .btn{appearance:none;border:none;font-family:inherit;font-size:1.02rem;font-weight:500;letter-spacing:.01em;
+  .btn{pointer-events:auto;appearance:none;border:none;font-family:inherit;font-size:1.02rem;font-weight:500;letter-spacing:.01em;
     padding:16px 34px;border-radius:100px;cursor:pointer;position:relative;overflow:hidden;
-    transition:transform .5s var(--spring),box-shadow .5s var(--ease),background .4s,color .4s}
-  .btn.primary{background:var(--btn-bg);color:var(--btn-fg);box-shadow:0 12px 34px -14px rgba(30,50,70,.55),inset 0 0 0 1px rgba(255,255,255,.08)}
-  .btn.primary::after{content:"";position:absolute;top:0;left:-70%;width:52%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.4),transparent);transition:left .7s var(--ease)}
-  .btn.primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 20px 46px -16px rgba(30,50,70,.6)}
+    transition:transform .5s var(--spring),box-shadow .5s var(--ease),background .4s,color .4s,opacity .4s}
+  .btn.primary{background:var(--btn-bg);color:var(--btn-fg);box-shadow:0 14px 40px -16px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.14)}
+  .btn.primary::after{content:"";position:absolute;top:0;left:-70%;width:52%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transition:left .7s var(--ease)}
+  .btn.primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 22px 50px -18px rgba(0,0,0,.75)}
   .btn.primary:hover::after{left:130%}
   .btn.primary:active{transform:translateY(-1px) scale(.99)}
-  .btn.secondary{background:rgba(255,255,255,.72);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-  .btn.secondary:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px var(--ink);background:rgba(255,255,255,.9)}
+  .btn.secondary{background:rgba(255,255,255,.14);color:#f3f2ef;box-shadow:inset 0 0 0 1px rgba(255,255,255,.34);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .btn.secondary:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);background:rgba(255,255,255,.22)}
+
+  /* when fully healed, gently invite the primary CTA */
+  .btn.primary.ready{animation:readyPulse 2.2s var(--ease) infinite}
+  @keyframes readyPulse{0%,100%{box-shadow:0 14px 40px -16px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.14)}50%{box-shadow:0 14px 40px -16px rgba(0,0,0,.7),0 0 0 6px rgba(255,255,255,.18),inset 0 0 0 1px rgba(255,255,255,.14)}}
 
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);z-index:9;
-    background:rgba(22,23,25,.92);color:#fff;padding:12px 22px;border-radius:100px;font-size:.9rem;
+    background:rgba(20,20,20,.92);color:#fff;padding:12px 22px;border-radius:100px;font-size:.9rem;
     opacity:0;transition:opacity .5s var(--ease),transform .5s var(--spring);pointer-events:none}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-  @media (prefers-reduced-motion:reduce){.frames,.hint .arrows{animation:none}*{transition-duration:.15s!important}}
+  @media (prefers-reduced-motion:reduce){.invite *{animation:none}.btn.primary.ready{animation:none}*{transition-duration:.15s!important}}
 </style>
 </head>
 <body>
-  <div class="hero">
-    <div class="topline">APIOU &middot; iPhone 18 Studio</div>
-    <h1 class="headline">
-      <span class="rise" style="animation-delay:.35s">Your new iPhone</span><br>
-      <span class="rise" style="animation-delay:.55s">deserves better.</span>
-    </h1>
+  <div class="stage" id="stage">
+    <img id="frame" src="frames/f_000.jpg" alt="broken iPhone screen">
+  </div>
+  <div class="scrim"></div>
 
-    <div class="stage" id="stage">
-      <div class="frames"><img id="frame" src="frames/f_000.jpg" alt="broken iPhone screen"></div>
-      <div class="hint" id="hint">
-        <div class="arrows">&#8592;&nbsp;&#8594;</div>
-        <div class="txt">Move to heal</div>
-      </div>
+  <div class="invite" id="invite">
+    <span class="halo"></span><span class="halo2"></span><span class="core"></span>
+  </div>
+
+  <div class="ui">
+    <div class="top">
+      <div class="topline">APIOU &middot; iPhone 18 Studio</div>
+      <h1 class="headline">
+        <span class="rise" style="animation-delay:.35s">Your new iPhone</span><br>
+        <span class="rise" style="animation-delay:.55s">deserves better.</span>
+      </h1>
     </div>
-
-    <div class="lower">
+    <div class="bottom">
       <div class="subq">Do you have your iPhone 18 yet?</div>
       <div class="btn-row">
         <button class="btn primary" id="yesBtn">Yes, I do.</button>
@@ -98,57 +108,57 @@
 <script>
 (function(){
   var N=48;
-  var stage=document.getElementById("stage"), frame=document.getElementById("frame");
+  var stage=document.getElementById("stage"), frame=document.getElementById("frame"), invite=document.getElementById("invite");
+  var yesBtn=document.getElementById("yesBtn");
 
-  // responsive: wide screens use the 16:9 desktop sequence, portrait uses 9:16
   var DIR = window.matchMedia("(min-aspect-ratio:1/1)").matches ? "frames-desktop" : "frames";
   function srcFor(i){ return DIR+"/f_"+String(i).padStart(3,"0")+".jpg"; }
-
-  // preload all frames into cache so src swaps are instant
   var srcs=[];
   for(var i=0;i<N;i++){ srcs.push(srcFor(i)); var im=new Image(); im.src=srcs[i]; }
 
-  // DEFAULT STATE = broken (frame 0). Force it on load regardless of the <img> src.
+  // DEFAULT = broken (frame 0)
   frame.src=srcs[0];
 
-  // progress 0..1 → frame index. Update the frame DIRECTLY on movement (no rAF
-  // dependency), so it works everywhere and feels instant.
-  var progress=0, shown=0, touched=false, dragging=false;
+  // progress 0..1 (0 broken → 1 healed). ANY movement advances healing (no direction).
+  var progress=0, shown=0, touched=false, healed=false, lastX=null, lastY=null;
   function show(idx){
     idx=Math.max(0,Math.min(N-1,Math.round(idx)));
     if(idx===shown)return;
     frame.src=srcs[idx];
     shown=idx;
   }
-  function setProgress(p){
-    progress=Math.max(0,Math.min(1,p));
+  function advance(amount){
+    if(healed)return;
+    progress=Math.min(1,progress+amount);
     show(progress*(N-1));
+    if(!touched){ touched=true; stage.classList.add("touched"); invite.classList.add("gone"); }
+    if(progress>=1 && !healed){ healed=true; onHealed(); }
   }
-  function setFromX(clientX){
-    var r=stage.getBoundingClientRect();
-    setProgress((clientX-r.left)/r.width);
-    if(!touched){ touched=true; stage.classList.add("touched"); }
+  function onHealed(){
+    // hold on the pristine screen; gently invite the primary CTA
+    yesBtn.classList.add("ready");
   }
-  // hover (desktop) — attach always; on touch, pointermove only fires while pressed
-  stage.addEventListener("pointermove",function(e){ setFromX(e.clientX); });
-  stage.addEventListener("pointerdown",function(e){ dragging=true; setFromX(e.clientX); });
-  window.addEventListener("pointerup",function(){ dragging=false; });
-  window.addEventListener("pointermove",function(e){ if(dragging) setFromX(e.clientX); });
-  document.addEventListener("keydown",function(e){
-    if(e.key==="ArrowRight"){ setProgress(progress+0.08); touched=true; stage.classList.add("touched"); }
-    if(e.key==="ArrowLeft"){ setProgress(progress-0.08); }
-  });
 
-  // repair concept: start broken (frame 0), hold whatever the user has healed.
-  // if left almost-broken and idle, drift very gently back to fully broken so the
-  // "move to heal" invitation still makes sense — but never undo real progress.
-  setInterval(function(){
-    if(touched && !dragging && progress>0 && progress<0.12){ setProgress(progress-0.01); }
-  },80);
+  // movement magnitude → healing. Works with mouse hover and touch drag, any direction.
+  function move(x,y){
+    if(lastX!=null){
+      var dx=x-lastX, dy=y-lastY;
+      var dist=Math.sqrt(dx*dx+dy*dy);
+      var r=stage.getBoundingClientRect();
+      var norm=dist/Math.max(r.width,r.height); // fraction of screen moved
+      advance(norm*1.6); // sensitivity: ~a bit more than one screen-sweep to fully heal
+    }
+    lastX=x; lastY=y;
+  }
+  stage.addEventListener("pointermove",function(e){ move(e.clientX,e.clientY); });
+  stage.addEventListener("pointerdown",function(e){ lastX=e.clientX; lastY=e.clientY; });
+  window.addEventListener("pointermove",function(e){ /* keep tracking if dragging outside */ });
+  // keyboard nudge for accessibility
+  document.addEventListener("keydown",function(e){ if(e.key==="ArrowRight"||e.key==="ArrowLeft"||e.key===" "){ advance(0.08); } });
 
   var toastT;
   function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},3000);}
-  document.getElementById("yesBtn").addEventListener("click",function(e){e.stopPropagation();toast("下一步:顏色世界(其他顏色素材到位就接上)");});
+  yesBtn.addEventListener("click",function(e){e.stopPropagation();toast("下一步:顏色世界(其他顏色素材到位就接上)");});
   document.getElementById("noBtn").addEventListener("click",function(e){e.stopPropagation();toast("這裡會導向「現役機型 + 配件」頁(待接連結)");});
 })();
 </script>
