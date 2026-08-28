@@ -89,10 +89,6 @@
   <div class="ui">
     <div class="top">
       <div class="topline">APIOU &middot; iPhone 18 Studio</div>
-      <h1 class="headline">
-        <span class="rise" style="animation-delay:.35s">Your new iPhone</span><br>
-        <span class="rise" style="animation-delay:.55s">deserves better.</span>
-      </h1>
     </div>
     <div class="bottom">
       <div class="subq">Do you have your iPhone 18 yet?</div>
@@ -119,42 +115,36 @@
   // DEFAULT = broken (frame 0)
   frame.src=srcs[0];
 
-  // progress 0..1 (0 broken → 1 healed). ANY movement advances healing (no direction).
-  var progress=0, shown=0, touched=false, healed=false, lastX=null, lastY=null;
+  // progress 0..1 (0 broken → 1 healed). Two-way: moving right/down heals,
+  // moving left/up cracks again. Slower, more contemplative sensitivity.
+  var progress=0, shown=0, touched=false, lastX=null, lastY=null;
+  var SENS=0.9; // lower = need to move more to change (was ~1.6)
   function show(idx){
     idx=Math.max(0,Math.min(N-1,Math.round(idx)));
     if(idx===shown)return;
     frame.src=srcs[idx];
     shown=idx;
   }
-  function advance(amount){
-    if(healed)return;
-    progress=Math.min(1,progress+amount);
+  function nudge(delta){
+    progress=Math.max(0,Math.min(1,progress+delta));
     show(progress*(N-1));
     if(!touched){ touched=true; stage.classList.add("touched"); invite.classList.add("gone"); }
-    if(progress>=1 && !healed){ healed=true; onHealed(); }
+    yesBtn.classList.toggle("ready", progress>=0.999);
   }
-  function onHealed(){
-    // hold on the pristine screen; gently invite the primary CTA
-    yesBtn.classList.add("ready");
-  }
-
-  // movement magnitude → healing. Works with mouse hover and touch drag, any direction.
+  // signed movement → heal or re-crack. Use horizontal as primary, vertical as helper.
   function move(x,y){
     if(lastX!=null){
       var dx=x-lastX, dy=y-lastY;
-      var dist=Math.sqrt(dx*dx+dy*dy);
       var r=stage.getBoundingClientRect();
-      var norm=dist/Math.max(r.width,r.height); // fraction of screen moved
-      advance(norm*1.6); // sensitivity: ~a bit more than one screen-sweep to fully heal
+      var signed=(dx+dy*0.5)/Math.max(r.width,r.height); // right/down = +, left/up = −
+      nudge(signed*SENS);
     }
     lastX=x; lastY=y;
   }
   stage.addEventListener("pointermove",function(e){ move(e.clientX,e.clientY); });
   stage.addEventListener("pointerdown",function(e){ lastX=e.clientX; lastY=e.clientY; });
-  window.addEventListener("pointermove",function(e){ /* keep tracking if dragging outside */ });
-  // keyboard nudge for accessibility
-  document.addEventListener("keydown",function(e){ if(e.key==="ArrowRight"||e.key==="ArrowLeft"||e.key===" "){ advance(0.08); } });
+  stage.addEventListener("pointerleave",function(){ lastX=null; lastY=null; });
+  document.addEventListener("keydown",function(e){ if(e.key==="ArrowRight"){nudge(0.06);} if(e.key==="ArrowLeft"){nudge(-0.06);} });
 
   var toastT;
   function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},3000);}
