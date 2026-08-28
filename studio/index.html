@@ -73,6 +73,17 @@
     opacity:0;transition:opacity .5s var(--ease),transform .5s var(--spring);pointer-events:none}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+  /* MOBILE (portrait): show whole frame (smaller phone) on a matching beige, dark UI text */
+  @media (max-aspect-ratio:1/1){
+    body{background:radial-gradient(78% 60% at 50% 34%,#c3bfb4,#adab9f)}
+    #frame{object-fit:contain}
+    .scrim{display:none}
+    .topline{color:rgba(28,27,24,.55)}
+    .subq{color:#1c1b18;text-shadow:none}
+    .btn.primary{background:#161719;color:#f4f4f2}
+    .btn.secondary{background:rgba(0,0,0,.05);color:#1c1b18;box-shadow:inset 0 0 0 1px rgba(0,0,0,.22)}
+    .invite .core{box-shadow:0 0 24px 6px rgba(255,255,255,.7)}
+  }
   @media (prefers-reduced-motion:reduce){.invite *{animation:none}.btn.primary.ready{animation:none}*{transition-duration:.15s!important}}
 </style>
 </head>
@@ -117,15 +128,17 @@
 
   // phone-SCREEN region as fractions of the SOURCE image (x0,y0,x1,y1).
   // Interaction only counts inside this region.
-  var HOT = (DIR==="frames-desktop")
+  var IS_DESKTOP = (DIR==="frames-desktop");
+  var FIT = IS_DESKTOP ? "cover" : "contain"; // desktop fills; mobile shows whole frame (smaller phone)
+  var HOT = IS_DESKTOP
     ? {x0:0.435,y0:0.16,x1:0.565,y1:0.86}   // 16:9 desktop clip: tall centred phone
-    : {x0:0.384,y0:0.373,x1:0.615,y1:0.632}; // portrait (centred + 0.55 scale)
+    : {x0:0.29, y0:0.27, x1:0.71, y1:0.74};  // portrait centred crop: phone screen area
 
-  // map image-fraction → viewport rect through object-fit:cover
+  // map image-fraction → viewport rect through the actual object-fit used
   function hotRect(){
     var CW=innerWidth, CH=innerHeight;
     var IW=frame.naturalWidth||16, IH=frame.naturalHeight||9;
-    var scale=Math.max(CW/IW, CH/IH);
+    var scale = FIT==="cover" ? Math.max(CW/IW, CH/IH) : Math.min(CW/IW, CH/IH);
     var rw=IW*scale, rh=IH*scale, ox=(CW-rw)/2, oy=(CH-rh)/2;
     return { x0:ox+HOT.x0*rw, y0:oy+HOT.y0*rh, x1:ox+HOT.x1*rw, y1:oy+HOT.y1*rh };
   }
