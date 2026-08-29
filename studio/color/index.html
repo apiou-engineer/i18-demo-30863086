@@ -159,9 +159,12 @@
   }
   setTimeout(function(){ if(veil.parentNode) veil.parentNode.removeChild(veil); }, 1200);
 
-  // parallax tilt
+  // parallax tilt — suppressed during the entrance flip so it isn't overridden
+  var parallaxOn=true;
+  if(location.hash==="#flip" && !reduce){ parallaxOn=false; setTimeout(function(){ parallaxOn=true; }, 1450); }
   if(!reduce && window.matchMedia("(pointer:fine)").matches){
     addEventListener("pointermove",function(e){
+      if(!parallaxOn)return;
       var x=e.clientX/innerWidth-.5, y=e.clientY/innerHeight-.5;
       document.getElementById("phoneWrap").style.transform="rotateY("+(x*9)+"deg) rotateX("+(-y*7)+"deg)";
     });
