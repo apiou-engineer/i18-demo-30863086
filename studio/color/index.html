@@ -14,7 +14,10 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
-  body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;-webkit-font-smoothing:antialiased}
+  body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;-webkit-font-smoothing:antialiased;
+    --bgc:#0a0a0b;transition:--bgc .6s}
+  /* negative / light world (Titanium Natural): flip UI to dark ink */
+  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.62);--line:rgba(27,27,30,.2);--bgc:#d6d2ca}
 
   /* code-generated grainy studio backdrop (soft light top-left) */
   canvas#bg{position:fixed;inset:0;z-index:0;display:block}
@@ -59,17 +62,17 @@
   .swatch{background:none;border:none;cursor:pointer;display:flex;align-items:center;transition:transform .5s var(--spring)}
   .swatch:hover{transform:translateY(-3px)}
   @media (min-aspect-ratio:1/1){ .swatch:hover{transform:translateX(-4px)} }
-  .swatch .dot{width:clamp(40px,4.4vw,54px);height:clamp(40px,4.4vw,54px);border-radius:50%;position:relative;flex:0 0 auto;
-    box-shadow:inset 0 2px 6px rgba(255,255,255,.25),inset 0 -4px 10px rgba(0,0,0,.5),0 8px 22px -8px rgba(0,0,0,.6);
-    transition:transform .5s var(--spring)}
-  .swatch[aria-pressed="true"] .dot{transform:scale(1.05)}
-  .swatch[aria-pressed="true"] .dot::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1.5px solid var(--ink)}
-  .swatch .nm{font-size:.92rem;font-weight:500;letter-spacing:-.01em;color:var(--ink);white-space:nowrap;opacity:.82;transition:opacity .4s}
+  /* flat swatches */
+  .swatch .dot{width:clamp(30px,3vw,38px);height:clamp(30px,3vw,38px);border-radius:50%;position:relative;flex:0 0 auto;
+    box-shadow:0 0 0 1px rgba(255,255,255,.14);transition:transform .4s var(--spring),box-shadow .4s var(--ease)}
+  .swatch:hover .dot{box-shadow:0 0 0 1px rgba(255,255,255,.4)}
+  .swatch[aria-pressed="true"] .dot{box-shadow:0 0 0 2px var(--bgc,#0a0a0b),0 0 0 4px var(--ink)}
+  .swatch .nm{font-size:.9rem;font-weight:500;letter-spacing:-.01em;color:var(--ink);white-space:nowrap;opacity:.7;transition:opacity .4s}
   .swatch[aria-pressed="true"] .nm{opacity:1}
-  .d-blue{background:radial-gradient(circle at 38% 32%,#8fb3d8,#3f6690)}
-  .d-plum{background:radial-gradient(circle at 38% 32%,#7c4a63,#3a1f2e)}
-  .d-natural{background:radial-gradient(circle at 38% 32%,#e2ded6,#a9a49a)}
-  .d-black{background:radial-gradient(circle at 38% 32%,#3a3a40,#0b0b0e)}
+  .d-blue{background:#7fa3cf}
+  .d-plum{background:#6f4258}
+  .d-natural{background:#cfcabf}
+  .d-black{background:#1c1c20}
 </style>
 </head>
 <body>
@@ -95,7 +98,7 @@
   var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
   var COLORS=[
     {id:"black",  nm:"Titanium Black",   cls:"d-black",   img:"titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
-    {id:"natural",nm:"Titanium Natural", cls:"d-natural", img:"titanium-natural.png", base:[19,18,15],  bloom:[228,222,208]},
+    {id:"natural",nm:"Titanium Natural", cls:"d-natural", img:"titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
     {id:"plum",   nm:"Titanium Plum",    cls:"d-plum",    img:"titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
     {id:"blue",   nm:"Titanium Blue",    cls:"d-blue",    img:"titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
   ];
@@ -127,7 +130,8 @@
     state.color=c;
     COLORS.forEach(function(x){ x._el.setAttribute("aria-pressed",String(x===c)); });
     showColor(c);
-    target.base=c.base.slice(); target.bloom=c.bloom.slice();
+    target.base=c.base.slice(); target.bloom=c.bloom.slice(); target.neg=c.neg?1:0;
+    document.body.classList.toggle("light", !!c.neg);
     var nmEl=document.getElementById("cname"); nmEl.style.opacity=0;
     setTimeout(function(){ nmEl.textContent=c.nm; nmEl.style.opacity=1; },220);
     if(!reduce){ document.getElementById("phoneWrap").animate(
@@ -160,27 +164,31 @@
   var lx=0.22, ly=0.16, tlx=0.22, tly=0.16;
   addEventListener("pointermove",function(e){ tlx=0.14+ (e.clientX/innerWidth)*0.3; tly=0.10+ (e.clientY/innerHeight)*0.25; });
   // background tint eases toward the selected colour
-  var cur={base:COLORS[0].base.slice(), bloom:COLORS[0].bloom.slice()};
-  var target={base:COLORS[0].base.slice(), bloom:COLORS[0].bloom.slice()};
+  var cur={base:COLORS[0].base.slice(), bloom:COLORS[0].bloom.slice(), neg:0};
+  var target={base:COLORS[0].base.slice(), bloom:COLORS[0].bloom.slice(), neg:0};
   function lerp(a,b,t){return a+(b-a)*t;}
   function rgb(a){return "rgb("+(a[0]|0)+","+(a[1]|0)+","+(a[2]|0)+")";}
   function draw(){
     lx=lerp(lx,tlx,.05); ly=lerp(ly,tly,.05);
     for(var i=0;i<3;i++){ cur.base[i]=lerp(cur.base[i],target.base[i],.05); cur.bloom[i]=lerp(cur.bloom[i],target.bloom[i],.05); }
+    cur.neg=lerp(cur.neg,target.neg,.05);
     var b=cur.bloom;
-    // base dark (tinted)
+    // base fill (dark for normal worlds, light for the negative/Natural world)
     ctx.fillStyle=rgb(cur.base); ctx.fillRect(0,0,W,H);
-    // big soft diffuse light from upper-left (tinted)
+    // soft diffuse halo from the light position — bright bloom on dark worlds,
+    // dark bloom on the light world (photo-negative), stronger alpha when neg
     var bx=lx*W, by=ly*H, R=Math.max(W,H)*1.25;
+    var a0=lerp(0.5,0.62,cur.neg), a1=lerp(0.2,0.26,cur.neg), a2=lerp(0.07,0.10,cur.neg);
     var g=ctx.createRadialGradient(bx,by,0,bx,by,R);
-    g.addColorStop(0,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+",0.5)");
-    g.addColorStop(0.22,"rgba("+(b[0]*0.7|0)+","+(b[1]*0.7|0)+","+(b[2]*0.7|0)+",0.2)");
-    g.addColorStop(0.5,"rgba("+(b[0]*0.3|0)+","+(b[1]*0.3|0)+","+(b[2]*0.3|0)+",0.07)");
+    g.addColorStop(0,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+","+a0+")");
+    g.addColorStop(0.22,"rgba("+(b[0]*0.7|0)+","+(b[1]*0.7|0)+","+(b[2]*0.7|0)+","+a1+")");
+    g.addColorStop(0.5,"rgba("+(b[0]*0.3|0)+","+(b[1]*0.3|0)+","+(b[2]*0.3|0)+","+a2+")");
     g.addColorStop(1,"rgba(0,0,0,0)");
     ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-    // gentle floor sheen near bottom
+    // floor grounding — inverts with neg (dark floor on dark worlds, soft on light)
     var fg=ctx.createLinearGradient(0,H*0.8,0,H);
-    fg.addColorStop(0,"rgba(0,0,0,0)"); fg.addColorStop(.7,"rgba(255,255,255,0.03)"); fg.addColorStop(1,"rgba(0,0,0,0.25)");
+    var floorA=lerp(0.25,0.10,cur.neg);
+    fg.addColorStop(0,"rgba(0,0,0,0)"); fg.addColorStop(.7,"rgba(255,255,255,0.03)"); fg.addColorStop(1,"rgba(0,0,0,"+floorA+")");
     ctx.fillStyle=fg; ctx.fillRect(0,0,W,H);
     // grain overlay
     if(grain){ ctx.globalAlpha=1; ctx.drawImage(grain,0,0,W,H); }
