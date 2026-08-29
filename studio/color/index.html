@@ -9,26 +9,27 @@
   :root{
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",Roboto,sans-serif;
     --mono:ui-monospace,"SF Mono",Menlo,monospace;
-    --ink:#f4f3f0; --soft:rgba(244,243,240,.62); --line:rgba(244,243,240,.2);
+    --ink:#f4f3f0; --soft:rgba(244,243,240,.6); --line:rgba(244,243,240,.2);
     --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
-  body{font-family:var(--sans);color:var(--ink);background:#0a0b0d;overflow:hidden;-webkit-font-smoothing:antialiased}
+  body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;-webkit-font-smoothing:antialiased}
 
+  /* code-generated grainy studio backdrop (soft light top-left) */
   canvas#bg{position:fixed;inset:0;z-index:0;display:block}
-  .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-  /* phone (masked so its baked studio bg fades into the live gradient) */
-  .stage{position:fixed;inset:0;z-index:2;display:grid;place-items:center;perspective:1400px;pointer-events:none}
-  .phone-wrap{transition:transform .5s var(--ease);will-change:transform}
-  .phone{position:relative;width:min(58vh,520px);max-width:88vw;animation:float 9s var(--ease) infinite;will-change:transform}
+  /* phone (transparent cut-out) floating on the backdrop */
+  .stage{position:fixed;inset:0;z-index:1;display:grid;place-items:center;perspective:1500px;pointer-events:none}
+  .phone-wrap{position:relative;transition:transform .5s var(--ease);transform-style:preserve-3d;will-change:transform}
+  .phone{position:relative;height:min(76vh,660px);animation:float 9s var(--ease) infinite;will-change:transform}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-  .phone img{display:block;width:100%;height:auto;
-    -webkit-mask-image:radial-gradient(72% 78% at 50% 50%,#000 72%,transparent 100%);
-            mask-image:radial-gradient(72% 78% at 50% 50%,#000 72%,transparent 100%);
-    filter:drop-shadow(0 40px 70px rgba(0,0,0,.5))}
+  .phone img{position:absolute;inset:0;height:100%;width:auto;left:50%;transform:translateX(-50%);
+    filter:drop-shadow(0 46px 60px rgba(0,0,0,.55));opacity:0;transition:opacity .6s var(--ease)}
+  .phone img.on{opacity:1}
+  /* soft contact shadow under phone */
+  .shadow{position:absolute;bottom:-4%;left:50%;transform:translateX(-50%);width:52%;height:5%;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(0,0,0,.55),transparent);filter:blur(6px)}
 
   .ui{position:fixed;inset:0;z-index:3;pointer-events:none}
   .eyebrow{position:absolute;top:clamp(20px,4vh,40px);left:0;right:0;text-align:center;
@@ -36,50 +37,47 @@
     opacity:0;animation:fade 1s var(--ease) .2s forwards}
   @keyframes fade{to{opacity:1}}
 
-  /* headline top-left area */
   .head{position:absolute;top:clamp(70px,12vh,140px);left:clamp(24px,6vw,86px);max-width:12ch}
   .head h1{font-weight:600;font-size:clamp(2.4rem,5vw,4.2rem);line-height:.98;letter-spacing:-.03em;text-wrap:balance}
   .head p{margin-top:16px;color:var(--soft);font-size:clamp(.95rem,1.4vw,1.1rem);font-weight:300;max-width:26ch}
+  .head .cname{margin-top:22px;font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);transition:opacity .4s}
 
-  /* swatches — right side on desktop, bottom on mobile */
-  .colors{position:absolute;pointer-events:auto;display:flex;gap:26px}
+  .colors{position:absolute;pointer-events:auto;display:flex}
   @media (min-aspect-ratio:1/1){
     .colors{right:clamp(30px,6vw,90px);top:50%;transform:translateY(-50%);flex-direction:column;gap:22px}
     .swatch{flex-direction:row;gap:16px}
   }
   @media (max-aspect-ratio:1/1){
-    .head{top:clamp(56px,9vh,110px);left:0;right:0;text-align:center;max-width:none;padding:0 24px}
+    .head{top:clamp(48px,8vh,96px);left:0;right:0;text-align:center;max-width:none;padding:0 24px}
+    .head h1{font-size:clamp(2rem,8vw,2.8rem)}
     .head p{margin-left:auto;margin-right:auto}
-    .colors{left:0;right:0;bottom:clamp(40px,8vh,80px);justify-content:center;gap:clamp(16px,5vw,34px)}
-    .swatch{flex-direction:column;gap:10px;align-items:center}
-    .swatch .nm{text-align:center;font-size:.8rem}
+    .colors{left:0;right:0;bottom:clamp(34px,7vh,70px);justify-content:center;gap:clamp(16px,5vw,32px)}
+    .swatch{flex-direction:column;gap:9px;align-items:center}
+    .swatch .nm{text-align:center;font-size:.78rem}
+    .phone{height:min(52vh,440px)}
   }
   .swatch{background:none;border:none;cursor:pointer;display:flex;align-items:center;transition:transform .5s var(--spring)}
   .swatch:hover{transform:translateY(-3px)}
   @media (min-aspect-ratio:1/1){ .swatch:hover{transform:translateX(-4px)} }
   .swatch .dot{width:clamp(40px,4.4vw,54px);height:clamp(40px,4.4vw,54px);border-radius:50%;position:relative;flex:0 0 auto;
-    box-shadow:inset 0 2px 6px rgba(255,255,255,.28),inset 0 -4px 10px rgba(0,0,0,.5),0 8px 22px -8px rgba(0,0,0,.6);
+    box-shadow:inset 0 2px 6px rgba(255,255,255,.25),inset 0 -4px 10px rgba(0,0,0,.5),0 8px 22px -8px rgba(0,0,0,.6);
     transition:transform .5s var(--spring)}
   .swatch[aria-pressed="true"] .dot{transform:scale(1.05)}
   .swatch[aria-pressed="true"] .dot::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1.5px solid var(--ink)}
-  .swatch .nm{font-size:.92rem;font-weight:500;letter-spacing:-.01em;color:var(--ink);white-space:nowrap;
-    opacity:.85;transition:opacity .4s}
+  .swatch .nm{font-size:.92rem;font-weight:500;letter-spacing:-.01em;color:var(--ink);white-space:nowrap;opacity:.82;transition:opacity .4s}
   .swatch[aria-pressed="true"] .nm{opacity:1}
+  .d-blue{background:radial-gradient(circle at 38% 32%,#8fb3d8,#3f6690)}
+  .d-plum{background:radial-gradient(circle at 38% 32%,#7c4a63,#3a1f2e)}
+  .d-natural{background:radial-gradient(circle at 38% 32%,#e2ded6,#a9a49a)}
   .d-black{background:radial-gradient(circle at 38% 32%,#3a3a40,#0b0b0e)}
-  .d-white{background:radial-gradient(circle at 38% 32%,#ffffff,#dcdad2)}
-  .d-natural{background:radial-gradient(circle at 38% 32%,#d9d2c4,#a99f8c)}
-  .d-blue{background:radial-gradient(circle at 38% 32%,#7f97b4,#33465f)}
-
-  .hint{position:absolute;left:50%;bottom:clamp(14px,3vh,26px);transform:translateX(-50%);z-index:4;
-    font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,243,240,.4)}
 </style>
 </head>
 <body>
   <canvas id="bg"></canvas>
-  <div class="grain"></div>
 
   <div class="stage"><div class="phone-wrap" id="phoneWrap">
-    <div class="phone"><img id="phoneImg" src="titanium-black.jpg" alt="iPhone 18"></div>
+    <div class="phone" id="phone"></div>
+    <div class="shadow"></div>
   </div></div>
 
   <div class="ui">
@@ -87,21 +85,35 @@
     <div class="head">
       <h1>Choose your colour.</h1>
       <p>Personalise your iPhone 18 with a colour that reflects you.</p>
+      <div class="cname" id="cname">Titanium Black</div>
     </div>
     <div class="colors" id="colors"></div>
   </div>
-  <div class="hint">Move your cursor</div>
 
 <script>
 (function(){
   var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
   var COLORS=[
-    {id:"black",  nm:"Titanium Black",   cls:"d-black",   base:[10,11,13],   bloom:[196,204,214], img:"titanium-black.jpg"},
-    {id:"white",  nm:"Titanium White",   cls:"d-white",   base:[30,30,34],   bloom:[240,237,230], img:"titanium-black.jpg"},
-    {id:"natural",nm:"Titanium Natural", cls:"d-natural", base:[22,20,15],   bloom:[230,221,205], img:"titanium-black.jpg"},
-    {id:"blue",   nm:"Titanium Blue",    cls:"d-blue",    base:[9,17,26],    bloom:[150,190,220], img:"titanium-black.jpg"}
+    {id:"black",  nm:"Titanium Black",   cls:"d-black",   img:"titanium-black.png"},
+    {id:"natural",nm:"Titanium Natural", cls:"d-natural", img:"titanium-natural.png"},
+    {id:"plum",   nm:"Titanium Plum",    cls:"d-plum",    img:"titanium-plum.png"},
+    {id:"blue",   nm:"Titanium Blue",    cls:"d-blue",    img:"titanium-blue.png"}
   ];
   var state={color:COLORS[0]};
+
+  // preload + stack phone images (cross-fade between colours)
+  var phoneEl=document.getElementById("phone"), imgs={};
+  COLORS.forEach(function(c){
+    var im=new Image(); im.src=c.img; im.className="pimg"; im.alt="iPhone 18 "+c.nm;
+    im.style.cssText=""; phoneEl.appendChild(im); imgs[c.id]=im;
+    im.classList.add("pimg");
+  });
+  // apply base class for styling
+  Array.prototype.forEach.call(phoneEl.querySelectorAll("img"),function(im){ im.className="pimg"; im.setAttribute("style",""); });
+  // set the .phone img styles via CSS class already; ensure 'on' for default
+  function showColor(c){
+    Object.keys(imgs).forEach(function(k){ imgs[k].classList.toggle("on", k===c.id); });
+  }
 
   // swatches
   var cEl=document.getElementById("colors");
@@ -114,57 +126,67 @@
   function pick(c){
     state.color=c;
     COLORS.forEach(function(x){ x._el.setAttribute("aria-pressed",String(x===c)); });
-    // phone image swap (all point to black for now until other renders arrive)
-    var img=document.getElementById("phoneImg");
-    if(img.getAttribute("src")!==c.img){ img.src=c.img; }
-    // world retargets in the canvas loop via targetBase/targetBloom
-    target.base=c.base.slice(); target.bloom=c.bloom.slice();
+    showColor(c);
+    var nmEl=document.getElementById("cname"); nmEl.style.opacity=0;
+    setTimeout(function(){ nmEl.textContent=c.nm; nmEl.style.opacity=1; },220);
     if(!reduce){ document.getElementById("phoneWrap").animate(
-      [{transform:"scale(1)"},{transform:"scale(1.04)"},{transform:"scale(1)"}],{duration:700,easing:"cubic-bezier(.34,1.4,.5,1)"}); }
+      [{transform:"scale(1)"},{transform:"scale(1.035)"},{transform:"scale(1)"}],{duration:640,easing:"cubic-bezier(.34,1.4,.5,1)"}); }
+  }
+  showColor(state.color);
+
+  // parallax tilt
+  if(!reduce && window.matchMedia("(pointer:fine)").matches){
+    addEventListener("pointermove",function(e){
+      var x=e.clientX/innerWidth-.5, y=e.clientY/innerHeight-.5;
+      document.getElementById("phoneWrap").style.transform="rotateY("+(x*9)+"deg) rotateX("+(-y*7)+"deg)";
+    });
   }
 
-  // ---------- animated gradient background ----------
-  var cv=document.getElementById("bg"), ctx=cv.getContext("2d"), W=0,H=0,dpr=Math.min(2,window.devicePixelRatio||1);
-  function resize(){ W=cv.width=innerWidth*dpr; H=cv.height=innerHeight*dpr; cv.style.width=innerWidth+"px"; cv.style.height=innerHeight+"px"; }
+  // ---------- grainy studio backdrop (reproduces the reference) ----------
+  var cv=document.getElementById("bg"), ctx=cv.getContext("2d"), W,H,dpr=Math.min(2,window.devicePixelRatio||1);
+  var grain=null;
+  function buildGrain(){
+    var gw=Math.ceil(innerWidth), gh=Math.ceil(innerHeight);
+    var g=document.createElement("canvas"); g.width=gw; g.height=gh;
+    var gx=g.getContext("2d"); var id=gx.createImageData(gw,gh); var d=id.data;
+    for(var i=0;i<d.length;i+=4){ var v=(Math.random()*255)|0; d[i]=d[i+1]=d[i+2]=v; d[i+3]=16; }
+    gx.putImageData(id,0,0); grain=g;
+  }
+  function resize(){ W=cv.width=innerWidth*dpr; H=cv.height=innerHeight*dpr; cv.style.width=innerWidth+"px"; cv.style.height=innerHeight+"px"; buildGrain(); }
   resize(); addEventListener("resize",resize);
 
-  var cur={base:COLORS[0].base.slice(), bloom:COLORS[0].bloom.slice()};
-  var target={base:COLORS[0].base.slice(), bloom:COLORS[0].bloom.slice()};
-  // light position (eased toward pointer)
-  var lx=0.32, ly=0.30, tlx=0.32, tly=0.30;
-  addEventListener("pointermove",function(e){ tlx=e.clientX/innerWidth; tly=e.clientY/innerHeight;
-    var w=document.getElementById("phoneWrap"); w.style.transform="rotateY("+((tlx-.5)*10)+"deg) rotateX("+(-(tly-.5)*8)+"deg)"; });
-
-  function lerp(a,b,t){ return a+(b-a)*t; }
-  function rgb(a){ return "rgb("+(a[0]|0)+","+(a[1]|0)+","+(a[2]|0)+")"; }
+  // light position eases toward pointer (subtle)
+  var lx=0.22, ly=0.16, tlx=0.22, tly=0.16;
+  addEventListener("pointermove",function(e){ tlx=0.14+ (e.clientX/innerWidth)*0.3; tly=0.10+ (e.clientY/innerHeight)*0.25; });
+  function lerp(a,b,t){return a+(b-a)*t;}
   function draw(){
-    for(var i=0;i<3;i++){ cur.base[i]=lerp(cur.base[i],target.base[i],.05); cur.bloom[i]=lerp(cur.bloom[i],target.bloom[i],.05); }
-    lx=lerp(lx,tlx,.06); ly=lerp(ly,tly,.06);
-    // base fill
-    ctx.fillStyle=rgb(cur.base); ctx.fillRect(0,0,W,H);
-    // soft light bloom following the cursor
-    var bx=lx*W, by=ly*H, R=Math.max(W,H)*1.15;
+    lx=lerp(lx,tlx,.05); ly=lerp(ly,tly,.05);
+    // base dark
+    ctx.fillStyle="#0a0a0b"; ctx.fillRect(0,0,W,H);
+    // big soft diffuse light from upper-left
+    var bx=lx*W, by=ly*H, R=Math.max(W,H)*1.25;
     var g=ctx.createRadialGradient(bx,by,0,bx,by,R);
-    var b=cur.bloom;
-    g.addColorStop(0,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+",0.34)");
-    g.addColorStop(0.28,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+",0.14)");
-    g.addColorStop(0.6,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+",0.04)");
+    g.addColorStop(0,"rgba(220,224,228,0.5)");
+    g.addColorStop(0.22,"rgba(150,155,162,0.22)");
+    g.addColorStop(0.5,"rgba(60,62,68,0.08)");
     g.addColorStop(1,"rgba(0,0,0,0)");
     ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-    // subtle counter-bloom bottom-right for depth
-    var g2=ctx.createRadialGradient(W*0.82,H*0.9,0,W*0.82,H*0.9,R*0.7);
-    g2.addColorStop(0,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+",0.08)");
-    g2.addColorStop(1,"rgba(0,0,0,0)");
-    ctx.fillStyle=g2; ctx.fillRect(0,0,W,H);
-    // floor reflection band
-    var fg=ctx.createLinearGradient(0,H*0.72,0,H);
-    fg.addColorStop(0,"rgba(0,0,0,0)"); fg.addColorStop(1,"rgba(0,0,0,0.35)");
+    // gentle floor sheen near bottom
+    var fg=ctx.createLinearGradient(0,H*0.8,0,H);
+    fg.addColorStop(0,"rgba(0,0,0,0)"); fg.addColorStop(.7,"rgba(255,255,255,0.03)"); fg.addColorStop(1,"rgba(0,0,0,0.25)");
     ctx.fillStyle=fg; ctx.fillRect(0,0,W,H);
+    // grain overlay
+    if(grain){ ctx.globalAlpha=1; ctx.drawImage(grain,0,0,W,H); }
     if(!reduce) requestAnimationFrame(draw);
   }
   requestAnimationFrame(draw);
-  if(reduce){ tlx=0.32; tly=0.30; draw(); }
+  if(reduce) draw();
 })();
 </script>
+<style>
+  .phone img.pimg{position:absolute;inset:0;height:100%;width:auto;left:50%;transform:translateX(-50%);
+    filter:drop-shadow(0 46px 60px rgba(0,0,0,.55));opacity:0;transition:opacity .6s var(--ease)}
+  .phone img.pimg.on{opacity:1}
+</style>
 </body>
 </html>
