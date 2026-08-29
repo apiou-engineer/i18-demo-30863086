@@ -76,6 +76,9 @@
     opacity:0;transition:opacity .5s var(--ease),transform .5s var(--spring);pointer-events:none}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+  /* flip transition veil (rises as the phone turns edge-on, hands off to colour world) */
+  .flip-veil{position:fixed;inset:0;z-index:30;background:#d3cfc6;opacity:0;pointer-events:none;transition:opacity .6s var(--ease)}
+
   /* iOS-style notification banner */
   .ios-note{position:fixed;top:max(14px,env(safe-area-inset-top));left:50%;transform:translate(-50%,-160%);z-index:20;
     width:min(92vw,430px);display:flex;gap:12px;align-items:center;cursor:pointer;
@@ -145,6 +148,7 @@
   </div>
 
   <div class="toast" id="toast"></div>
+  <div class="flip-veil" id="flipVeil"></div>
 
 <script>
 (function(){
@@ -237,7 +241,18 @@
 
   var toastT;
   function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},3000);}
-  yesBtn.addEventListener("click",function(e){e.stopPropagation();toast("下一步:顏色世界(其他顏色素材到位就接上)");});
+  yesBtn.addEventListener("click",function(e){e.stopPropagation(); flipToColour();});
+  function flipToColour(){
+    dismissNote();
+    var veil=document.getElementById("flipVeil");
+    document.querySelector(".ui").style.transition="opacity .4s"; document.querySelector(".ui").style.opacity="0";
+    // turn the phone/scene edge-on while a light veil rises, then hand off to the colour world
+    var s=document.querySelector(".stage");
+    s.style.transition="transform .7s cubic-bezier(.6,0,.4,1),opacity .7s ease";
+    s.style.transformOrigin="center"; s.style.transform="perspective(1400px) rotateY(-88deg) scale(1.06)"; s.style.opacity="0.4";
+    if(veil){ requestAnimationFrame(function(){ veil.style.opacity="1"; }); }
+    setTimeout(function(){ location.href="color/#flip"; }, 640);
+  }
   document.getElementById("noBtn").addEventListener("click",function(e){e.stopPropagation();toast("這裡會導向「現役機型 + 配件」頁(待接連結)");});
 })();
 </script>
