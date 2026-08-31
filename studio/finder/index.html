@@ -26,6 +26,7 @@
   .phone{position:relative;height:min(64vh,560px);animation:float 9s var(--ease) infinite;will-change:transform;transition:height .6s var(--ease),transform .6s var(--ease)}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
   .phone img{height:100%;width:auto;filter:drop-shadow(0 46px 60px rgba(0,0,0,.55))}
+  body.light .phone img{filter:drop-shadow(0 26px 34px rgba(120,116,106,.32))}
   /* result: phone slides left to make room for the bundle card (desktop) */
   body.result .phone-wrap{transform:translateX(-14vw)}
   @media (max-aspect-ratio:1/1){ body.result .phone-wrap{transform:translateY(-16vh)} .phone{height:min(46vh,400px)} }
