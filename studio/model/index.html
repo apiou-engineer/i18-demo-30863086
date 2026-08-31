@@ -27,8 +27,8 @@
   .head h1{font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1;letter-spacing:-.03em;text-wrap:balance}
   .head p{margin-top:14px;color:var(--soft);font-size:clamp(.92rem,1.4vw,1.08rem);font-weight:300;max-width:30ch;margin-left:auto;margin-right:auto}
 
-  .grid{margin-top:auto;margin-bottom:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.4vw,20px);
-    width:min(1040px,94vw)}
+  .grid{margin-top:auto;margin-bottom:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,22px);
+    width:min(840px,94vw)}
   .card{position:relative;pointer-events:auto;cursor:pointer;text-align:center;
     background:var(--card);border:1px solid var(--line);border-radius:22px;
     padding:clamp(20px,2.4vw,30px) clamp(12px,1.4vw,20px) clamp(18px,2.2vw,26px);
@@ -56,15 +56,12 @@
   .card:hover .m-go{opacity:1;transform:none;color:var(--ink)}
 
   @media (max-aspect-ratio:1/1){
-    .grid{grid-template-columns:1fr 1fr;gap:12px;width:min(560px,94vw)}
-    .card{flex-direction:row;justify-content:flex-start;gap:16px;text-align:left;padding:16px 16px}
-    .glyph{height:auto}
+    .grid{grid-template-columns:1fr;gap:12px;width:min(440px,94vw)}
+    .card{flex-direction:row;justify-content:flex-start;gap:18px;text-align:left;padding:16px 20px}
+    .glyph{height:auto;width:44px;flex:0 0 auto}
     .ph{--h:56px !important}
     .card > .txt{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
     .m-go{display:none}
-  }
-  @media (max-width:430px){
-    .grid{grid-template-columns:1fr}
   }
 
   .veil{position:fixed;inset:0;z-index:40;background:#d3cfc6;pointer-events:none;opacity:1;transition:opacity .55s var(--ease)}
@@ -89,10 +86,9 @@
 (function(){
   var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
   var MODELS=[
-    {id:"base",   nm:"iPhone 18",         spec:"6.1&Prime; · Dual camera · Bright colours",  w:38, h:64},
-    {id:"air",    nm:"iPhone 18 Air",     spec:"6.6&Prime; · The thinnest iPhone ever",      w:30, h:76},
-    {id:"pro",    nm:"iPhone 18 Pro",     spec:"6.3&Prime; · Pro camera · Titanium",         w:38, h:68},
-    {id:"promax", nm:"iPhone 18 Pro Max", spec:"6.9&Prime; · Largest display · Pro camera",  w:40, h:80}
+    {id:"base", nm:"iPhone 18",     spec:"6.1&Prime; · Dual camera · Bright colours",  w:38, h:66},
+    {id:"air",  nm:"iPhone 18 Air", spec:"6.6&Prime; · The thinnest iPhone ever",      w:30, h:78},
+    {id:"pro",  nm:"iPhone 18 Pro", spec:"Pro &amp; Pro Max · 6.3&Prime;/6.9&Prime; · Titanium", w:39, h:72}
   ];
   var gridEl=document.getElementById("grid");
   MODELS.forEach(function(m){
