@@ -114,12 +114,34 @@
 <script>
 (function(){
   var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
-  var COLORS=[
-    {id:"natural",nm:"Titanium Natural", cls:"d-natural", img:"titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
-    {id:"black",  nm:"Titanium Black",   cls:"d-black",   img:"titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
-    {id:"plum",   nm:"Titanium Plum",    cls:"d-plum",    img:"titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
-    {id:"blue",   nm:"Titanium Blue",    cls:"d-blue",    img:"titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
-  ];
+  // per-model colour lists. Light/neg colour is first in each list so the entry
+  // from the (light) model page stays silky. Phone images are shared Pro cutouts
+  // as placeholders until per-model images are provided.
+  var MODELS={
+    base:{ nm:"iPhone 18", colors:[
+      {id:"white", nm:"White",       hex:"#e7e6e3", img:"titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"Black",       hex:"#1c1c20", img:"titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"Ultramarine", hex:"#3f52d6", img:"titanium-blue.png",    base:[10,16,34],    bloom:[120,150,235]},
+      {id:"pink",  nm:"Pink",        hex:"#e6a6bd", img:"titanium-plum.png",    base:[30,14,22],    bloom:[236,170,196]}
+    ]},
+    air:{ nm:"iPhone 18 Air", colors:[
+      {id:"white", nm:"Cloud White", hex:"#e9e8e4", img:"titanium-natural.png", base:[224,223,219], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"Space Black", hex:"#1a1a1e", img:"titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"Sky Blue",    hex:"#9cc2e0", img:"titanium-blue.png",    base:[12,20,32],    bloom:[150,190,224]},
+      {id:"gold",  nm:"Light Gold",  hex:"#dcc9a2", img:"titanium-natural.png", base:[222,212,190], bloom:[74,58,32], neg:true}
+    ]},
+    pro:{ nm:"iPhone 18 Pro", colors:[
+      {id:"natural",nm:"Titanium Natural", hex:"#cfcabf", img:"titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
+      {id:"black",  nm:"Titanium Black",   hex:"#1c1c20", img:"titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
+      {id:"plum",   nm:"Titanium Plum",    hex:"#6f4258", img:"titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
+      {id:"blue",   nm:"Titanium Blue",    hex:"#7fa3cf", img:"titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
+    ]}
+  };
+  MODELS.promax={ nm:"iPhone 18 Pro Max", colors:MODELS.pro.colors };
+  var mid=new URLSearchParams(location.search).get("m"); if(!MODELS[mid]) mid="pro";
+  var model=MODELS[mid];
+  var COLORS=model.colors;
+  document.querySelector(".eyebrow").innerHTML="APIOU &middot; "+model.nm;
   var state={color:COLORS[0]};
 
   // preload + stack phone images (cross-fade between colours)
@@ -140,7 +162,7 @@
   var cEl=document.getElementById("colors");
   COLORS.forEach(function(c){
     var b=document.createElement("button");b.className="swatch";b.setAttribute("aria-pressed",String(c===state.color));
-    b.innerHTML='<span class="dot '+c.cls+'"></span><span class="nm">'+c.nm+'</span>';
+    b.innerHTML='<span class="dot" style="background:'+c.hex+'"></span><span class="nm">'+c.nm+'</span>';
     b.addEventListener("click",function(){ pick(c); });
     cEl.appendChild(b); c._el=b;
   });
@@ -163,7 +185,7 @@
   // continue → carry the chosen colour to the bundle finder
   document.getElementById("cont").addEventListener("click",function(){
     document.querySelector(".ui").style.transition="opacity .35s"; document.querySelector(".ui").style.opacity="0";
-    setTimeout(function(){ location.href="../finder/?c="+state.color.id; }, 300);
+    setTimeout(function(){ location.href="../finder/?c="+state.color.id+"&m="+mid; }, 300);
   });
 
   // entrance: if we arrived from the home flip (#flip), run the flip-in + veil fade

@@ -138,17 +138,35 @@
 <script>
 (function(){
   var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
-  var COLORS={
-    natural:{nm:"Titanium Natural", img:"../color/titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
-    black:{nm:"Titanium Black", img:"../color/titanium-black.png", base:[10,10,11], bloom:[216,220,226]},
-    plum:{nm:"Titanium Plum", img:"../color/titanium-plum.png", base:[18,10,16], bloom:[203,150,182]},
-    blue:{nm:"Titanium Blue", img:"../color/titanium-blue.png", base:[9,15,23], bloom:[150,186,220]}
+  var MODELS={
+    base:{ nm:"iPhone 18", colors:[
+      {id:"white", nm:"White",       img:"../color/titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"Black",       img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"Ultramarine", img:"../color/titanium-blue.png",    base:[10,16,34],    bloom:[120,150,235]},
+      {id:"pink",  nm:"Pink",        img:"../color/titanium-plum.png",    base:[30,14,22],    bloom:[236,170,196]}
+    ]},
+    air:{ nm:"iPhone 18 Air", colors:[
+      {id:"white", nm:"Cloud White", img:"../color/titanium-natural.png", base:[224,223,219], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"Space Black", img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"Sky Blue",    img:"../color/titanium-blue.png",    base:[12,20,32],    bloom:[150,190,224]},
+      {id:"gold",  nm:"Light Gold",  img:"../color/titanium-natural.png", base:[222,212,190], bloom:[74,58,32], neg:true}
+    ]},
+    pro:{ nm:"iPhone 18 Pro", colors:[
+      {id:"natural",nm:"Titanium Natural", img:"../color/titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
+      {id:"black",  nm:"Titanium Black",   img:"../color/titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
+      {id:"plum",   nm:"Titanium Plum",    img:"../color/titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
+      {id:"blue",   nm:"Titanium Blue",    img:"../color/titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
+    ]}
   };
+  MODELS.promax={ nm:"iPhone 18 Pro Max", colors:MODELS.pro.colors };
   var params=new URLSearchParams(location.search);
-  var cid=params.get("c"); if(!COLORS[cid]) cid="natural";
-  var col=COLORS[cid];
+  var mid=params.get("m"); if(!MODELS[mid]) mid="pro";
+  var model=MODELS[mid];
+  var cid=params.get("c");
+  var col=model.colors.filter(function(c){return c.id===cid;})[0] || model.colors[0];
   document.getElementById("phoneImg").src=col.img;
   document.body.classList.toggle("light", !!col.neg);
+  document.querySelector(".eyebrow").innerHTML="APIOU &middot; "+model.nm;
 
   // usage → bundle mapping
   var USES=[

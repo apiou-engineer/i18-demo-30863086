@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>APIOU · Choose your iPhone 18</title>
+<style>
+  :root{
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+    --ink:#1b1b1e; --soft:rgba(27,27,30,.66); --line:rgba(27,27,30,.16);
+    --card:rgba(255,255,255,.5); --bgc:#d6d2ca;
+    --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--sans);color:var(--ink);background:#d6d2ca;overflow:hidden;-webkit-font-smoothing:antialiased}
+  canvas#bg{position:fixed;inset:0;z-index:0;display:block}
+
+  .ui{position:fixed;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;
+    padding:clamp(40px,7vh,80px) 24px clamp(28px,5vh,56px)}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.4em;text-transform:uppercase;color:var(--soft);
+    opacity:0;animation:fade 1s var(--ease) .1s forwards}
+  @keyframes fade{to{opacity:1}}
+  .head{text-align:center;margin-top:clamp(18px,3vh,30px);max-width:20ch}
+  .head h1{font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1;letter-spacing:-.03em;text-wrap:balance}
+  .head p{margin-top:14px;color:var(--soft);font-size:clamp(.92rem,1.4vw,1.08rem);font-weight:300;max-width:30ch;margin-left:auto;margin-right:auto}
+
+  .grid{margin-top:auto;margin-bottom:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.4vw,20px);
+    width:min(1040px,94vw)}
+  .card{position:relative;pointer-events:auto;cursor:pointer;text-align:center;
+    background:var(--card);border:1px solid var(--line);border-radius:22px;
+    padding:clamp(20px,2.4vw,30px) clamp(12px,1.4vw,20px) clamp(18px,2.2vw,26px);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+    transition:transform .5s var(--spring),border-color .3s,box-shadow .4s,background .3s;
+    opacity:0;transform:translateY(16px);animation:cardIn .7s var(--ease) forwards}
+  .card:nth-child(1){animation-delay:.14s}
+  .card:nth-child(2){animation-delay:.22s}
+  .card:nth-child(3){animation-delay:.30s}
+  .card:nth-child(4){animation-delay:.38s}
+  @keyframes cardIn{to{opacity:1;transform:none}}
+  .card:hover{transform:translateY(-6px);border-color:rgba(27,27,30,.4);box-shadow:0 22px 40px -22px rgba(0,0,0,.4)}
+
+  .glyph{height:96px;display:flex;align-items:flex-end;justify-content:center}
+  .ph{width:var(--w);height:var(--h);border:1.5px solid var(--ink);border-radius:calc(var(--w)*.26);opacity:.85;
+    position:relative;transition:transform .5s var(--spring)}
+  .ph::before{content:"";position:absolute;top:8%;left:50%;transform:translateX(-50%);width:26%;height:3px;border-radius:3px;background:var(--ink);opacity:.5}
+  .card:hover .ph{transform:translateY(-3px)}
+
+  .m-name{font-weight:600;font-size:clamp(1.02rem,1.5vw,1.24rem);letter-spacing:-.02em}
+  .m-spec{font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;color:var(--soft);line-height:1.5;text-transform:uppercase}
+  .m-go{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);
+    opacity:0;transform:translateY(4px);transition:opacity .35s,transform .35s,color .35s}
+  .card:hover .m-go{opacity:1;transform:none;color:var(--ink)}
+
+  @media (max-aspect-ratio:1/1){
+    .grid{grid-template-columns:1fr 1fr;gap:12px;width:min(560px,94vw)}
+    .card{flex-direction:row;justify-content:flex-start;gap:16px;text-align:left;padding:16px 16px}
+    .glyph{height:auto}
+    .ph{--h:56px !important}
+    .card > .txt{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+    .m-go{display:none}
+  }
+  @media (max-width:430px){
+    .grid{grid-template-columns:1fr}
+  }
+
+  .veil{position:fixed;inset:0;z-index:40;background:#d3cfc6;pointer-events:none;opacity:1;transition:opacity .55s var(--ease)}
+  .veil.gone{opacity:0}
+</style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <div class="ui">
+    <div class="eyebrow">APIOU &middot; iPhone 18</div>
+    <div class="head">
+      <h1>Which iPhone 18 is yours?</h1>
+      <p>Pick your model to see the colours and cases made for it.</p>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="veil" id="veil"></div>
+
+<script>
+(function(){
+  var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+  var MODELS=[
+    {id:"base",   nm:"iPhone 18",         spec:"6.1&Prime; · Dual camera · Bright colours",  w:38, h:64},
+    {id:"air",    nm:"iPhone 18 Air",     spec:"6.6&Prime; · The thinnest iPhone ever",      w:30, h:76},
+    {id:"pro",    nm:"iPhone 18 Pro",     spec:"6.3&Prime; · Pro camera · Titanium",         w:38, h:68},
+    {id:"promax", nm:"iPhone 18 Pro Max", spec:"6.9&Prime; · Largest display · Pro camera",  w:40, h:80}
+  ];
+  var gridEl=document.getElementById("grid");
+  MODELS.forEach(function(m){
+    var c=document.createElement("button"); c.className="card"; c.setAttribute("aria-label",m.nm);
+    c.innerHTML='<span class="glyph"><span class="ph" style="--w:'+m.w+'px;--h:'+m.h+'px"></span></span>'+
+                '<span class="txt"><span class="m-name">'+m.nm+'</span>'+
+                '<span class="m-spec">'+m.spec+'</span></span>'+
+                '<span class="m-go">Select &rarr;</span>';
+    c.addEventListener("click",function(){ selectModel(m,c); });
+    gridEl.appendChild(c);
+  });
+
+  var picking=false;
+  function selectModel(m,card){
+    if(picking)return; picking=true;
+    if(!reduce){ card.animate([{transform:"translateY(-6px) scale(1)"},{transform:"translateY(-6px) scale(1.04)"}],{duration:260,easing:"cubic-bezier(.34,1.4,.5,1)",fill:"forwards"}); }
+    document.getElementById("grid").style.transition="opacity .4s var(--ease)";
+    document.getElementById("grid").style.opacity=".35";
+    var veil=document.getElementById("veil"); veil.classList.remove("gone");
+    requestAnimationFrame(function(){ veil.style.opacity="1"; });
+    setTimeout(function(){ location.href="../color/?m="+m.id+"#flip"; }, 520);
+  }
+
+  // entrance: fade the veil away (arriving from the home flip)
+  var veil=document.getElementById("veil");
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ veil.classList.add("gone"); }); });
+  setTimeout(function(){ if(veil.parentNode && !picking) veil.parentNode.removeChild(veil); }, 900);
+
+  // ---------- grainy studio backdrop (warm light world, matches the hero) ----------
+  var cv=document.getElementById("bg"), ctx=cv.getContext("2d"), W,H,dpr=Math.min(2,window.devicePixelRatio||1);
+  var grain=null;
+  function buildGrain(){var gw=Math.ceil(innerWidth),gh=Math.ceil(innerHeight);var g=document.createElement("canvas");g.width=gw;g.height=gh;var gx=g.getContext("2d");var id=gx.createImageData(gw,gh);var d=id.data;for(var i=0;i<d.length;i+=4){var v=(Math.random()*255)|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=15;}gx.putImageData(id,0,0);grain=g;}
+  function resize(){W=cv.width=innerWidth*dpr;H=cv.height=innerHeight*dpr;cv.style.width=innerWidth+"px";cv.style.height=innerHeight+"px";buildGrain();}
+  resize(); addEventListener("resize",resize);
+  var lx=0.5,ly=0.28,tlx=0.5,tly=0.28;
+  addEventListener("pointermove",function(e){tlx=0.2+(e.clientX/innerWidth)*0.6;tly=0.12+(e.clientY/innerHeight)*0.4;});
+  var base=[214,211,204], bloom=[44,42,38];
+  function draw(){
+    lx+=(tlx-lx)*.05; ly+=(tly-ly)*.05;
+    ctx.fillStyle="rgb("+base[0]+","+base[1]+","+base[2]+")"; ctx.fillRect(0,0,W,H);
+    var bx=lx*W,by=ly*H,R=Math.max(W,H)*1.3;
+    var g=ctx.createRadialGradient(bx,by,0,bx,by,R);
+    g.addColorStop(0,"rgba("+bloom[0]+","+bloom[1]+","+bloom[2]+",.6)");
+    g.addColorStop(0.24,"rgba("+bloom[0]+","+bloom[1]+","+bloom[2]+",.24)");
+    g.addColorStop(0.5,"rgba("+bloom[0]+","+bloom[1]+","+bloom[2]+",.09)");
+    g.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    var fg=ctx.createLinearGradient(0,H*0.78,0,H);
+    fg.addColorStop(0,"rgba(0,0,0,0)"); fg.addColorStop(1,"rgba(120,116,106,.10)");
+    ctx.fillStyle=fg; ctx.fillRect(0,0,W,H);
+    if(grain){ ctx.drawImage(grain,0,0,W,H); }
+    if(!reduce) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw); if(reduce) draw();
+})();
+</script>
+</body>
+</html>
