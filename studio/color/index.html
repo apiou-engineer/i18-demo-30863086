@@ -50,6 +50,11 @@
   .head h1{font-weight:600;font-size:clamp(2.4rem,5vw,4.2rem);line-height:.98;letter-spacing:-.03em;text-wrap:balance}
   .head p{margin-top:16px;color:var(--soft);font-size:clamp(.95rem,1.4vw,1.1rem);font-weight:300;max-width:26ch}
   .head .cname{margin-top:22px;font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);transition:opacity .4s}
+  .cont{position:absolute;left:50%;bottom:clamp(20px,4vh,40px);transform:translateX(-50%);pointer-events:auto;
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);
+    background:none;border:1px solid var(--line);border-radius:100px;padding:11px 22px;cursor:pointer;
+    transition:color .4s,border-color .4s,transform .4s var(--spring)}
+  .cont:hover{color:var(--ink);border-color:var(--ink);transform:translateX(-50%) translateY(-2px)}
 
   .colors{position:absolute;pointer-events:auto;display:flex}
   @media (min-aspect-ratio:1/1){
@@ -98,6 +103,7 @@
       <div class="cname" id="cname">Titanium Black</div>
     </div>
     <div class="colors" id="colors"></div>
+    <button class="cont" id="cont" aria-label="Continue">Continue&nbsp;&nbsp;&darr;</button>
   </div>
 
 <script>
@@ -148,6 +154,12 @@
   // init to the default (Natural, negative/light) world
   document.body.classList.toggle("light", !!state.color.neg);
   document.getElementById("cname").textContent=state.color.nm;
+
+  // continue → carry the chosen colour to the bundle finder
+  document.getElementById("cont").addEventListener("click",function(){
+    document.querySelector(".ui").style.transition="opacity .35s"; document.querySelector(".ui").style.opacity="0";
+    setTimeout(function(){ location.href="../finder/?c="+state.color.id; }, 300);
+  });
 
   // entrance: if we arrived from the home flip (#flip), run the flip-in + veil fade
   var veil=document.getElementById("veil"), stageEl=document.getElementById("stage");
