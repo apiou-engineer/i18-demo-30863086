@@ -57,7 +57,9 @@
   .r-name{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:600;letter-spacing:-.02em;margin:6px 0 4px}
   .r-for{color:var(--soft);font-size:.92rem;margin-bottom:16px}
   .r-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-  .r-item{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+  .r-item{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem;
+    opacity:0;transform:translateX(10px);animation:itemIn .5s var(--ease) forwards}
+  @keyframes itemIn{to{opacity:1;transform:none}}
   .r-item:last-of-type{border-bottom:none}
   .r-item .d{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5;flex:0 0 auto}
   .r-sum{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
@@ -97,8 +99,6 @@
   <div class="stage"><div class="phone-wrap" id="phoneWrap">
     <div class="phone" id="phone"><img id="phoneImg" src="../color/titanium-natural.png" alt="iPhone 18"></div>
   </div></div>
-
-  <div class="accessories" id="accessories"></div>
 
   <div class="ui">
     <div class="eyebrow">APIOU &middot; iPhone 18</div>
@@ -173,26 +173,19 @@
     document.getElementById("rName").textContent=b.nm;
     document.getElementById("rFor").textContent=b.forWho;
     var it=document.getElementById("rItems"); it.innerHTML="";
-    b.items.forEach(function(x){ var d=document.createElement("div"); d.className="r-item"; d.innerHTML='<span class="d"></span><span>'+x+'</span>'; it.appendChild(d); });
+    b.items.forEach(function(x,i){
+      var d=document.createElement("div"); d.className="r-item"; d.style.animationDelay=(0.25+i*0.09)+"s";
+      d.innerHTML='<span class="d"></span><span>'+x+'</span>'; it.appendChild(d);
+    });
     document.getElementById("rPrice").textContent="$"+b.price;
+    // clear parallax inline transform so the CSS left-shift applies cleanly
+    document.getElementById("phoneWrap").style.transform="";
     document.body.classList.add("result");
-    // accessory tags snap in around the phone (desktop)
-    var wrap=document.getElementById("accessories"); wrap.innerHTML="";
-    if(!reduce){
-      b.items.slice(0,4).forEach(function(x,i){
-        var pos=ACC_POS[i]||{x:"0",y:"0"};
-        var el=document.createElement("div"); el.className="acc"; el.textContent=x;
-        el.style.left="50%"; el.style.top="50%"; el.style.setProperty("--fromx",pos.x); el.style.setProperty("--fromy",pos.y);
-        el.style.marginLeft="-14vw"; // sit near the (shifted) phone
-        wrap.appendChild(el);
-        setTimeout(function(){ el.style.left=(50-14)+"%"; el.style.top="50%";
-          el.style.transform="translate("+ (i%2?120:-120) +"px,"+ ((i<2?-1:1)*90) +"px)";
-          el.classList.add("snap"); }, 180+i*140);
-      });
-    }
+    if(!reduce){ document.getElementById("phoneWrap").animate(
+      [{filter:"brightness(1)"},{filter:"brightness(1.12)"},{filter:"brightness(1)"}],{duration:700,easing:"var(--ease)"}); }
   }
 
-  document.getElementById("restartBtn").addEventListener("click",function(){ document.body.classList.remove("result"); document.getElementById("accessories").innerHTML=""; });
+  document.getElementById("restartBtn").addEventListener("click",function(){ document.body.classList.remove("result"); });
   document.getElementById("takeBtn").addEventListener("click",function(){ toast("這裡會連到「"+BUNDLES[state.bundle].nm+"」的商品/組合頁(待接連結)"); });
   var toastT; function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},3000);}
 
