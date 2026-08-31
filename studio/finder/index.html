@@ -29,7 +29,12 @@
   body.light .phone img{filter:drop-shadow(0 26px 34px rgba(120,116,106,.32))}
   /* result: phone slides left to make room for the bundle card (desktop) */
   body.result .phone-wrap{transform:translateX(-14vw)}
-  @media (max-aspect-ratio:1/1){ body.result .phone-wrap{transform:translateY(-16vh)} .phone{height:min(46vh,400px)} }
+  @media (max-aspect-ratio:1/1){
+    .stage{place-items:start center;padding-top:12vh}
+    .phone{height:min(38vh,340px)}
+    body.result .phone-wrap{transform:translateY(-2vh)}
+    body.result .phone{height:min(32vh,290px)}
+  }
 
   .ui{position:fixed;inset:0;z-index:3;pointer-events:none}
   .eyebrow{position:absolute;top:clamp(20px,4vh,40px);left:0;right:0;text-align:center;
@@ -38,7 +43,9 @@
   /* STEP 1 — usage question */
   .ask{position:absolute;left:0;right:0;bottom:clamp(34px,7vh,72px);display:flex;flex-direction:column;align-items:center;gap:20px;
     padding:0 24px;transition:opacity .5s var(--ease),transform .5s var(--ease)}
+  @media (max-aspect-ratio:1/1){ .ask{bottom:clamp(30px,6vh,64px);gap:14px} }
   .ask h2{font-weight:300;font-size:clamp(1.4rem,3vw,2.1rem);letter-spacing:-.02em;text-align:center;text-wrap:balance}
+  @media (max-aspect-ratio:1/1){ .ask h2{font-size:clamp(1.3rem,5.2vw,1.8rem)} }
   .chips{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:760px}
   .chip{pointer-events:auto;background:var(--card);border:1px solid var(--line);color:var(--ink);
     padding:13px 22px;border-radius:100px;font-size:.98rem;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
