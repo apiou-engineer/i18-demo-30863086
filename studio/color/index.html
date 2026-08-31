@@ -17,7 +17,7 @@
   body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;-webkit-font-smoothing:antialiased;
     --bgc:#0a0a0b;transition:--bgc .6s}
   /* negative / light world (Titanium Natural): flip UI to dark ink */
-  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.72);--line:rgba(27,27,30,.2);--bgc:#d6d2ca}
+  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.72);--line:rgba(27,27,30,.2);--bgc:#d6d2ca;background:#d6d2ca}
 
   /* code-generated grainy studio backdrop (soft light top-left) */
   canvas#bg{position:fixed;inset:0;z-index:0;display:block}
@@ -29,7 +29,7 @@
   .stage.enter .phone-wrap{animation:flipIn 1.2s var(--ease) .12s both}
   @keyframes flipIn{0%{transform:rotateY(-118deg) scale(.86)}55%{transform:rotateY(18deg) scale(1.02)}100%{transform:rotateY(0) scale(1)}}
   /* light veil bridges from the home page's bright bg, then clears quickly so the flip shows */
-  .veil{position:fixed;inset:0;z-index:40;background:#d3cfc6;pointer-events:none;opacity:1;transition:opacity .35s var(--ease)}
+  .veil{position:fixed;inset:0;z-index:40;background:#d3cfc6;pointer-events:none;opacity:1;transition:opacity .5s var(--ease)}
   .veil.gone{opacity:0}
   .phone{position:relative;height:min(76vh,660px);animation:float 9s var(--ease) infinite;will-change:transform}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
@@ -226,8 +226,10 @@
   var lx=0.22, ly=0.16, tlx=0.22, tly=0.16;
   addEventListener("pointermove",function(e){ tlx=0.14+ (e.clientX/innerWidth)*0.3; tly=0.10+ (e.clientY/innerHeight)*0.25; });
   // background tint eases toward the selected colour
-  var cur={base:COLORS[0].base.slice(), bloom:COLORS[0].bloom.slice(), neg:0};
-  var target={base:COLORS[0].base.slice(), bloom:COLORS[0].bloom.slice(), neg:0};
+  // init the world to the DEFAULT colour (incl. its neg flag) so the very first frame
+  // already matches the model page's negative light world — no jump when the veil lifts
+  var cur={base:state.color.base.slice(), bloom:state.color.bloom.slice(), neg:state.color.neg?1:0};
+  var target={base:state.color.base.slice(), bloom:state.color.bloom.slice(), neg:state.color.neg?1:0};
   function lerp(a,b,t){return a+(b-a)*t;}
   function rgb(a){return "rgb("+(a[0]|0)+","+(a[1]|0)+","+(a[2]|0)+")";}
   function draw(){
