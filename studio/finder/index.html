@@ -212,7 +212,10 @@
   }
 
   document.getElementById("restartBtn").addEventListener("click",function(){ document.body.classList.remove("result"); });
-  document.getElementById("takeBtn").addEventListener("click",function(){ toast("這裡會連到「"+BUNDLES[state.bundle].nm+"」的商品/組合頁(待接連結)"); });
+  document.getElementById("takeBtn").addEventListener("click",function(){
+    document.querySelector(".ui").style.transition="opacity .3s"; document.querySelector(".ui").style.opacity="0";
+    setTimeout(function(){ location.href="../offer/?m="+mid+"&c="+col.id+"&b="+state.bundle; }, 280);
+  });
   var toastT; function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},3000);}
 
   // parallax

@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>APIOU · Your early-bird set</title>
+<style>
+  :root{
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+    --ink:#f4f3f0; --soft:rgba(244,243,240,.6); --line:rgba(244,243,240,.2);
+    --card:rgba(30,30,33,.5); --good:#7fd0a0; --hot:#e9b04a;
+    --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;-webkit-font-smoothing:antialiased;--bgc:#0a0a0b}
+  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.7);--line:rgba(27,27,30,.18);--card:rgba(255,255,255,.55);--bgc:#d6d2ca;background:#d6d2ca}
+
+  canvas#bg{position:fixed;inset:0;z-index:0;display:block}
+
+  .stage{position:fixed;inset:0;z-index:1;display:grid;place-items:center;perspective:1500px;pointer-events:none}
+  .phone-wrap{position:relative;transition:transform .7s var(--ease);will-change:transform}
+  .phone{position:relative;height:min(62vh,540px);animation:float 9s var(--ease) infinite;will-change:transform}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .phone img{height:100%;width:auto;filter:drop-shadow(0 46px 60px rgba(0,0,0,.55))}
+  body.light .phone img{filter:drop-shadow(0 26px 34px rgba(120,116,106,.32))}
+  /* phone shifts left to make room for the offer panel (desktop) */
+  body.enter .phone-wrap{transform:translateX(-15vw)}
+  @media (max-aspect-ratio:1/1){
+    .stage{place-items:start center;padding-top:9vh}
+    .phone{height:min(30vh,270px)}
+    body.enter .phone-wrap{transform:none}
+  }
+
+  .ui{position:fixed;inset:0;z-index:3;pointer-events:none}
+  .eyebrow{position:absolute;top:clamp(20px,4vh,40px);left:0;right:0;text-align:center;
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.36em;text-transform:uppercase;color:var(--soft)}
+
+  .offer{position:absolute;top:50%;right:clamp(28px,6vw,90px);transform:translateY(-50%) translateX(30px);
+    width:min(92vw,410px);opacity:0;pointer-events:none;
+    transition:opacity .6s var(--ease) .12s,transform .6s var(--spring) .12s}
+  body.enter .offer{opacity:1;transform:translateY(-50%);pointer-events:auto}
+  @media (max-aspect-ratio:1/1){
+    .offer{top:auto;bottom:0;right:0;left:0;width:100%;max-height:62vh;overflow-y:auto;
+      padding:0 20px calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateY(30px)}
+    body.enter .offer{transform:none}
+    .offer-inner{margin:0 auto;max-width:440px}
+  }
+
+  .badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--hot);border:1px solid color-mix(in srgb,var(--hot) 55%,transparent);
+    border-radius:100px;padding:6px 12px}
+  .o-title{font-size:clamp(1.5rem,2.6vw,2.05rem);font-weight:600;letter-spacing:-.02em;margin:14px 0 4px;line-height:1.05;text-wrap:balance}
+  .o-sub{color:var(--soft);font-size:.92rem;margin-bottom:14px}
+
+  .count{display:flex;gap:8px;margin:6px 0 16px}
+  .count .u{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 0;flex:1;text-align:center;
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .count .n{font-family:var(--mono);font-size:1.32rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
+  .count .l{font-family:var(--mono);font-size:.54rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-top:5px}
+  .count.live{justify-content:flex-start}
+  .count.live .u{flex:0 0 auto;padding:9px 16px;color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
+  .count.live .n{font-size:.82rem;letter-spacing:.1em}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px 20px;
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .r-name{font-size:1.16rem;font-weight:600;letter-spacing:-.01em}
+  .r-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.92rem}
+  .r-item:last-of-type{border-bottom:none}
+  .r-item .d{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5;flex:0 0 auto}
+  .price{display:flex;align-items:baseline;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+  .price .was{color:var(--soft);text-decoration:line-through;font-size:.9rem}
+  .price .now{font-family:var(--mono);font-size:1.5rem;font-weight:700}
+  .price .off{margin-left:auto;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;color:var(--hot);
+    border:1px solid color-mix(in srgb,var(--hot) 55%,transparent);border-radius:100px;padding:4px 9px}
+  .placeholder-note{font-family:var(--mono);font-size:.58rem;color:var(--soft);margin-top:7px;letter-spacing:.03em}
+
+  .bonus{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+  .b-row{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:11px 13px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .b-ic{flex:0 0 auto;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+    background:color-mix(in srgb,var(--hot) 16%,transparent);color:var(--hot);font-size:.9rem}
+  .b-tx{flex:1;min-width:0}
+  .b-tx .t{font-size:.86rem;font-weight:500;line-height:1.25}
+  .b-tx .s{font-size:.74rem;color:var(--soft);margin-top:2px}
+  .code{pointer-events:auto;flex:0 0 auto;font-family:var(--mono);font-size:.74rem;font-weight:600;letter-spacing:.12em;
+    background:var(--ink);color:var(--bgc);border:none;border-radius:8px;padding:7px 11px;cursor:pointer;transition:transform .3s var(--spring)}
+  .code:active{transform:scale(.94)}
+  .b-link{pointer-events:auto;flex:0 0 auto;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--soft);text-decoration:none;border:1px solid var(--line);border-radius:100px;padding:6px 11px;transition:color .3s,border-color .3s}
+  .b-link:hover{color:var(--ink);border-color:var(--ink)}
+
+  .actions{display:flex;flex-direction:column;gap:9px;margin-top:16px}
+  .btn{pointer-events:auto;display:block;text-align:center;text-decoration:none;appearance:none;border:none;font-family:inherit;
+    font-size:1rem;font-weight:600;cursor:pointer;padding:15px 24px;border-radius:100px;
+    transition:transform .5s var(--spring),box-shadow .4s,background .3s,color .3s}
+  .btn.primary{background:var(--ink);color:var(--bgc);box-shadow:0 14px 34px -16px rgba(0,0,0,.65)}
+  .btn.primary:hover{transform:translateY(-2px)}
+  .btn.ghost{background:none;color:var(--soft);font-weight:500;font-size:.92rem;padding:6px}
+  .btn.ghost:hover{color:var(--ink)}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);z-index:9;
+    background:rgba(20,20,20,.92);color:#fff;padding:11px 20px;border-radius:100px;font-size:.86rem;
+    opacity:0;transition:opacity .5s var(--ease),transform .5s var(--spring);pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .veil{position:fixed;inset:0;z-index:40;background:#0a0a0b;pointer-events:none;opacity:1;transition:opacity .55s var(--ease)}
+  .veil.gone{opacity:0}
+</style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <div class="stage"><div class="phone-wrap" id="phoneWrap">
+    <div class="phone" id="phone"><img id="phoneImg" src="../color/titanium-natural.png" alt="iPhone 18"></div>
+  </div></div>
+
+  <div class="ui">
+    <div class="eyebrow" id="eyebrow">APIOU &middot; iPhone 18</div>
+
+    <div class="offer" id="offer"><div class="offer-inner">
+      <span class="badge">&#9679; Early-bird pre-order</span>
+      <div class="o-title">Your set, 33% off.</div>
+      <div class="o-sub" id="oSub">Pre-order opens Sep 2, 12:00 (Taipei).</div>
+
+      <div class="count" id="count"></div>
+
+      <div class="card">
+        <div class="r-name" id="rName">—</div>
+        <div id="rItems"></div>
+        <div class="price">
+          <span class="was" id="pWas"></span>
+          <span class="now" id="pNow"></span>
+          <span class="off">67折 · 33% OFF</span>
+        </div>
+        <div class="placeholder-note">Prices are placeholders — final price shown on the product page.</div>
+      </div>
+
+      <div class="bonus">
+        <div class="b-row">
+          <span class="b-ic">&#9670;</span>
+          <span class="b-tx"><span class="t">Free matching screen glass</span><span class="s">Use code at checkout on any iPhone 18 case</span></span>
+          <button class="code" id="codeBtn" aria-label="Copy code i18">i18</button>
+        </div>
+        <div class="b-row">
+          <span class="b-ic">&#43;</span>
+          <span class="b-tx"><span class="t">Add the 8-in-1 cleaning kit</span><span class="s">Just NT$99 during the pre-order</span></span>
+          <a class="b-link" id="kitLink" target="_blank" rel="noopener">Add</a>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn primary" id="shopBtn" target="_blank" rel="noopener">Shop this set &rarr;</a>
+        <button class="btn ghost" id="restartBtn">Start over</button>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div class="veil" id="veil"></div>
+
+<script>
+(function(){
+  var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+  // campaign links (Eva 提供)
+  var LINKS={
+    set:"https://www.apeelcase.com/categories/set",
+    cases:"https://www.apeelcase.com/categories/iphone-18-pro",
+    kit:"https://www.apeelcase.com/products/8-in-1-multifunctional-cleaning-kit"
+  };
+  var PROMO_CODE="i18";
+  // 早鳥開跑:2026-09-02 12:00 (台北 UTC+8)
+  var OPEN_AT=new Date("2026-09-02T12:00:00+08:00").getTime();
+
+  var MODELS={
+    base:{ nm:"iPhone 18", colors:[
+      {id:"white", nm:"White",       img:"../color/titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"Black",       img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"Ultramarine", img:"../color/titanium-blue.png",    base:[10,16,34],    bloom:[120,150,235]},
+      {id:"pink",  nm:"Pink",        img:"../color/titanium-plum.png",    base:[30,14,22],    bloom:[236,170,196]}
+    ]},
+    air:{ nm:"iPhone 18 Air", colors:[
+      {id:"white", nm:"Cloud White", img:"../color/titanium-natural.png", base:[224,223,219], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"Space Black", img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"Sky Blue",    img:"../color/titanium-blue.png",    base:[12,20,32],    bloom:[150,190,224]},
+      {id:"gold",  nm:"Light Gold",  img:"../color/titanium-natural.png", base:[222,212,190], bloom:[74,58,32], neg:true}
+    ]},
+    pro:{ nm:"iPhone 18 Pro", colors:[
+      {id:"natural",nm:"Titanium Natural", img:"../color/titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
+      {id:"black",  nm:"Titanium Black",   img:"../color/titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
+      {id:"plum",   nm:"Titanium Plum",    img:"../color/titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
+      {id:"blue",   nm:"Titanium Blue",    img:"../color/titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
+    ]}
+  };
+  MODELS.promax={ nm:"iPhone 18 Pro / Pro Max", colors:MODELS.pro.colors };
+
+  // 組合:price 為佔位原價;url 先導到優惠組合分類,待 Eva 給各組合商品頁後替換
+  var BUNDLES={
+    minimal:{nm:"Bare Essentials",items:["Clear case","Lens ring protector","20W charger"], price:790, url:LINKS.set},
+    creator:{nm:"Creator Kit",    items:["Liquid silicone case","Stand / grip ×2"], price:990, url:LINKS.set},
+    leather:{nm:"Leather Set",    items:["Leather case","Card holder","Leather strap","Screen glass"], price:1980, url:LINKS.set},
+    fan:{nm:"Collector Set",      items:["Mirror case","Rotating card holder"], price:890, url:LINKS.set},
+    home:{nm:"Home Power Set",    items:["Clear case","4-in-1 wireless charger","Magnetic cable","65W charger"], price:2280, url:LINKS.set}
+  };
+
+  var p=new URLSearchParams(location.search);
+  var mid=p.get("m"); if(!MODELS[mid]) mid="pro";
+  var model=MODELS[mid];
+  var col=model.colors.filter(function(c){return c.id===p.get("c");})[0] || model.colors[0];
+  var bundle=BUNDLES[p.get("b")] || BUNDLES.minimal;
+
+  document.getElementById("phoneImg").src=col.img;
+  document.body.classList.toggle("light", !!col.neg);
+  document.getElementById("eyebrow").innerHTML="APIOU &middot; "+model.nm;
+
+  // fill the offer
+  document.getElementById("rName").textContent=bundle.nm;
+  var it=document.getElementById("rItems");
+  bundle.items.forEach(function(x){ var d=document.createElement("div");d.className="r-item";
+    d.innerHTML='<span class="d"></span><span>'+x+'</span>'; it.appendChild(d); });
+  var sale=Math.round(bundle.price*0.67/10)*10;
+  document.getElementById("pWas").textContent="NT$"+bundle.price;
+  document.getElementById("pNow").textContent="NT$"+sale;
+  document.getElementById("shopBtn").href=bundle.url;
+  document.getElementById("kitLink").href=LINKS.kit;
+
+  // copy promo code
+  document.getElementById("codeBtn").addEventListener("click",function(){
+    var done=function(){ toast("已複製折扣碼 "+PROMO_CODE); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(PROMO_CODE).then(done,done); }
+    else { done(); }
+  });
+  var toastT; function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},2400);}
+
+  document.getElementById("restartBtn").addEventListener("click",function(){ location.href="../model/"; });
+
+  // countdown to the early-bird open time
+  var countEl=document.getElementById("count"), subEl=document.getElementById("oSub");
+  function pad(n){return (n<10?"0":"")+n;}
+  function tick(){
+    var d=OPEN_AT-Date.now();
+    if(d<=0){
+      countEl.className="count live";
+      countEl.innerHTML='<div class="u"><div class="n">&#9679; Pre-order is live</div></div>';
+      subEl.textContent="Pre-order is open now — through the campaign period.";
+      return false;
+    }
+    var s=Math.floor(d/1000), dd=Math.floor(s/86400), hh=Math.floor(s%86400/3600), mm=Math.floor(s%3600/60), ss=s%60;
+    countEl.className="count";
+    countEl.innerHTML=
+      '<div class="u"><div class="n">'+dd+'</div><div class="l">Days</div></div>'+
+      '<div class="u"><div class="n">'+pad(hh)+'</div><div class="l">Hrs</div></div>'+
+      '<div class="u"><div class="n">'+pad(mm)+'</div><div class="l">Min</div></div>'+
+      '<div class="u"><div class="n">'+pad(ss)+'</div><div class="l">Sec</div></div>';
+    return true;
+  }
+  tick(); var ct=setInterval(function(){ if(!tick()) clearInterval(ct); }, 1000);
+
+  // entrance: veil (matches the colour world) lifts, phone slides + offer panel eases in
+  var veil=document.getElementById("veil");
+  veil.style.background="rgb("+(col.base[0]|0)+","+(col.base[1]|0)+","+(col.base[2]|0)+")";
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){
+    veil.classList.add("gone"); document.body.classList.add("enter");
+  }); });
+
+  // ---------- grainy studio backdrop tinted to the chosen colour (same engine as colour/finder) ----------
+  var cv=document.getElementById("bg"), ctx=cv.getContext("2d"), W,H,dpr=Math.min(2,window.devicePixelRatio||1);
+  var grain=null;
+  function buildGrain(){var gw=Math.ceil(innerWidth),gh=Math.ceil(innerHeight);var g=document.createElement("canvas");g.width=gw;g.height=gh;var gx=g.getContext("2d");var id=gx.createImageData(gw,gh);var d=id.data;for(var i=0;i<d.length;i+=4){var v=(Math.random()*255)|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=16;}gx.putImageData(id,0,0);grain=g;}
+  function resize(){W=cv.width=innerWidth*dpr;H=cv.height=innerHeight*dpr;cv.style.width=innerWidth+"px";cv.style.height=innerHeight+"px";buildGrain();}
+  resize(); addEventListener("resize",resize);
+  var lx=0.22,ly=0.16,tlx=0.22,tly=0.16;
+  addEventListener("pointermove",function(e){tlx=0.14+(e.clientX/innerWidth)*0.3;tly=0.10+(e.clientY/innerHeight)*0.25;});
+  var neg=col.neg?1:0, base=col.base, b=col.bloom;
+  function lerp(a,bb,t){return a+(bb-a)*t;}
+  function draw(){
+    lx=lerp(lx,tlx,.05); ly=lerp(ly,tly,.05);
+    ctx.fillStyle="rgb("+base[0]+","+base[1]+","+base[2]+")"; ctx.fillRect(0,0,W,H);
+    var bx=lx*W,by=ly*H,R=Math.max(W,H)*1.25;
+    var a0=lerp(0.5,0.62,neg),a1=lerp(0.2,0.26,neg),a2=lerp(0.07,0.1,neg);
+    var g=ctx.createRadialGradient(bx,by,0,bx,by,R);
+    g.addColorStop(0,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+","+a0+")");
+    g.addColorStop(0.22,"rgba("+(b[0]*0.7|0)+","+(b[1]*0.7|0)+","+(b[2]*0.7|0)+","+a1+")");
+    g.addColorStop(0.5,"rgba("+(b[0]*0.3|0)+","+(b[1]*0.3|0)+","+(b[2]*0.3|0)+","+a2+")");
+    g.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    var fg=ctx.createLinearGradient(0,H*0.8,0,H);var floorA=lerp(0.25,0.1,neg);
+    fg.addColorStop(0,"rgba(0,0,0,0)");fg.addColorStop(.7,"rgba(255,255,255,0.03)");fg.addColorStop(1,"rgba(0,0,0,"+floorA+")");
+    ctx.fillStyle=fg; ctx.fillRect(0,0,W,H);
+    if(grain){ ctx.drawImage(grain,0,0,W,H); }
+    if(!reduce) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw); if(reduce) draw();
+})();
+</script>
+</body>
+</html>
