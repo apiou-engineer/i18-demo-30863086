@@ -97,10 +97,10 @@
     setTimeout(function(){ location.href="../color/?m="+m.id+"#flip"; }, 520);
   }
 
-  // entrance: the (beige) veil from the home flip lifts to reveal the grainy studio + the choices
+  // entrance: the (beige) veil from the home flip lifts to reveal the grainy studio + the choices.
+  // Keep the veil in the DOM (it's pointer-events:none when gone) — selectModel reuses it to exit.
   var veil=document.getElementById("veil");
   requestAnimationFrame(function(){ requestAnimationFrame(function(){ veil.classList.add("gone"); }); });
-  setTimeout(function(){ if(veil.parentNode && !picking) veil.parentNode.removeChild(veil); }, 900);
 
   // ---------- grainy studio backdrop — identical engine + palette to the colour page's
   //            default Natural/White "negative light world", so the two pages match ----------
