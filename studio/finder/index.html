@@ -177,11 +177,11 @@
     {id:"basic", t:"Just the essentials",b:"minimal"}
   ];
   var BUNDLES={
-    minimal:{nm:"Bare Essentials",  forWho:"A clean start for your new iPhone", items:["Clear case","Lens ring protector","20W charger"], price:790},
-    creator:{nm:"Creator Kit",      forWho:"For shooting photos, video & going live", items:["Liquid silicone case","Stand / grip ×2"], price:990},
-    leather:{nm:"Leather Set",      forWho:"Everyday quality, cards on you", items:["Leather case","Card holder","Leather strap","Screen glass"], price:1980},
-    fan:{nm:"Collector Set",        forWho:"Selfies, photocards & shine", items:["Mirror case","Rotating card holder"], price:890},
-    home:{nm:"Home Power Set",      forWho:"Charging & multiple devices", items:["Clear case","4-in-1 wireless charger","Magnetic cable","65W charger"], price:2280}
+    minimal:{nm:"New iPhone Essentials", forWho:"A clean start for your new iPhone", items:["Clear case (non-MagSafe)","Lens ring protector","20W charger"], was:1497, sale:999},
+    creator:{nm:"Creator Kit",           forWho:"For shooting photos, video & going live", items:["Liquid silicone case","Ring grip","MagSafe suction mount"], was:1797, sale:1199},
+    leather:{nm:"Leather Match Set",     forWho:"Everyday quality, cards on you", items:["Leather case","Mirror stand cardholder","Leather strap + plate"], was:2697, sale:1799},
+    fan:{nm:"Collector Set",             forWho:"Selfies, photocards & shine", items:["Mirror case","Rotating card grip"], was:1598, sale:1199},
+    home:{nm:"Home Power Set",           forWho:"Charging & multiple devices", items:["Clear MagSafe case","4-in-1 wireless charger","Magnetic cable","65W charger"], was:3787, sale:2599}
   };
   var ACC_POS=[ {x:"-30vw",y:"-24vh"},{x:"30vw",y:"-20vh"},{x:"-32vw",y:"18vh"},{x:"30vw",y:"22vh"} ];
 
@@ -203,7 +203,8 @@
       var d=document.createElement("div"); d.className="r-item"; d.style.animationDelay=(0.25+i*0.09)+"s";
       d.innerHTML='<span class="d"></span><span>'+x+'</span>'; it.appendChild(d);
     });
-    document.getElementById("rPrice").textContent="$"+b.price;
+    document.getElementById("rPrice").textContent="NT$"+b.sale;
+    var noteEl=document.querySelector(".r-note"); if(noteEl){ noteEl.textContent="早鳥組合價 · 原價 NT$"+b.was; }
     // clear parallax inline transform so the CSS left-shift applies cleanly
     document.getElementById("phoneWrap").style.transform="";
     document.body.classList.add("result");

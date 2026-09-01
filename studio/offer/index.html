@@ -122,7 +122,7 @@
 
     <div class="offer" id="offer"><div class="offer-inner">
       <span class="badge">&#9679; Early-bird pre-order</span>
-      <div class="o-title">Your set, 33% off.</div>
+      <div class="o-title" id="oTitle">Your set is ready.</div>
       <div class="o-sub" id="oSub">Pre-order opens Sep 2, 12:00 (Taipei).</div>
 
       <div class="count" id="count"></div>
@@ -133,7 +133,7 @@
         <div class="price">
           <span class="was" id="pWas"></span>
           <span class="now" id="pNow"></span>
-          <span class="off">67折 · 33% OFF</span>
+          <span class="off" id="pOff"></span>
         </div>
         <div class="placeholder-note">Prices are placeholders — final price shown on the product page.</div>
       </div>
@@ -146,7 +146,7 @@
         </div>
         <div class="b-row">
           <span class="b-ic">&#43;</span>
-          <span class="b-tx"><span class="t">Add the 8-in-1 cleaning kit</span><span class="s">Just NT$99 during the pre-order</span></span>
+          <span class="b-tx"><span class="t">Add the 8-in-1 cleaning kit</span><span class="s">Was NT$199 — add for NT$99</span></span>
           <a class="b-link" id="kitLink" target="_blank" rel="noopener">Add</a>
         </div>
       </div>
@@ -197,13 +197,13 @@
   };
   MODELS.promax={ nm:"iPhone 18 Pro / Pro Max", colors:MODELS.pro.colors };
 
-  // 組合:price 為佔位原價;url 先導到優惠組合分類,待 Eva 給各組合商品頁後替換
+  // 組合:was=原價、sale=組合優惠價(Eva 提供的實際價);url 先導到優惠組合分類,待各組合商品頁網址替換
   var BUNDLES={
-    minimal:{nm:"Bare Essentials",items:["Clear case","Lens ring protector","20W charger"], price:790, url:LINKS.set},
-    creator:{nm:"Creator Kit",    items:["Liquid silicone case","Stand / grip ×2"], price:990, url:LINKS.set},
-    leather:{nm:"Leather Set",    items:["Leather case","Card holder","Leather strap","Screen glass"], price:1980, url:LINKS.set},
-    fan:{nm:"Collector Set",      items:["Mirror case","Rotating card holder"], price:890, url:LINKS.set},
-    home:{nm:"Home Power Set",    items:["Clear case","4-in-1 wireless charger","Magnetic cable","65W charger"], price:2280, url:LINKS.set}
+    minimal:{nm:"New iPhone Essentials", items:["Clear case (non-MagSafe)","Lens ring protector","20W charger"], was:1497, sale:999, url:LINKS.set},
+    creator:{nm:"Creator Kit",           items:["Liquid silicone case","Ring grip","MagSafe suction mount"], was:1797, sale:1199, url:LINKS.set},
+    leather:{nm:"Leather Match Set",     items:["Leather case","Mirror stand cardholder","Leather strap + plate"], was:2697, sale:1799, url:LINKS.set},
+    fan:{nm:"Collector Set",             items:["Mirror case","Rotating card grip"], was:1598, sale:1199, url:LINKS.set},
+    home:{nm:"Home Power Set",           items:["Clear MagSafe case","4-in-1 wireless charger","Magnetic cable","65W charger"], was:3787, sale:2599, url:LINKS.set}
   };
 
   var p=new URLSearchParams(location.search);
@@ -221,9 +221,11 @@
   var it=document.getElementById("rItems");
   bundle.items.forEach(function(x){ var d=document.createElement("div");d.className="r-item";
     d.innerHTML='<span class="d"></span><span>'+x+'</span>'; it.appendChild(d); });
-  var sale=Math.round(bundle.price*0.67/10)*10;
-  document.getElementById("pWas").textContent="NT$"+bundle.price;
-  document.getElementById("pNow").textContent="NT$"+sale;
+  document.getElementById("pWas").textContent="NT$"+bundle.was;
+  document.getElementById("pNow").textContent="NT$"+bundle.sale;
+  var off=Math.round((1-bundle.sale/bundle.was)*100);
+  document.getElementById("pOff").textContent=off+"% OFF";
+  document.getElementById("oTitle").textContent="Save NT$"+(bundle.was-bundle.sale)+".";
   document.getElementById("shopBtn").href=bundle.url;
   document.getElementById("kitLink").href=LINKS.kit;
 
