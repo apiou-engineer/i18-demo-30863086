@@ -77,6 +77,15 @@
     border:1px solid color-mix(in srgb,var(--hot) 55%,transparent);border-radius:100px;padding:4px 9px}
   .placeholder-note{font-family:var(--mono);font-size:.58rem;color:var(--soft);margin-top:7px;letter-spacing:.03em}
 
+  .finish{margin-top:14px}
+  .fin-lab{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin-bottom:9px}
+  .fin-row{display:flex;flex-wrap:wrap;gap:8px}
+  .fin{pointer-events:auto;font-size:.82rem;background:var(--card);border:1px solid var(--line);color:var(--ink);
+    border-radius:100px;padding:8px 15px;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    transition:border-color .3s,background .3s,transform .3s var(--spring)}
+  .fin:hover{transform:translateY(-2px)}
+  .fin.on{border-color:var(--ink);background:color-mix(in srgb,var(--ink) 12%,transparent);font-weight:500}
+
   .bonus{display:flex;flex-direction:column;gap:9px;margin-top:14px}
   .b-row{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:14px;
     padding:11px 13px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
@@ -135,7 +144,12 @@
           <span class="now" id="pNow"></span>
           <span class="off" id="pOff"></span>
         </div>
-        <div class="placeholder-note">Prices are placeholders — final price shown on the product page.</div>
+        <div class="placeholder-note">Final price &amp; stock are confirmed on the product page.</div>
+      </div>
+
+      <div class="finish" id="finish" style="display:none">
+        <span class="fin-lab">Choose your leather finish</span>
+        <div class="fin-row" id="finRow"></div>
       </div>
 
       <div class="bonus">
@@ -197,13 +211,19 @@
   };
   MODELS.promax={ nm:"iPhone 18 Pro / Pro Max", colors:MODELS.pro.colors };
 
-  // 組合:was=原價、sale=組合優惠價(Eva 提供的實際價);url 先導到優惠組合分類,待各組合商品頁網址替換
+  // 組合:was=原價、sale=組合優惠價(實際價),url=各組合商品頁。皮革組合有 3 種花色(variants),
+  // 品項/價格相同,只差皮革花色與連結。
+  var P="https://www.apeelcase.com/products/";
   var BUNDLES={
-    minimal:{nm:"New iPhone Essentials", items:["Clear case (non-MagSafe)","Lens ring protector","20W charger"], was:1497, sale:999, url:LINKS.set},
-    creator:{nm:"Creator Kit",           items:["Liquid silicone case","Ring grip","MagSafe suction mount"], was:1797, sale:1199, url:LINKS.set},
-    leather:{nm:"Leather Match Set",     items:["Leather case","Mirror stand cardholder","Leather strap + plate"], was:2697, sale:1799, url:LINKS.set},
-    fan:{nm:"Collector Set",             items:["Mirror case","Rotating card grip"], was:1598, sale:1199, url:LINKS.set},
-    home:{nm:"Home Power Set",           items:["Clear MagSafe case","4-in-1 wireless charger","Magnetic cable","65W charger"], was:3787, sale:2599, url:LINKS.set}
+    minimal:{nm:"New iPhone Essentials", items:["Clear case (non-MagSafe)","Lens ring protector","20W charger"], was:1497, sale:999, url:P+"iphone-18-new-phone-essentials-bundle"},
+    creator:{nm:"Creator Kit",           items:["Liquid silicone case","Ring grip","MagSafe suction mount"], was:1797, sale:1199, url:P+"iphone-18-creator-all-in-one-bundle"},
+    leather:{nm:"Leather Styling Set",   items:["Leather case","Mirror stand cardholder","Leather strap + plate"], was:2697, sale:1799, variants:[
+      {nm:"Wabi-Sabi Gray", url:P+"iphone-18-wabi-sabi-gray-leather-styling-set"},
+      {nm:"Beige Crocodile", url:P+"iphone-18-beige-crocodile-grain-leather-styling-set"},
+      {nm:"Black Lychee",    url:P+"iphone-18-black-lychee-grain-leather-styling-set"}
+    ]},
+    fan:{nm:"Collector Set",             items:["Mirror case","Rotating card grip"], was:1598, sale:1199, url:P+"iphone-18-fan-essentials-bundle"},
+    home:{nm:"Home Power Set",           items:["Clear MagSafe case","4-in-1 wireless charger","Magnetic cable","65W charger"], was:3787, sale:2599, url:P+"iphone-18-all-in-one-home-charging-bundle"}
   };
 
   var p=new URLSearchParams(location.search);
@@ -226,8 +246,25 @@
   var off=Math.round((1-bundle.sale/bundle.was)*100);
   document.getElementById("pOff").textContent=off+"% OFF";
   document.getElementById("oTitle").textContent="Save NT$"+(bundle.was-bundle.sale)+".";
-  document.getElementById("shopBtn").href=bundle.url;
   document.getElementById("kitLink").href=LINKS.kit;
+
+  // shop link — bundles with leather finishes let the user pick which one to buy
+  var shopBtn=document.getElementById("shopBtn");
+  if(bundle.variants){
+    var finWrap=document.getElementById("finish"), finRow=document.getElementById("finRow");
+    finWrap.style.display="";
+    shopBtn.href=bundle.variants[0].url;
+    bundle.variants.forEach(function(v,i){
+      var f=document.createElement("button"); f.className="fin"+(i===0?" on":""); f.textContent=v.nm;
+      f.addEventListener("click",function(){
+        shopBtn.href=v.url;
+        finRow.querySelectorAll(".fin").forEach(function(x){x.classList.remove("on");}); f.classList.add("on");
+      });
+      finRow.appendChild(f);
+    });
+  } else {
+    shopBtn.href=bundle.url;
+  }
 
   // copy promo code
   document.getElementById("codeBtn").addEventListener("click",function(){
