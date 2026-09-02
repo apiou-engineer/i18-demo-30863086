@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>APIOU · Choose your colour</title>
+<title>APIOU · 選擇顏色</title>
 <style>
   :root{
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",Roboto,sans-serif;
@@ -103,12 +103,12 @@
   <div class="ui">
     <div class="eyebrow">APIOU &middot; iPhone 18</div>
     <div class="head">
-      <h1>Choose your colour.</h1>
-      <p>Personalise your iPhone 18 with a colour that reflects you.</p>
-      <div class="cname" id="cname">Titanium Black</div>
+      <h1>選擇你的顏色。</h1>
+      <p>為你的 iPhone 18 選一個代表你的顏色。</p>
+      <div class="cname" id="cname">原色鈦金屬</div>
     </div>
     <div class="colors" id="colors"></div>
-    <button class="cont" id="cont" aria-label="Continue">Continue&nbsp;&nbsp;&darr;</button>
+    <button class="cont" id="cont" aria-label="繼續">繼續&nbsp;&nbsp;&darr;</button>
   </div>
 
 <script>
@@ -119,22 +119,22 @@
   // as placeholders until per-model images are provided.
   var MODELS={
     base:{ nm:"iPhone 18", colors:[
-      {id:"white", nm:"White",       hex:"#e7e6e3", img:"titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
-      {id:"black", nm:"Black",       hex:"#1c1c20", img:"titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
-      {id:"blue",  nm:"Ultramarine", hex:"#3f52d6", img:"titanium-blue.png",    base:[10,16,34],    bloom:[120,150,235]},
-      {id:"pink",  nm:"Pink",        hex:"#e6a6bd", img:"titanium-plum.png",    base:[30,14,22],    bloom:[236,170,196]}
+      {id:"white", nm:"白色",   hex:"#e7e6e3", img:"titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"黑色",   hex:"#1c1c20", img:"titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"群青色", hex:"#3f52d6", img:"titanium-blue.png",    base:[10,16,34],    bloom:[120,150,235]},
+      {id:"pink",  nm:"粉紅色", hex:"#e6a6bd", img:"titanium-plum.png",    base:[30,14,22],    bloom:[236,170,196]}
     ]},
     air:{ nm:"iPhone 18 Air", colors:[
-      {id:"white", nm:"Cloud White", hex:"#e9e8e4", img:"titanium-natural.png", base:[224,223,219], bloom:[40,40,44], neg:true},
-      {id:"black", nm:"Space Black", hex:"#1a1a1e", img:"titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
-      {id:"blue",  nm:"Sky Blue",    hex:"#9cc2e0", img:"titanium-blue.png",    base:[12,20,32],    bloom:[150,190,224]},
-      {id:"gold",  nm:"Light Gold",  hex:"#dcc9a2", img:"titanium-natural.png", base:[222,212,190], bloom:[74,58,32], neg:true}
+      {id:"white", nm:"雲白色", hex:"#e9e8e4", img:"titanium-natural.png", base:[224,223,219], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"太空黑", hex:"#1a1a1e", img:"titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"天藍色", hex:"#9cc2e0", img:"titanium-blue.png",    base:[12,20,32],    bloom:[150,190,224]},
+      {id:"gold",  nm:"淺金色", hex:"#dcc9a2", img:"titanium-natural.png", base:[222,212,190], bloom:[74,58,32], neg:true}
     ]},
     pro:{ nm:"iPhone 18 Pro", colors:[
-      {id:"natural",nm:"Titanium Natural", hex:"#cfcabf", img:"titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
-      {id:"black",  nm:"Titanium Black",   hex:"#1c1c20", img:"titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
-      {id:"plum",   nm:"Titanium Plum",    hex:"#6f4258", img:"titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
-      {id:"blue",   nm:"Titanium Blue",    hex:"#7fa3cf", img:"titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
+      {id:"natural",nm:"原色鈦金屬", hex:"#cfcabf", img:"titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
+      {id:"black",  nm:"黑色鈦金屬", hex:"#1c1c20", img:"titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
+      {id:"plum",   nm:"梅色鈦金屬", hex:"#6f4258", img:"titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
+      {id:"blue",   nm:"藍色鈦金屬", hex:"#7fa3cf", img:"titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
     ]}
   };
   MODELS.promax={ nm:"iPhone 18 Pro Max", colors:MODELS.pro.colors };

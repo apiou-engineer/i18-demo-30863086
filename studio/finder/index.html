@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>APIOU · Build your set</title>
+<title>APIOU · 打造你的組合</title>
 <style>
   :root{
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",Roboto,sans-serif;
@@ -112,22 +112,22 @@
     <div class="eyebrow">APIOU &middot; iPhone 18</div>
 
     <div class="ask" id="ask">
-      <h2>How do you use your iPhone most?</h2>
+      <h2>你最常怎麼使用手機?</h2>
       <div class="chips" id="chips"></div>
     </div>
 
     <div class="result" id="result">
-      <div class="r-eyebrow">Your APIOU set</div>
+      <div class="r-eyebrow">你的 APIOU 組合</div>
       <div class="r-name" id="rName">—</div>
       <div class="r-for" id="rFor"></div>
       <div class="r-card">
         <div id="rItems"></div>
-        <div class="r-sum"><span class="lab">Bundle price</span><span class="val" id="rPrice">—</span></div>
-        <div class="r-note">Price is a placeholder — final price shown on the product page.</div>
+        <div class="r-sum"><span class="lab">組合價</span><span class="val" id="rPrice">—</span></div>
+        <div class="r-note">早鳥組合優惠價</div>
       </div>
       <div class="r-actions">
-        <button class="btn primary" id="takeBtn">Take this set &rarr;</button>
-        <button class="btn ghost" id="restartBtn">Start over</button>
+        <button class="btn primary" id="takeBtn">選這組 &rarr;</button>
+        <button class="btn ghost" id="restartBtn">重新開始</button>
       </div>
     </div>
   </div>
@@ -140,22 +140,22 @@
   var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
   var MODELS={
     base:{ nm:"iPhone 18", colors:[
-      {id:"white", nm:"White",       img:"../color/titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
-      {id:"black", nm:"Black",       img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
-      {id:"blue",  nm:"Ultramarine", img:"../color/titanium-blue.png",    base:[10,16,34],    bloom:[120,150,235]},
-      {id:"pink",  nm:"Pink",        img:"../color/titanium-plum.png",    base:[30,14,22],    bloom:[236,170,196]}
+      {id:"white", nm:"白色",   img:"../color/titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"黑色",   img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"群青色", img:"../color/titanium-blue.png",    base:[10,16,34],    bloom:[120,150,235]},
+      {id:"pink",  nm:"粉紅色", img:"../color/titanium-plum.png",    base:[30,14,22],    bloom:[236,170,196]}
     ]},
     air:{ nm:"iPhone 18 Air", colors:[
-      {id:"white", nm:"Cloud White", img:"../color/titanium-natural.png", base:[224,223,219], bloom:[40,40,44], neg:true},
-      {id:"black", nm:"Space Black", img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
-      {id:"blue",  nm:"Sky Blue",    img:"../color/titanium-blue.png",    base:[12,20,32],    bloom:[150,190,224]},
-      {id:"gold",  nm:"Light Gold",  img:"../color/titanium-natural.png", base:[222,212,190], bloom:[74,58,32], neg:true}
+      {id:"white", nm:"雲白色", img:"../color/titanium-natural.png", base:[224,223,219], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"太空黑", img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"天藍色", img:"../color/titanium-blue.png",    base:[12,20,32],    bloom:[150,190,224]},
+      {id:"gold",  nm:"淺金色", img:"../color/titanium-natural.png", base:[222,212,190], bloom:[74,58,32], neg:true}
     ]},
     pro:{ nm:"iPhone 18 Pro", colors:[
-      {id:"natural",nm:"Titanium Natural", img:"../color/titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
-      {id:"black",  nm:"Titanium Black",   img:"../color/titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
-      {id:"plum",   nm:"Titanium Plum",    img:"../color/titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
-      {id:"blue",   nm:"Titanium Blue",    img:"../color/titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
+      {id:"natural",nm:"原色鈦金屬", img:"../color/titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
+      {id:"black",  nm:"黑色鈦金屬", img:"../color/titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
+      {id:"plum",   nm:"梅色鈦金屬", img:"../color/titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
+      {id:"blue",   nm:"藍色鈦金屬", img:"../color/titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
     ]}
   };
   MODELS.promax={ nm:"iPhone 18 Pro Max", colors:MODELS.pro.colors };
@@ -170,18 +170,18 @@
 
   // usage → bundle mapping
   var USES=[
-    {id:"photo", t:"Photos & video",    b:"creator"},
-    {id:"fan",   t:"K-pop & collecting",b:"fan"},
-    {id:"cards", t:"Commute & cards",   b:"leather"},
-    {id:"home",  t:"Charging at home",  b:"home"},
-    {id:"basic", t:"Just the essentials",b:"minimal"}
+    {id:"photo", t:"拍照與錄影",   b:"creator"},
+    {id:"fan",   t:"追星與蒐集",   b:"fan"},
+    {id:"cards", t:"通勤與卡片",   b:"leather"},
+    {id:"home",  t:"居家充電",     b:"home"},
+    {id:"basic", t:"只要基本款",   b:"minimal"}
   ];
   var BUNDLES={
-    minimal:{nm:"New iPhone Essentials", forWho:"A clean start for your new iPhone", items:["Clear case (non-MagSafe)","Lens ring protector","20W charger"], was:1497, sale:999},
-    creator:{nm:"Creator Kit",           forWho:"For shooting photos, video & going live", items:["Liquid silicone case","Ring grip","MagSafe suction mount"], was:1797, sale:1199},
-    leather:{nm:"Leather Styling Set",   forWho:"Everyday quality, cards on you · 3 finishes", items:["Leather case","Mirror stand cardholder","Leather strap + plate"], was:2697, sale:1799},
-    fan:{nm:"Collector Set",             forWho:"Selfies, photocards & shine", items:["Mirror case","Rotating card grip"], was:1598, sale:1199},
-    home:{nm:"Home Power Set",           forWho:"Charging & multiple devices", items:["Clear MagSafe case","4-in-1 wireless charger","Magnetic cable","65W charger"], was:3787, sale:2599}
+    minimal:{nm:"新機必備組合", forWho:"基礎保護,也適合想秀出機身顏色的你", items:["透明殼(非磁吸)","鏡頭底座貼","20W 充電頭"], was:1497, sale:999},
+    creator:{nm:"創作者組合",   forWho:"拍照、錄影、經營自媒體都合拍", items:["液態矽膠殼","指環支架","磁吸吸盤"], was:1797, sale:1199},
+    leather:{nm:"皮革造型組合", forWho:"日常質感,卡片隨身 · 4 種花色", items:["皮革手機殼","鏡面支架卡包","皮革掛繩＋墊片"], was:2697, sale:1799},
+    fan:{nm:"追星必備組合",     forWho:"自拍、小卡與鏡面光澤", items:["鏡面手機殼","旋轉支架卡夾"], was:1598, sale:1199},
+    home:{nm:"居家快充組合",     forWho:"居家充電,多裝置一次到位", items:["透明磁吸殼","四合一無線充","磁吸線","65W 快充"], was:3787, sale:2599}
   };
   var ACC_POS=[ {x:"-30vw",y:"-24vh"},{x:"30vw",y:"-20vh"},{x:"-32vw",y:"18vh"},{x:"30vw",y:"22vh"} ];
 
