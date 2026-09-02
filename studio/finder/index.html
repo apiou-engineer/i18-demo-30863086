@@ -17,7 +17,7 @@
   html,body{height:100%}
   body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;-webkit-font-smoothing:antialiased;
     --bgc:#0a0a0b}
-  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.7);--line:rgba(27,27,30,.2);--card:rgba(255,255,255,.55);--bgc:#d6d2ca}
+  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.7);--line:rgba(27,27,30,.2);--card:rgba(255,255,255,.55);--bgc:#d6d2ca;background:#d6d2ca}
 
   canvas#bg{position:fixed;inset:0;z-index:0;display:block}
 
@@ -230,14 +230,14 @@
   var cv=document.getElementById("bg"), ctx=cv.getContext("2d"), W,H,dpr=Math.min(2,window.devicePixelRatio||1);
   var grain=null;
   function buildGrain(){var gw=Math.ceil(innerWidth),gh=Math.ceil(innerHeight);var g=document.createElement("canvas");g.width=gw;g.height=gh;var gx=g.getContext("2d");var id=gx.createImageData(gw,gh);var d=id.data;for(var i=0;i<d.length;i+=4){var v=(Math.random()*255)|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=16;}gx.putImageData(id,0,0);grain=g;}
-  function resize(){W=cv.width=innerWidth*dpr;H=cv.height=innerHeight*dpr;cv.style.width=innerWidth+"px";cv.style.height=innerHeight+"px";buildGrain();}
+  function resize(){W=cv.width=innerWidth*dpr;H=cv.height=innerHeight*dpr;cv.style.width=innerWidth+"px";cv.style.height=innerHeight+"px";buildGrain(); if(typeof cur!=="undefined") paint();}
   resize(); addEventListener("resize",resize);
   var lx=0.22,ly=0.16,tlx=0.22,tly=0.16;
   addEventListener("pointermove",function(e){tlx=0.14+(e.clientX/innerWidth)*0.3;tly=0.10+(e.clientY/innerHeight)*0.25;});
   var cur={base:col.base.slice(),bloom:col.bloom.slice(),neg:col.neg?1:0};
   function lerp(a,b,t){return a+(b-a)*t;}
   function rgb(a){return "rgb("+(a[0]|0)+","+(a[1]|0)+","+(a[2]|0)+")";}
-  function draw(){
+  function paint(){
     lx=lerp(lx,tlx,.05); ly=lerp(ly,tly,.05);
     var b=cur.bloom;
     ctx.fillStyle=rgb(cur.base); ctx.fillRect(0,0,W,H);
@@ -253,9 +253,9 @@
     fg.addColorStop(0,"rgba(0,0,0,0)");fg.addColorStop(.7,"rgba(255,255,255,0.03)");fg.addColorStop(1,"rgba(0,0,0,"+floorA+")");
     ctx.fillStyle=fg; ctx.fillRect(0,0,W,H);
     if(grain){ ctx.drawImage(grain,0,0,W,H); }
-    if(!reduce) requestAnimationFrame(draw);
   }
-  requestAnimationFrame(draw); if(reduce) draw();
+  function draw(){ paint(); if(!reduce) requestAnimationFrame(draw); }
+  requestAnimationFrame(draw); if(reduce) paint();
 
   // entrance veil fade (veil matches the chosen colour's world so there's no flash)
   var veil=document.getElementById("veil");
