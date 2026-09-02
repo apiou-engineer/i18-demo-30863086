@@ -10,21 +10,20 @@
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",Roboto,sans-serif;
     --mono:ui-monospace,"SF Mono",Menlo,monospace;
     --ink:#f4f3f0; --soft:rgba(244,243,240,.6); --line:rgba(244,243,240,.2);
-    --card:rgba(30,30,33,.5); --good:#7fd0a0;
+    --card:rgba(24,24,27,.82); --good:#7fd0a0;
     --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;-webkit-font-smoothing:antialiased;
     --bgc:#0a0a0b}
-  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.7);--line:rgba(27,27,30,.2);--card:rgba(255,255,255,.55);--bgc:#d6d2ca;background:#d6d2ca}
+  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.7);--line:rgba(27,27,30,.2);--card:rgba(255,255,255,.86);--bgc:#d6d2ca;background:#d6d2ca}
 
   canvas#bg{position:fixed;inset:0;z-index:0;display:block}
 
   .stage{position:fixed;inset:0;z-index:1;display:grid;place-items:center;perspective:1500px;pointer-events:none}
-  .phone-wrap{position:relative;transition:transform .7s var(--ease);will-change:transform}
-  .phone{position:relative;height:min(64vh,560px);animation:float 9s var(--ease) infinite;will-change:transform;transition:height .6s var(--ease),transform .6s var(--ease)}
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .phone-wrap{position:relative;transition:transform .7s var(--ease)}
+  .phone{position:relative;height:min(64vh,560px);transition:height .6s var(--ease),transform .6s var(--ease)}
   .phone img{height:100%;width:auto;filter:drop-shadow(0 46px 60px rgba(0,0,0,.55))}
   body.light .phone img{filter:drop-shadow(0 26px 34px rgba(120,116,106,.32))}
   /* result: phone slides left to make room for the bundle card (desktop) */
@@ -53,7 +52,7 @@
   @media (max-aspect-ratio:1/1){ .ask h2{font-size:clamp(1.3rem,5.2vw,1.8rem)} }
   .chips{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:760px}
   .chip{pointer-events:auto;background:var(--card);border:1px solid var(--line);color:var(--ink);
-    padding:13px 22px;border-radius:100px;font-size:.98rem;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    padding:13px 22px;border-radius:100px;font-size:.98rem;cursor:pointer;
     transition:transform .4s var(--spring),border-color .3s,background .3s}
   .chip:hover{transform:translateY(-3px);border-color:var(--ink)}
   body.result .ask{opacity:0;transform:translateY(20px);pointer-events:none}
@@ -69,7 +68,7 @@
   .r-eyebrow{font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
   .r-name{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:600;letter-spacing:-.02em;margin:6px 0 4px}
   .r-for{color:var(--soft);font-size:.92rem;margin-bottom:16px}
-  .r-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .r-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
   .r-item{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem;
     opacity:0;transform:translateX(10px);animation:itemIn .5s var(--ease) forwards}
   @keyframes itemIn{to{opacity:1;transform:none}}
@@ -91,7 +90,7 @@
   .accessories{position:fixed;inset:0;z-index:2;pointer-events:none}
   .acc{position:absolute;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;
     color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:100px;padding:7px 13px;
-    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);white-space:nowrap;
+    white-space:nowrap;
     opacity:0;transform:translate(var(--fromx,0),var(--fromy,0)) scale(.7)}
   .acc.snap{animation:snap .7s var(--spring) forwards}
   @keyframes snap{0%{opacity:0}60%{opacity:1}100%{opacity:1;transform:translate(0,0) scale(1)}}
@@ -105,18 +104,9 @@
   .veil{position:fixed;inset:0;z-index:40;background:#d3cfc6;pointer-events:none;opacity:1;transition:opacity .5s var(--ease)}
   .veil.gone{opacity:0}
 
-  /* MOBILE: a backdrop-filter element that fades in/out (the result card / chips) is a
-     notorious iOS full-page black-screen trigger. Drop the blur on phones and use a solid
-     translucent background instead — visually near-identical, but stable. */
-  @media (max-aspect-ratio:1/1){
-    body{--card:rgba(22,22,25,.9)}
-    body.light{--card:rgba(255,255,255,.9)}
-    .chip,.r-card,.acc{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
-  }
 </style>
 </head>
 <body>
-  <canvas id="bg"></canvas>
 
   <div class="stage"><div class="phone-wrap" id="phoneWrap">
     <div class="phone" id="phone"><img id="phoneImg" src="../color/titanium-natural.png" alt="iPhone 18"></div>
@@ -182,6 +172,17 @@
   document.body.classList.toggle("light", !!col.neg);
   document.querySelector(".eyebrow").innerHTML="APIOU &middot; "+model.nm;
 
+  // static CSS backdrop tinted to the chosen colour — no live <canvas> layer, so the page
+  // can't hit the GPU compositing collapse that blanked the screen on the result transition.
+  (function(){
+    var b=col.base, bl=col.bloom;
+    function mix(a,c,t){return "rgb("+Math.round(a[0]+(c[0]-a[0])*t)+","+Math.round(a[1]+(c[1]-a[1])*t)+","+Math.round(a[2]+(c[2]-a[2])*t)+")";}
+    var base="rgb("+b[0]+","+b[1]+","+b[2]+")";
+    var glow=mix(b,bl,col.neg?0.5:0.3);
+    var edge=mix(b,[0,0,0],0.14);
+    document.body.style.background="radial-gradient(135% 105% at 30% 18%, "+glow+" 0%, "+base+" 48%, "+edge+" 100%)";
+  })();
+
   // usage → bundle mapping
   var USES=[
     {id:"photo", t:"拍照與錄影",   b:"creator"},
@@ -231,47 +232,10 @@
   });
   var toastT; function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},3000);}
 
-  // parallax
-  if(!reduce && window.matchMedia("(pointer:fine)").matches){
-    addEventListener("pointermove",function(e){ if(document.body.classList.contains("result"))return;
-      var x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;
-      document.getElementById("phoneWrap").style.transform="rotateY("+(x*8)+"deg) rotateX("+(-y*6)+"deg)"; });
-  }
-
-  // ---------- grainy studio backdrop (same as colour world, tinted by chosen colour) ----------
-  var cv=document.getElementById("bg"), ctx=cv.getContext("2d"), W,H,dpr=Math.min(2,window.devicePixelRatio||1);
-  var grain=null;
-  function buildGrain(){var gw=Math.ceil(innerWidth),gh=Math.ceil(innerHeight);var g=document.createElement("canvas");g.width=gw;g.height=gh;var gx=g.getContext("2d");var id=gx.createImageData(gw,gh);var d=id.data;for(var i=0;i<d.length;i+=4){var v=(Math.random()*255)|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=16;}gx.putImageData(id,0,0);grain=g;}
-  function resize(){W=cv.width=innerWidth*dpr;H=cv.height=innerHeight*dpr;cv.style.width=innerWidth+"px";cv.style.height=innerHeight+"px";buildGrain(); if(typeof cur!=="undefined") paint();}
-  resize(); addEventListener("resize",resize);
-  var lx=0.22,ly=0.16,tlx=0.22,tly=0.16;
-  addEventListener("pointermove",function(e){tlx=0.14+(e.clientX/innerWidth)*0.3;tly=0.10+(e.clientY/innerHeight)*0.25;});
-  var cur={base:col.base.slice(),bloom:col.bloom.slice(),neg:col.neg?1:0};
-  function lerp(a,b,t){return a+(b-a)*t;}
-  function rgb(a){return "rgb("+(a[0]|0)+","+(a[1]|0)+","+(a[2]|0)+")";}
-  function paint(){
-    lx=lerp(lx,tlx,.05); ly=lerp(ly,tly,.05);
-    var b=cur.bloom;
-    ctx.fillStyle=rgb(cur.base); ctx.fillRect(0,0,W,H);
-    var bx=lx*W,by=ly*H,R=Math.max(W,H)*1.25;
-    var a0=lerp(0.5,0.62,cur.neg),a1=lerp(0.2,0.26,cur.neg),a2=lerp(0.07,0.1,cur.neg);
-    var g=ctx.createRadialGradient(bx,by,0,bx,by,R);
-    g.addColorStop(0,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+","+a0+")");
-    g.addColorStop(0.22,"rgba("+(b[0]*0.7|0)+","+(b[1]*0.7|0)+","+(b[2]*0.7|0)+","+a1+")");
-    g.addColorStop(0.5,"rgba("+(b[0]*0.3|0)+","+(b[1]*0.3|0)+","+(b[2]*0.3|0)+","+a2+")");
-    g.addColorStop(1,"rgba(0,0,0,0)");
-    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-    var fg=ctx.createLinearGradient(0,H*0.8,0,H);var floorA=lerp(0.25,0.1,cur.neg);
-    fg.addColorStop(0,"rgba(0,0,0,0)");fg.addColorStop(.7,"rgba(255,255,255,0.03)");fg.addColorStop(1,"rgba(0,0,0,"+floorA+")");
-    ctx.fillStyle=fg; ctx.fillRect(0,0,W,H);
-    if(grain){ ctx.drawImage(grain,0,0,W,H); }
-  }
-  function draw(){ paint(); if(!reduce) requestAnimationFrame(draw); }
-  requestAnimationFrame(draw); if(reduce) paint();
-
   // entrance veil fade (veil matches the chosen colour's world so there's no flash)
   var veil=document.getElementById("veil");
-  veil.style.background=rgb(col.neg?col.base:[ (col.base[0]+8), (col.base[1]+8), (col.base[2]+8) ]);
+  var vb=col.neg?col.base:[col.base[0]+8,col.base[1]+8,col.base[2]+8];
+  veil.style.background="rgb("+(vb[0]|0)+","+(vb[1]|0)+","+(vb[2]|0)+")";
   requestAnimationFrame(function(){ requestAnimationFrame(function(){ veil.classList.add("gone"); }); });
   setTimeout(function(){ if(veil.parentNode) veil.parentNode.removeChild(veil); }, 900);
 })();
