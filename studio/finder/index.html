@@ -31,7 +31,12 @@
   body.result .phone-wrap{transform:translateX(-14vw)}
   @media (max-aspect-ratio:1/1){
     .stage{place-items:start center;padding-top:12vh}
-    .phone{height:min(38vh,340px)}
+    /* Strip heavy GPU compositing on mobile: will-change + drop-shadow filter + the infinite
+       float animation together made iOS drop every composited layer (the screen collapsed to
+       just the body colour) the moment the result card faded in. */
+    .phone{height:min(38vh,340px);animation:none;will-change:auto}
+    .phone-wrap{will-change:auto}
+    .phone img,body.light .phone img{filter:none}
     body.result .phone-wrap{transform:translateY(-2vh)}
     body.result .phone{height:min(32vh,290px)}
   }
