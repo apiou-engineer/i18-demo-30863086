@@ -99,6 +99,15 @@
 
   .veil{position:fixed;inset:0;z-index:40;background:#d3cfc6;pointer-events:none;opacity:1;transition:opacity .5s var(--ease)}
   .veil.gone{opacity:0}
+
+  /* MOBILE: a backdrop-filter element that fades in/out (the result card / chips) is a
+     notorious iOS full-page black-screen trigger. Drop the blur on phones and use a solid
+     translucent background instead — visually near-identical, but stable. */
+  @media (max-aspect-ratio:1/1){
+    body{--card:rgba(22,22,25,.9)}
+    body.light{--card:rgba(255,255,255,.9)}
+    .chip,.r-card,.acc{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
+  }
 </style>
 </head>
 <body>
