@@ -208,8 +208,6 @@
     // clear parallax inline transform so the CSS left-shift applies cleanly
     document.getElementById("phoneWrap").style.transform="";
     document.body.classList.add("result");
-    if(!reduce){ document.getElementById("phoneWrap").animate(
-      [{filter:"brightness(1)"},{filter:"brightness(1.12)"},{filter:"brightness(1)"}],{duration:700,easing:"cubic-bezier(.22,1,.36,1)"}); }
   }
 
   document.getElementById("restartBtn").addEventListener("click",function(){ document.body.classList.remove("result"); });
