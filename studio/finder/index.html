@@ -104,6 +104,9 @@
   .veil{position:fixed;inset:0;z-index:40;background:#d3cfc6;pointer-events:none;opacity:1;transition:opacity .5s var(--ease)}
   .veil.gone{opacity:0}
 
+  /* iOS drops the whole position:fixed layer (phone + UI vanish, only the body bg shows) when a
+     descendant transitions/animates on the ask→result state change. Make the swap instant. */
+  .stage,.phone-wrap,.phone,.phone img,.ask,.result,.r-item{transition:none !important;animation:none !important}
 </style>
 </head>
 <body>
