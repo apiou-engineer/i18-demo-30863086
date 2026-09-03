@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>APIOU 診斷</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:-apple-system,sans-serif;background:#d6d2ca;overflow:hidden;position:relative;color:#1b1b1e}
+
+  .stage{position:absolute;inset:0;z-index:1;display:grid;place-items:center;pointer-events:none;padding-top:10vh}
+  .phone{height:min(40vh,360px)}
+
+  .ui{position:absolute;inset:0;z-index:3;pointer-events:none;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 24px 48px;gap:16px}
+
+  .ask{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .btn{pointer-events:auto;font-size:18px;padding:15px 28px;border-radius:100px;border:1px solid rgba(0,0,0,.2);background:rgba(255,255,255,.86);color:#1b1b1e;cursor:pointer}
+  body.result .ask{opacity:0;pointer-events:none}
+
+  .result{opacity:0;pointer-events:none;background:rgba(255,255,255,.9);border:1px solid rgba(0,0,0,.15);border-radius:18px;padding:22px;width:min(92vw,360px);text-align:center}
+  body.result .result{opacity:1;pointer-events:auto}
+  .result h2{font-size:20px;margin-bottom:8px}
+  .result p{font-size:15px;color:#555;margin:3px 0}
+</style>
+</head>
+<body>
+  <div class="stage"><img class="phone" id="ph" src="../color/titanium-natural.png" alt=""></div>
+
+  <div class="ui">
+    <div class="ask" id="ask">
+      <div style="font-size:20px">診斷:點下面按鈕</div>
+      <button class="btn" id="go">點我(A:切換 class)</button>
+      <button class="btn" id="go2">點我(B:直接顯示卡片)</button>
+    </div>
+    <div class="result" id="result">
+      <h2>卡片出現了 ✓</h2>
+      <p>如果你看到這張白卡,代表切換有成功。</p>
+      <p id="which">—</p>
+    </div>
+  </div>
+
+<script>
+(function(){
+  function canary(txt,color){
+    var b=document.createElement("div");
+    b.textContent=txt;
+    b.style.cssText="position:absolute;top:70px;left:0;right:0;text-align:center;color:"+color+";font-size:26px;font-weight:700;z-index:9999";
+    document.documentElement.appendChild(b);
+  }
+  // A: mimic the finder exactly — add body.result class (CSS drives opacity)
+  document.getElementById("go").addEventListener("click",function(){
+    try{
+      document.getElementById("which").textContent="方式 A(class 切換)";
+      document.body.classList.add("result");
+      canary("A 已點擊 ✓", "red");
+    }catch(e){ canary("A 錯誤:"+e.message, "red"); }
+  });
+  // B: bypass class — set inline styles directly on the elements
+  document.getElementById("go2").addEventListener("click",function(){
+    try{
+      document.getElementById("ask").style.opacity="0";
+      document.getElementById("ask").style.pointerEvents="none";
+      var r=document.getElementById("result");
+      r.style.opacity="1"; r.style.pointerEvents="auto";
+      document.getElementById("which").textContent="方式 B(直接 inline)";
+      canary("B 已點擊 ✓", "blue");
+    }catch(e){ canary("B 錯誤:"+e.message, "blue"); }
+  });
+})();
+</script>
+</body>
+</html>
