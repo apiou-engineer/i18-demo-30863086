@@ -58,20 +58,16 @@
   body.result .ask{opacity:0;transform:translateY(20px);pointer-events:none}
 
   /* STEP 2 — recommendation card */
-  .result{position:absolute;top:50%;right:clamp(28px,6vw,90px);transform:translateY(-50%) translateX(30px);width:min(90vw,380px);
-    opacity:0;pointer-events:none;transition:opacity .6s var(--ease) .1s,transform .6s var(--spring) .1s}
-  body.result .result{opacity:1;transform:translateY(-50%);pointer-events:auto}
+  .result{position:absolute;top:50%;right:clamp(28px,6vw,90px);transform:translateY(-50%);width:min(90vw,380px);
+    opacity:0;pointer-events:none}
   @media (max-aspect-ratio:1/1){
-    .result{top:auto;bottom:clamp(24px,5vh,54px);right:0;left:0;margin:0 auto;transform:translateY(30px)}
-    body.result .result{transform:none}
+    .result{top:auto;bottom:clamp(24px,5vh,54px);right:0;left:0;margin:0 auto;transform:none}
   }
   .r-eyebrow{font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
   .r-name{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:600;letter-spacing:-.02em;margin:6px 0 4px}
   .r-for{color:var(--soft);font-size:.92rem;margin-bottom:16px}
   .r-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
-  .r-item{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem;
-    opacity:0;transform:translateX(10px);animation:itemIn .5s var(--ease) forwards}
-  @keyframes itemIn{to{opacity:1;transform:none}}
+  .r-item{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem}
   .r-item:last-of-type{border-bottom:none}
   .r-item .d{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5;flex:0 0 auto}
   .r-sum{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
@@ -223,12 +219,24 @@
     });
     document.getElementById("rPrice").textContent="NT$"+b.sale;
     var noteEl=document.querySelector(".r-note"); if(noteEl){ noteEl.textContent="早鳥組合價 · 原價 NT$"+b.was; }
-    // clear parallax inline transform so the CSS left-shift applies cleanly
-    document.getElementById("phoneWrap").style.transform="";
-    document.body.classList.add("result");
+    // Drive the reveal via INLINE styles, not a class on <body>. iOS Safari doesn't reliably
+    // restyle descendants when an ancestor class toggles (proven by the diagnostic page:
+    // class-toggle failed, inline styles worked) — that was blanking the whole screen.
+    var isM=window.matchMedia("(max-aspect-ratio:1/1)").matches;
+    var ask=document.getElementById("ask"), res=document.getElementById("result");
+    ask.style.opacity="0"; ask.style.pointerEvents="none";
+    res.style.opacity="1"; res.style.pointerEvents="auto";
+    document.getElementById("phoneWrap").style.transform = isM ? "translateY(-2vh)" : "translateX(-14vw)";
+    if(isM){ document.getElementById("phone").style.height="min(32vh,290px)"; }
   }
 
-  document.getElementById("restartBtn").addEventListener("click",function(){ document.body.classList.remove("result"); });
+  document.getElementById("restartBtn").addEventListener("click",function(){
+    var ask=document.getElementById("ask"), res=document.getElementById("result");
+    ask.style.opacity=""; ask.style.pointerEvents="";
+    res.style.opacity=""; res.style.pointerEvents="";
+    document.getElementById("phoneWrap").style.transform="";
+    document.getElementById("phone").style.height="";
+  });
   document.getElementById("takeBtn").addEventListener("click",function(){
     document.querySelector(".ui").style.transition="opacity .3s"; document.querySelector(".ui").style.opacity="0";
     setTimeout(function(){ location.href="../offer/?m="+mid+"&c="+col.id+"&b="+state.bundle; }, 280);
