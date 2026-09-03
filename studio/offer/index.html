@@ -15,15 +15,14 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
-  body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;-webkit-font-smoothing:antialiased;--bgc:#0a0a0b}
+  body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;position:relative;-webkit-font-smoothing:antialiased;--bgc:#0a0a0b}
   body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.7);--line:rgba(27,27,30,.18);--card:rgba(255,255,255,.55);--bgc:#d6d2ca;background:#d6d2ca}
 
   canvas#bg{position:fixed;inset:0;z-index:0;display:block}
 
-  .stage{position:fixed;inset:0;z-index:1;display:grid;place-items:center;perspective:1500px;pointer-events:none}
-  .phone-wrap{position:relative;transition:transform .7s var(--ease);will-change:transform}
-  .phone{position:relative;height:min(62vh,540px);animation:float 9s var(--ease) infinite;will-change:transform}
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .stage{position:absolute;inset:0;z-index:1;display:grid;place-items:center;perspective:1500px;pointer-events:none}
+  .phone-wrap{position:relative;transition:transform .7s var(--ease)}
+  .phone{position:relative;height:min(62vh,540px);}
   .phone img{height:100%;width:auto;filter:drop-shadow(0 46px 60px rgba(0,0,0,.55))}
   body.light .phone img{filter:drop-shadow(0 26px 34px rgba(120,116,106,.32))}
   /* phone shifts left to make room for the offer panel (desktop) */
@@ -34,7 +33,7 @@
     body.enter .phone-wrap{transform:none}
   }
 
-  .ui{position:fixed;inset:0;z-index:3;pointer-events:none}
+  .ui{position:absolute;inset:0;z-index:3;pointer-events:none}
   .eyebrow{position:absolute;top:clamp(20px,4vh,40px);left:0;right:0;text-align:center;
     font-family:var(--mono);font-size:.72rem;letter-spacing:.36em;text-transform:uppercase;color:var(--soft)}
 
@@ -57,7 +56,7 @@
 
   .count{display:flex;gap:8px;margin:6px 0 16px}
   .count .u{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 0;flex:1;text-align:center;
-    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+    }
   .count .n{font-family:var(--mono);font-size:1.32rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
   .count .l{font-family:var(--mono);font-size:.54rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-top:5px}
   .count.live{justify-content:flex-start}
@@ -65,7 +64,7 @@
   .count.live .n{font-size:.82rem;letter-spacing:.1em}
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px 20px;
-    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+    }
   .r-name{font-size:1.16rem;font-weight:600;letter-spacing:-.01em}
   .r-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.92rem}
   .r-item:last-of-type{border-bottom:none}
@@ -81,14 +80,14 @@
   .fin-lab{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin-bottom:9px}
   .fin-row{display:flex;flex-wrap:wrap;gap:8px}
   .fin{pointer-events:auto;font-size:.82rem;background:var(--card);border:1px solid var(--line);color:var(--ink);
-    border-radius:100px;padding:8px 15px;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-radius:100px;padding:8px 15px;cursor:pointer;
     transition:border-color .3s,background .3s,transform .3s var(--spring)}
   .fin:hover{transform:translateY(-2px)}
   .fin.on{border-color:var(--ink);background:color-mix(in srgb,var(--ink) 12%,transparent);font-weight:500}
 
   .bonus{display:flex;flex-direction:column;gap:9px;margin-top:14px}
   .b-row{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:14px;
-    padding:11px 13px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+    padding:11px 13px;}
   .b-ic{flex:0 0 auto;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
     background:color-mix(in srgb,var(--hot) 16%,transparent);color:var(--hot);font-size:.9rem}
   .b-tx{flex:1;min-width:0}
@@ -110,17 +109,19 @@
   .btn.ghost{background:none;color:var(--soft);font-weight:500;font-size:.92rem;padding:6px}
   .btn.ghost:hover{color:var(--ink)}
 
-  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);z-index:9;
+  .toast{position:absolute;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);z-index:9;
     background:rgba(20,20,20,.92);color:#fff;padding:11px 20px;border-radius:100px;font-size:.86rem;
     opacity:0;transition:opacity .5s var(--ease),transform .5s var(--spring);pointer-events:none}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-  .veil{position:fixed;inset:0;z-index:40;background:#0a0a0b;pointer-events:none;opacity:1;transition:opacity .55s var(--ease)}
+  .veil{position:absolute;inset:0;z-index:40;background:#0a0a0b;pointer-events:none;opacity:1;transition:opacity .55s var(--ease)}
   .veil.gone{opacity:0}
+
+  /* iOS-safe: no transition/animation on the fixed→absolute layers driven by the reveal */
+  .stage,.phone-wrap,.phone,.phone img,.offer{transition:none !important;animation:none !important}
 </style>
 </head>
 <body>
-  <canvas id="bg"></canvas>
 
   <div class="stage"><div class="phone-wrap" id="phoneWrap">
     <div class="phone" id="phone"><img id="phoneImg" src="../color/titanium-natural.png" alt="iPhone 18"></div>
@@ -299,41 +300,25 @@
   }
   tick(); var ct=setInterval(function(){ if(!tick()) clearInterval(ct); }, 1000);
 
-  // entrance: veil (matches the colour world) lifts, phone slides + offer panel eases in
+  // static CSS backdrop tinted to the colour (no live <canvas> layer — iOS-safe, same as finder)
+  (function(){
+    var bb=col.base, bl=col.bloom;
+    function mix(a,c,t){return "rgb("+Math.round(a[0]+(c[0]-a[0])*t)+","+Math.round(a[1]+(c[1]-a[1])*t)+","+Math.round(a[2]+(c[2]-a[2])*t)+")";}
+    var basec="rgb("+bb[0]+","+bb[1]+","+bb[2]+")";
+    document.body.style.background="radial-gradient(135% 105% at 30% 18%, "+mix(bb,bl,col.neg?0.5:0.3)+" 0%, "+basec+" 48%, "+mix(bb,[0,0,0],0.14)+" 100%)";
+  })();
+
+  // entrance: veil lifts, then reveal the offer panel + shift the phone via INLINE styles
+  // (iOS Safari doesn't reliably restyle descendants when a class toggles on <body>).
   var veil=document.getElementById("veil");
   veil.style.background="rgb("+(col.base[0]|0)+","+(col.base[1]|0)+","+(col.base[2]|0)+")";
+  var isM=window.matchMedia("(max-aspect-ratio:1/1)").matches;
   requestAnimationFrame(function(){ requestAnimationFrame(function(){
-    veil.classList.add("gone"); document.body.classList.add("enter");
+    veil.classList.add("gone");
+    var off=document.getElementById("offer");
+    off.style.opacity="1"; off.style.pointerEvents="auto"; off.style.transform=isM?"none":"translateY(-50%)";
+    document.getElementById("phoneWrap").style.transform=isM?"none":"translateX(-15vw)";
   }); });
-
-  // ---------- grainy studio backdrop tinted to the chosen colour (same engine as colour/finder) ----------
-  var cv=document.getElementById("bg"), ctx=cv.getContext("2d"), W,H,dpr=Math.min(2,window.devicePixelRatio||1);
-  var grain=null;
-  function buildGrain(){var gw=Math.ceil(innerWidth),gh=Math.ceil(innerHeight);var g=document.createElement("canvas");g.width=gw;g.height=gh;var gx=g.getContext("2d");var id=gx.createImageData(gw,gh);var d=id.data;for(var i=0;i<d.length;i+=4){var v=(Math.random()*255)|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=16;}gx.putImageData(id,0,0);grain=g;}
-  function resize(){W=cv.width=innerWidth*dpr;H=cv.height=innerHeight*dpr;cv.style.width=innerWidth+"px";cv.style.height=innerHeight+"px";buildGrain();}
-  resize(); addEventListener("resize",resize);
-  var lx=0.22,ly=0.16,tlx=0.22,tly=0.16;
-  addEventListener("pointermove",function(e){tlx=0.14+(e.clientX/innerWidth)*0.3;tly=0.10+(e.clientY/innerHeight)*0.25;});
-  var neg=col.neg?1:0, base=col.base, b=col.bloom;
-  function lerp(a,bb,t){return a+(bb-a)*t;}
-  function draw(){
-    lx=lerp(lx,tlx,.05); ly=lerp(ly,tly,.05);
-    ctx.fillStyle="rgb("+base[0]+","+base[1]+","+base[2]+")"; ctx.fillRect(0,0,W,H);
-    var bx=lx*W,by=ly*H,R=Math.max(W,H)*1.25;
-    var a0=lerp(0.5,0.62,neg),a1=lerp(0.2,0.26,neg),a2=lerp(0.07,0.1,neg);
-    var g=ctx.createRadialGradient(bx,by,0,bx,by,R);
-    g.addColorStop(0,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+","+a0+")");
-    g.addColorStop(0.22,"rgba("+(b[0]*0.7|0)+","+(b[1]*0.7|0)+","+(b[2]*0.7|0)+","+a1+")");
-    g.addColorStop(0.5,"rgba("+(b[0]*0.3|0)+","+(b[1]*0.3|0)+","+(b[2]*0.3|0)+","+a2+")");
-    g.addColorStop(1,"rgba(0,0,0,0)");
-    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-    var fg=ctx.createLinearGradient(0,H*0.8,0,H);var floorA=lerp(0.25,0.1,neg);
-    fg.addColorStop(0,"rgba(0,0,0,0)");fg.addColorStop(.7,"rgba(255,255,255,0.03)");fg.addColorStop(1,"rgba(0,0,0,"+floorA+")");
-    ctx.fillStyle=fg; ctx.fillRect(0,0,W,H);
-    if(grain){ ctx.drawImage(grain,0,0,W,H); }
-    if(!reduce) requestAnimationFrame(draw);
-  }
-  requestAnimationFrame(draw); if(reduce) draw();
 })();
 </script>
 </body>
