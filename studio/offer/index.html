@@ -9,212 +9,193 @@
   :root{
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",Roboto,sans-serif;
     --mono:ui-monospace,"SF Mono",Menlo,monospace;
-    --ink:#f4f3f0; --soft:rgba(244,243,240,.6); --line:rgba(244,243,240,.2);
-    --card:rgba(30,30,33,.5); --good:#7fd0a0; --hot:#e9b04a;
+    --ink:#f4f3f0; --soft:rgba(244,243,240,.6); --line:rgba(244,243,240,.16);
+    --card:rgba(24,24,27,.72); --good:#7fd0a0; --hot:#e9b04a;
     --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;position:relative;-webkit-font-smoothing:antialiased;--bgc:#0a0a0b}
-  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.7);--line:rgba(27,27,30,.18);--card:rgba(255,255,255,.55);--bgc:#d6d2ca;background:#d6d2ca}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;-webkit-font-smoothing:antialiased;
+    min-height:100%;--bgc:#0a0a0b}
+  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.66);--line:rgba(27,27,30,.14);--card:rgba(255,255,255,.72);--bgc:#d6d2ca}
 
-  canvas#bg{position:fixed;inset:0;z-index:0;display:block}
+  /* ---------- HERO (first screen): the phone as the star ---------- */
+  .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;
+    padding:clamp(40px,7vh,78px) 24px clamp(24px,4vh,44px)}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--soft)}
+  .hero-stage{flex:1;display:flex;align-items:center;justify-content:center;width:100%;position:relative;min-height:0}
+  .phone{position:relative;display:inline-block}
+  .phone img{height:min(50vh,440px);width:auto;display:block;filter:drop-shadow(0 40px 55px rgba(0,0,0,.5))}
+  body.light .phone img{filter:drop-shadow(0 26px 34px rgba(120,116,106,.3))}
+  /* accessory layer — reserved for the magnetic snap-on animation (assets pending) */
+  .acc-layer{position:absolute;inset:0;pointer-events:none}
 
-  .stage{position:absolute;inset:0;z-index:1;display:grid;place-items:center;perspective:1500px;pointer-events:none}
-  .phone-wrap{position:relative;transition:transform .7s var(--ease)}
-  .phone{position:relative;height:min(62vh,540px);}
-  .phone img{height:100%;width:auto;filter:drop-shadow(0 46px 60px rgba(0,0,0,.55))}
-  body.light .phone img{filter:drop-shadow(0 26px 34px rgba(120,116,106,.32))}
-  /* phone shifts left to make room for the offer panel (desktop) */
-  body.enter .phone-wrap{transform:translateX(-15vw)}
-  @media (max-aspect-ratio:1/1){
-    .stage{place-items:start center;padding-top:7vh;align-content:start}
-    .phone{height:min(20vh,185px)}
-    .phone img,body.light .phone img{filter:none}
-    body.enter .phone-wrap{transform:none}
-  }
+  .hero-foot{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+  .hero-name{font-size:clamp(1.5rem,5vw,2rem);font-weight:600;letter-spacing:-.02em}
+  .hero-save{font-size:.95rem;color:var(--soft)}
+  .hero-save b{color:var(--hot);font-weight:600}
+  .scrollhint{margin-top:clamp(8px,2vh,18px);font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--soft);display:flex;flex-direction:column;align-items:center;gap:5px}
+  .scrollhint .arrow{font-size:1rem;animation:bob 1.6s var(--ease) infinite}
+  @keyframes bob{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(5px);opacity:1}}
 
-  .ui{position:absolute;inset:0;z-index:3;pointer-events:none}
-  .eyebrow{position:absolute;top:clamp(20px,4vh,40px);left:0;right:0;text-align:center;
-    font-family:var(--mono);font-size:.72rem;letter-spacing:.36em;text-transform:uppercase;color:var(--soft)}
-
-  .offer{position:absolute;top:50%;right:clamp(28px,6vw,90px);transform:translateY(-50%) translateX(30px);
-    width:min(92vw,410px);opacity:0;pointer-events:none;
-    transition:opacity .6s var(--ease) .12s,transform .6s var(--spring) .12s}
-  body.enter .offer{opacity:1;transform:translateY(-50%);pointer-events:auto}
-  @media (max-aspect-ratio:1/1){
-    .offer{top:auto;bottom:0;right:0;left:0;width:100%;max-height:66vh;overflow-y:auto;
-      padding:0 20px calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateY(30px)}
-    body.enter .offer{transform:none}
-    .offer-inner{margin:0 auto;max-width:440px}
-  }
-
+  /* ---------- DETAILS (scroll down) ---------- */
+  .details{max-width:460px;margin:0 auto;padding:clamp(24px,5vh,56px) 20px calc(env(safe-area-inset-bottom,0px) + 60px)}
   .badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;
     text-transform:uppercase;color:var(--hot);border:1px solid color-mix(in srgb,var(--hot) 55%,transparent);
     border-radius:100px;padding:6px 12px}
-  .o-title{font-size:clamp(1.5rem,2.6vw,2.05rem);font-weight:600;letter-spacing:-.02em;margin:14px 0 4px;line-height:1.05;text-wrap:balance}
-  .o-sub{color:var(--soft);font-size:.92rem;margin-bottom:14px}
+  .o-title{font-size:clamp(1.6rem,6vw,2.15rem);font-weight:600;letter-spacing:-.02em;margin:14px 0 4px;line-height:1.05;text-wrap:balance}
+  .o-sub{color:var(--soft);font-size:.92rem;margin-bottom:16px}
 
-  .count{display:flex;gap:8px;margin:6px 0 16px}
-  .count .u{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 0;flex:1;text-align:center;
-    }
+  .count{display:flex;gap:8px;margin:6px 0 18px}
+  .count .u{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 0;flex:1;text-align:center}
   .count .n{font-family:var(--mono);font-size:1.32rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
   .count .l{font-family:var(--mono);font-size:.54rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-top:5px}
-  .count.live{justify-content:flex-start}
   .count.live .u{flex:0 0 auto;padding:9px 16px;color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
   .count.live .n{font-size:.82rem;letter-spacing:.1em}
 
-  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px 20px;
-    }
-  .r-name{font-size:1.16rem;font-weight:600;letter-spacing:-.01em}
-  .r-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.92rem}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
+  .r-name{font-size:1.18rem;font-weight:600;letter-spacing:-.01em;margin-bottom:2px}
+  .r-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+  .r-item:first-of-type{padding-top:12px}
   .r-item:last-of-type{border-bottom:none}
   .r-item .d{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5;flex:0 0 auto}
-  .price{display:flex;align-items:baseline;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+  .price{display:flex;align-items:baseline;gap:10px;margin-top:12px;padding-top:14px;border-top:1px solid var(--line)}
   .price .was{color:var(--soft);text-decoration:line-through;font-size:.9rem}
   .price .now{font-family:var(--mono);font-size:1.5rem;font-weight:700}
-  .price .off{margin-left:auto;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;color:var(--hot);
-    border:1px solid color-mix(in srgb,var(--hot) 55%,transparent);border-radius:100px;padding:4px 9px}
-  .placeholder-note{font-family:var(--mono);font-size:.58rem;color:var(--soft);margin-top:7px;letter-spacing:.03em}
+  .price .off{margin-left:auto;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--hot);
+    border:1px solid color-mix(in srgb,var(--hot) 55%,transparent);border-radius:100px;padding:4px 10px}
+  .placeholder-note{font-family:var(--mono);font-size:.58rem;color:var(--soft);margin-top:8px;letter-spacing:.03em}
 
-  .finish{margin-top:14px}
+  .finish{margin-top:16px}
   .fin-lab{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin-bottom:9px}
   .fin-row{display:flex;flex-wrap:wrap;gap:8px}
-  .fin{pointer-events:auto;font-size:.82rem;background:var(--card);border:1px solid var(--line);color:var(--ink);
-    border-radius:100px;padding:8px 15px;cursor:pointer;
-    transition:border-color .3s,background .3s,transform .3s var(--spring)}
-  .fin:hover{transform:translateY(-2px)}
+  .fin{font-size:.85rem;background:var(--card);border:1px solid var(--line);color:var(--ink);
+    border-radius:100px;padding:9px 15px;cursor:pointer;transition:border-color .3s,background .3s}
   .fin.on{border-color:var(--ink);background:color-mix(in srgb,var(--ink) 12%,transparent);font-weight:500}
 
-  .bonus{display:flex;flex-direction:column;gap:9px;margin-top:14px}
-  .b-row{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:14px;
-    padding:11px 13px;}
-  .b-ic{flex:0 0 auto;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
-    background:color-mix(in srgb,var(--hot) 16%,transparent);color:var(--hot);font-size:.9rem}
+  .bonus{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+  .b-row{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+  .b-ic{flex:0 0 auto;width:32px;height:32px;border-radius:9px;display:grid;place-items:center;
+    background:color-mix(in srgb,var(--hot) 16%,transparent);color:var(--hot);font-size:.95rem}
   .b-tx{flex:1;min-width:0}
-  .b-tx .t{display:block;font-size:.86rem;font-weight:500;line-height:1.25}
-  .b-tx .s{display:block;font-size:.74rem;color:var(--soft);margin-top:2px}
-  .code{pointer-events:auto;flex:0 0 auto;font-family:var(--mono);font-size:.74rem;font-weight:600;letter-spacing:.12em;
-    background:var(--ink);color:var(--bgc);border:none;border-radius:8px;padding:7px 11px;cursor:pointer;transition:transform .3s var(--spring)}
+  .b-tx .t{display:block;font-size:.9rem;font-weight:500;line-height:1.25}
+  .b-tx .s{display:block;font-size:.75rem;color:var(--soft);margin-top:2px}
+  .code{flex:0 0 auto;font-family:var(--mono);font-size:.78rem;font-weight:600;letter-spacing:.12em;
+    background:var(--ink);color:var(--bgc);border:none;border-radius:8px;padding:8px 12px;cursor:pointer;transition:transform .3s var(--spring)}
   .code:active{transform:scale(.94)}
-  .b-link{pointer-events:auto;flex:0 0 auto;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--soft);text-decoration:none;border:1px solid var(--line);border-radius:100px;padding:6px 11px;transition:color .3s,border-color .3s}
-  .b-link:hover{color:var(--ink);border-color:var(--ink)}
+  .b-link{flex:0 0 auto;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--soft);text-decoration:none;border:1px solid var(--line);border-radius:100px;padding:7px 12px;transition:color .3s,border-color .3s}
 
-  .actions{display:flex;flex-direction:column;gap:9px;margin-top:16px}
-  .btn{pointer-events:auto;display:block;text-align:center;text-decoration:none;appearance:none;border:none;font-family:inherit;
-    font-size:1rem;font-weight:600;cursor:pointer;padding:15px 24px;border-radius:100px;
-    transition:transform .5s var(--spring),box-shadow .4s,background .3s,color .3s}
-  .btn.primary{background:var(--ink);color:var(--bgc);box-shadow:0 14px 34px -16px rgba(0,0,0,.65)}
-  .btn.primary:hover{transform:translateY(-2px)}
-  .btn.ghost{background:none;color:var(--soft);font-weight:500;font-size:.92rem;padding:6px}
-  .btn.ghost:hover{color:var(--ink)}
+  .actions{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+  .btn{display:block;text-align:center;text-decoration:none;appearance:none;border:none;font-family:inherit;
+    font-size:1.02rem;font-weight:600;cursor:pointer;padding:16px 24px;border-radius:100px;transition:transform .4s var(--spring)}
+  .btn.primary{background:var(--ink);color:var(--bgc);box-shadow:0 14px 34px -16px rgba(0,0,0,.6)}
+  .btn.primary:active{transform:scale(.98)}
+  .btn.ghost{background:none;color:var(--soft);font-weight:500;font-size:.92rem;padding:8px}
 
-  .toast{position:absolute;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);z-index:9;
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);z-index:50;
     background:rgba(20,20,20,.92);color:#fff;padding:11px 20px;border-radius:100px;font-size:.86rem;
     opacity:0;transition:opacity .5s var(--ease),transform .5s var(--spring);pointer-events:none}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-  .veil{position:absolute;inset:0;z-index:40;background:#0a0a0b;pointer-events:none;opacity:1;transition:opacity .55s var(--ease)}
+  .veil{position:fixed;inset:0;z-index:60;background:#0a0a0b;pointer-events:none;opacity:1;transition:opacity .55s var(--ease)}
   .veil.gone{opacity:0}
-
-  /* iOS-safe: no transition/animation on the fixed→absolute layers driven by the reveal */
-  .stage,.phone-wrap,.phone,.phone img,.offer{transition:none !important;animation:none !important}
 </style>
 </head>
 <body>
-
-  <div class="stage"><div class="phone-wrap" id="phoneWrap">
-    <div class="phone" id="phone"><img id="phoneImg" src="../color/titanium-natural.png" alt="iPhone 18"></div>
-  </div></div>
-
-  <div class="ui">
+  <section class="hero">
     <div class="eyebrow" id="eyebrow">APIOU &middot; iPhone 18</div>
-
-    <div class="offer" id="offer"><div class="offer-inner">
-      <span class="badge">&#9679; 早鳥預購</span>
-      <div class="o-title" id="oTitle">你的組合準備好了。</div>
-      <div class="o-sub" id="oSub">早鳥預購 9/2 中午 12:00 開跑(台北時間)。</div>
-
-      <div class="count" id="count"></div>
-
-      <div class="card">
-        <div class="r-name" id="rName">—</div>
-        <div id="rItems"></div>
-        <div class="price">
-          <span class="was" id="pWas"></span>
-          <span class="now" id="pNow"></span>
-          <span class="off" id="pOff"></span>
-        </div>
-        <div class="placeholder-note">實際售價與庫存以商品頁為準。</div>
+    <div class="hero-stage">
+      <div class="phone" id="phone">
+        <img id="phoneImg" src="../color/titanium-natural.png" alt="iPhone 18">
+        <div class="acc-layer" id="accLayer"></div>
       </div>
+    </div>
+    <div class="hero-foot">
+      <div class="hero-name" id="heroName">—</div>
+      <div class="hero-save" id="heroSave"></div>
+      <div class="scrollhint">往下看組合<span class="arrow">&darr;</span></div>
+    </div>
+  </section>
 
-      <div class="finish" id="finish" style="display:none">
-        <span class="fin-lab">選擇皮革花色</span>
-        <div class="fin-row" id="finRow"></div>
-      </div>
+  <section class="details">
+    <span class="badge">&#9679; 早鳥預購</span>
+    <div class="o-title" id="oTitle">你的組合準備好了。</div>
+    <div class="o-sub" id="oSub">早鳥預購 9/2 中午 12:00 開跑(台北時間)。</div>
 
-      <div class="bonus">
-        <div class="b-row">
-          <span class="b-ic">&#9670;</span>
-          <span class="b-tx"><span class="t">贈同型號鋼化膜</span><span class="s">結帳輸入折扣碼,任一 iPhone 18 殼適用</span></span>
-          <button class="code" id="codeBtn" aria-label="Copy code i18">i18</button>
-        </div>
-        <div class="b-row">
-          <span class="b-ic">&#43;</span>
-          <span class="b-tx"><span class="t">加購八合一清潔組</span><span class="s">原價 NT$199 — 加購價 NT$99</span></span>
-          <a class="b-link" id="kitLink" target="_blank" rel="noopener">加購</a>
-        </div>
-      </div>
+    <div class="count" id="count"></div>
 
-      <div class="actions">
-        <a class="btn primary" id="shopBtn" target="_blank" rel="noopener">前往選購 &rarr;</a>
-        <button class="btn ghost" id="restartBtn">重新開始</button>
+    <div class="card">
+      <div class="r-name" id="rName">—</div>
+      <div id="rItems"></div>
+      <div class="price">
+        <span class="was" id="pWas"></span>
+        <span class="now" id="pNow"></span>
+        <span class="off" id="pOff"></span>
       </div>
-    </div></div>
-  </div>
+      <div class="placeholder-note">實際售價與庫存以商品頁為準。</div>
+    </div>
+
+    <div class="finish" id="finish" style="display:none">
+      <span class="fin-lab">選擇皮革花色</span>
+      <div class="fin-row" id="finRow"></div>
+    </div>
+
+    <div class="bonus">
+      <div class="b-row">
+        <span class="b-ic">&#9670;</span>
+        <span class="b-tx"><span class="t">贈同型號鋼化膜</span><span class="s">結帳輸入折扣碼,任一 iPhone 18 殼適用</span></span>
+        <button class="code" id="codeBtn" aria-label="複製折扣碼 i18">i18</button>
+      </div>
+      <div class="b-row">
+        <span class="b-ic">&#43;</span>
+        <span class="b-tx"><span class="t">加購八合一清潔組</span><span class="s">原價 NT$199 — 加購價 NT$99</span></span>
+        <a class="b-link" id="kitLink" target="_blank" rel="noopener">加購</a>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="btn primary" id="shopBtn" target="_blank" rel="noopener">前往選購 &rarr;</a>
+      <button class="btn ghost" id="restartBtn">重新開始</button>
+    </div>
+  </section>
 
   <div class="toast" id="toast"></div>
   <div class="veil" id="veil"></div>
 
 <script>
 (function(){
-  var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
-
-  // campaign links (Eva 提供)
   var LINKS={
     set:"https://www.apeelcase.com/categories/set",
     cases:"https://www.apeelcase.com/categories/iphone-18-pro",
     kit:"https://www.apeelcase.com/products/8-in-1-multifunctional-cleaning-kit"
   };
   var PROMO_CODE="i18";
-  // 早鳥開跑:2026-09-02 12:00 (台北 UTC+8)
   var OPEN_AT=new Date("2026-09-02T12:00:00+08:00").getTime();
 
   var MODELS={
     base:{ nm:"iPhone 18", colors:[
-      {id:"white", nm:"白色",   img:"../color/titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
-      {id:"black", nm:"黑色",   img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
-      {id:"blue",  nm:"群青色", img:"../color/titanium-blue.png",    base:[10,16,34],    bloom:[120,150,235]},
-      {id:"pink",  nm:"粉紅色", img:"../color/titanium-plum.png",    base:[30,14,22],    bloom:[236,170,196]}
+      {id:"white", nm:"白色",   img:"../color/titanium-natural.png", base:[228,227,224], neg:true},
+      {id:"black", nm:"黑色",   img:"../color/titanium-black.png",   base:[9,9,11]},
+      {id:"blue",  nm:"群青色", img:"../color/titanium-blue.png",    base:[10,16,34]},
+      {id:"pink",  nm:"粉紅色", img:"../color/titanium-plum.png",    base:[30,14,22]}
     ]},
     air:{ nm:"iPhone 18 Air", colors:[
-      {id:"white", nm:"雲白色", img:"../color/titanium-natural.png", base:[224,223,219], bloom:[40,40,44], neg:true},
-      {id:"black", nm:"太空黑", img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
-      {id:"blue",  nm:"天藍色", img:"../color/titanium-blue.png",    base:[12,20,32],    bloom:[150,190,224]},
-      {id:"gold",  nm:"淺金色", img:"../color/titanium-natural.png", base:[222,212,190], bloom:[74,58,32], neg:true}
+      {id:"white", nm:"雲白色", img:"../color/titanium-natural.png", base:[224,223,219], neg:true},
+      {id:"black", nm:"太空黑", img:"../color/titanium-black.png",   base:[9,9,11]},
+      {id:"blue",  nm:"天藍色", img:"../color/titanium-blue.png",    base:[12,20,32]},
+      {id:"gold",  nm:"淺金色", img:"../color/titanium-natural.png", base:[222,212,190], neg:true}
     ]},
     pro:{ nm:"iPhone 18 Pro", colors:[
-      {id:"natural",nm:"原色鈦金屬", img:"../color/titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
-      {id:"black",  nm:"黑色鈦金屬", img:"../color/titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
-      {id:"plum",   nm:"梅色鈦金屬", img:"../color/titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
-      {id:"blue",   nm:"藍色鈦金屬", img:"../color/titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
+      {id:"natural",nm:"原色鈦金屬", img:"../color/titanium-natural.png", base:[214,210,202], neg:true},
+      {id:"black",  nm:"黑色鈦金屬", img:"../color/titanium-black.png",   base:[10,10,11]},
+      {id:"plum",   nm:"梅色鈦金屬", img:"../color/titanium-plum.png",    base:[18,10,16]},
+      {id:"blue",   nm:"藍色鈦金屬", img:"../color/titanium-blue.png",    base:[9,15,23]}
     ]}
   };
   MODELS.promax={ nm:"iPhone 18 Pro / Pro Max", colors:MODELS.pro.colors };
 
-  // 組合:was=原價、sale=組合優惠價(實際價),url=各組合商品頁。皮革組合有 3 種花色(variants),
-  // 品項/價格相同,只差皮革花色與連結。
   var P="https://www.apeelcase.com/products/";
   var BUNDLES={
     minimal:{nm:"新機必備組合", items:["透明殼(非磁吸)","鏡頭底座貼","20W 充電頭"], was:1497, sale:999, url:P+"iphone-18-new-phone-essentials-bundle"},
@@ -234,24 +215,35 @@
   var model=MODELS[mid];
   var col=model.colors.filter(function(c){return c.id===p.get("c");})[0] || model.colors[0];
   var bundle=BUNDLES[p.get("b")] || BUNDLES.minimal;
+  var saving=bundle.was-bundle.sale;
 
   document.getElementById("phoneImg").src=col.img;
   document.body.classList.toggle("light", !!col.neg);
   document.getElementById("eyebrow").innerHTML="APIOU &middot; "+model.nm;
 
-  // fill the offer
+  // tinted background gradient (static, iOS-safe)
+  (function(){
+    var b=col.base, D=[0,0,0], L=[255,255,255];
+    function mix(a,c,t){return "rgb("+Math.round(a[0]+(c[0]-a[0])*t)+","+Math.round(a[1]+(c[1]-a[1])*t)+","+Math.round(a[2]+(c[2]-a[2])*t)+")";}
+    var basec="rgb("+b[0]+","+b[1]+","+b[2]+")";
+    var glow=col.neg?mix(b,D,0.16):mix(b,L,0.14);
+    document.body.style.background="radial-gradient(120% 60% at 50% 8%, "+glow+" 0%, "+basec+" 42%, "+mix(b,D,0.18)+" 100%)";
+    document.body.style.backgroundAttachment="scroll";
+  })();
+
+  // hero + details fills
+  document.getElementById("heroName").textContent=bundle.nm;
+  document.getElementById("heroSave").innerHTML="早鳥現省 <b>NT$"+saving+"</b>";
   document.getElementById("rName").textContent=bundle.nm;
   var it=document.getElementById("rItems");
   bundle.items.forEach(function(x){ var d=document.createElement("div");d.className="r-item";
     d.innerHTML='<span class="d"></span><span>'+x+'</span>'; it.appendChild(d); });
   document.getElementById("pWas").textContent="NT$"+bundle.was;
   document.getElementById("pNow").textContent="NT$"+bundle.sale;
-  var zhe=Math.round(bundle.sale/bundle.was*100);
-  document.getElementById("pOff").textContent=zhe+"折";
-  document.getElementById("oTitle").textContent="現省 NT$"+(bundle.was-bundle.sale)+"。";
+  document.getElementById("pOff").textContent=Math.round(bundle.sale/bundle.was*100)+"折";
+  document.getElementById("oTitle").textContent="現省 NT$"+saving+"。";
   document.getElementById("kitLink").href=LINKS.kit;
 
-  // shop link — bundles with leather finishes let the user pick which one to buy
   var shopBtn=document.getElementById("shopBtn");
   if(bundle.variants){
     var finWrap=document.getElementById("finish"), finRow=document.getElementById("finRow");
@@ -265,11 +257,8 @@
       });
       finRow.appendChild(f);
     });
-  } else {
-    shopBtn.href=bundle.url;
-  }
+  } else { shopBtn.href=bundle.url; }
 
-  // copy promo code
   document.getElementById("codeBtn").addEventListener("click",function(){
     var done=function(){ toast("已複製折扣碼 "+PROMO_CODE); };
     if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(PROMO_CODE).then(done,done); }
@@ -279,7 +268,7 @@
 
   document.getElementById("restartBtn").addEventListener("click",function(){ location.href="../model/"; });
 
-  // countdown to the early-bird open time
+  // countdown
   var countEl=document.getElementById("count"), subEl=document.getElementById("oSub");
   function pad(n){return (n<10?"0":"")+n;}
   function tick(){
@@ -301,25 +290,11 @@
   }
   tick(); var ct=setInterval(function(){ if(!tick()) clearInterval(ct); }, 1000);
 
-  // static CSS backdrop tinted to the colour (no live <canvas> layer — iOS-safe, same as finder)
-  (function(){
-    var bb=col.base, bl=col.bloom;
-    function mix(a,c,t){return "rgb("+Math.round(a[0]+(c[0]-a[0])*t)+","+Math.round(a[1]+(c[1]-a[1])*t)+","+Math.round(a[2]+(c[2]-a[2])*t)+")";}
-    var basec="rgb("+bb[0]+","+bb[1]+","+bb[2]+")";
-    document.body.style.background="radial-gradient(135% 105% at 30% 18%, "+mix(bb,bl,col.neg?0.5:0.3)+" 0%, "+basec+" 48%, "+mix(bb,[0,0,0],0.14)+" 100%)";
-  })();
-
-  // entrance: veil lifts, then reveal the offer panel + shift the phone via INLINE styles
-  // (iOS Safari doesn't reliably restyle descendants when a class toggles on <body>).
+  // entrance veil (matches the colour) fades out — inline, iOS-safe
   var veil=document.getElementById("veil");
   veil.style.background="rgb("+(col.base[0]|0)+","+(col.base[1]|0)+","+(col.base[2]|0)+")";
-  var isM=window.matchMedia("(max-aspect-ratio:1/1)").matches;
-  requestAnimationFrame(function(){ requestAnimationFrame(function(){
-    veil.classList.add("gone");
-    var off=document.getElementById("offer");
-    off.style.opacity="1"; off.style.pointerEvents="auto"; off.style.transform=isM?"none":"translateY(-50%)";
-    document.getElementById("phoneWrap").style.transform=isM?"none":"translateX(-15vw)";
-  }); });
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ veil.style.opacity="0"; }); });
+  setTimeout(function(){ if(veil.parentNode) veil.parentNode.removeChild(veil); }, 800);
 })();
 </script>
 </body>
