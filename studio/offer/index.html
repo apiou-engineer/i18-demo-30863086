@@ -255,17 +255,18 @@
     }, 2450);
     charger.animate([{opacity:0,transform:"translate(70vw,8vh) rotate(14deg) scale(1.12)"},{opacity:1,transform:"translate(70vw,8vh) rotate(14deg) scale(1.12)",offset:.16},{opacity:1,transform:"translate(-3%,-1%) rotate(-3deg) scale(1)",offset:.82},{opacity:1,transform:"translate(0,0) rotate(0) scale(1)"}],{duration:1500,delay:1700,easing:SP,fill:"both"});
   }
-  document.body.classList.toggle("light", !!col.neg);
   document.getElementById("eyebrow").innerHTML="APIOU &middot; "+model.nm;
 
-  // tinted background gradient (static, iOS-safe)
+  // dark studio background for the whole page (keeps the phone dramatic on every colour),
+  // subtly tinted toward the chosen colour for cohesion.
   (function(){
-    var b=col.base, D=[0,0,0], L=[255,255,255];
-    function mix(a,c,t){return "rgb("+Math.round(a[0]+(c[0]-a[0])*t)+","+Math.round(a[1]+(c[1]-a[1])*t)+","+Math.round(a[2]+(c[2]-a[2])*t)+")";}
-    var basec="rgb("+b[0]+","+b[1]+","+b[2]+")";
-    var glow=col.neg?mix(b,D,0.16):mix(b,L,0.14);
-    document.body.style.background="radial-gradient(120% 60% at 50% 8%, "+glow+" 0%, "+basec+" 42%, "+mix(b,D,0.18)+" 100%)";
-    document.body.style.backgroundAttachment="scroll";
+    var BG={
+      natural:["#2b2d32","#141519"], white:["#2b2d32","#141519"], black:["#34373d","#181a1e"],
+      blue:["#1e2c46","#0e1420"], plum:["#301e39","#160e1a"], pink:["#3a2130","#1a0f16"],
+      ultramarine:["#1c2450","#0d1024"], gold:["#332b1e","#171410"], _def:["#2a2c31","#131417"]
+    };
+    var g=BG[col.id]||BG._def;
+    document.body.style.background="radial-gradient(120% 62% at 50% 8%, "+g[0]+" 0%, "+g[1]+" 46%, #0a0a0b 100%)";
   })();
 
   // hero + details fills
@@ -329,7 +330,7 @@
 
   // entrance veil (matches the colour) fades out — inline, iOS-safe
   var veil=document.getElementById("veil");
-  veil.style.background="rgb("+(col.base[0]|0)+","+(col.base[1]|0)+","+(col.base[2]|0)+")";
+  veil.style.background="#0f1013";
   requestAnimationFrame(function(){ requestAnimationFrame(function(){ veil.style.opacity="0"; }); });
   setTimeout(function(){ if(veil.parentNode) veil.parentNode.removeChild(veil); }, 800);
 })();
