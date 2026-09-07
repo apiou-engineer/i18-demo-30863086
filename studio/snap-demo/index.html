@@ -16,18 +16,28 @@
   .eyebrow{position:absolute;top:clamp(24px,5vh,48px);left:0;right:0;text-align:center;
     font-family:var(--mono);font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:rgba(244,243,240,.55)}
 
-  /* phone + accessory stage. Everything is sized relative to the phone. */
   .stage{position:relative;height:min(62vh,560px);aspect-ratio:499/1000}
   .stage img{position:absolute;display:block}
-  .phone{width:100%;height:100%;object-fit:contain;left:0;top:0;
-    filter:drop-shadow(0 30px 50px rgba(0,0,0,.55))}
-  /* lens ring lands on the camera module (tunable) */
+  .phone{width:100%;height:100%;object-fit:contain;left:0;top:0;filter:drop-shadow(0 30px 50px rgba(0,0,0,.55))}
   .ring{--w:80.4%; --x:8.5%; --y:3.8%;
     width:var(--w);left:var(--x);top:var(--y);opacity:0;will-change:transform,opacity}
-  /* charger rests to the lower right, beside the phone */
-  .charger{--w:30%; --x:82%; --y:60%;
+  .charger{--w:58%; --x:66%; --y:62%;
     width:var(--w);left:var(--x);top:var(--y);opacity:0;
-    filter:drop-shadow(0 16px 24px rgba(0,0,0,.5));will-change:transform,opacity}
+    filter:drop-shadow(0 18px 26px rgba(0,0,0,.55));will-change:transform,opacity}
+
+  /* glint sweep over the camera module (same box as the ring) */
+  .glint{position:absolute;left:var(--gx,8.5%);top:var(--gy,3.8%);width:var(--gw,80.4%);
+    aspect-ratio:460/283;border-radius:20%;overflow:hidden;pointer-events:none;opacity:0}
+  .glint span{position:absolute;top:-40%;left:-60%;width:45%;height:180%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);
+    transform:translateX(-120%) rotate(18deg);filter:blur(2px)}
+  /* sparkles at the three lens centres */
+  .spark{position:absolute;width:16%;aspect-ratio:1;transform:translate(-50%,-50%) scale(0);
+    pointer-events:none;opacity:0;
+    background:radial-gradient(closest-side, rgba(255,255,255,.95), rgba(255,255,255,.25) 40%, transparent 70%)}
+  .spark::before,.spark::after{content:"";position:absolute;inset:0;
+    background:conic-gradient(from 0deg, transparent 0 78deg, rgba(255,255,255,.9) 90deg, transparent 102deg 168deg, rgba(255,255,255,.9) 180deg, transparent 192deg 258deg, rgba(255,255,255,.9) 270deg, transparent 282deg 348deg, rgba(255,255,255,.9) 360deg);
+    -webkit-mask:radial-gradient(closest-side, #000 0 6%, transparent 30%);mask:radial-gradient(closest-side,#000 0 6%,transparent 30%)}
 
   .name{margin-top:clamp(18px,4vh,40px);text-align:center}
   .name .t{font-size:clamp(1.3rem,5vw,1.7rem);font-weight:600;letter-spacing:-.02em}
@@ -45,6 +55,10 @@
     <div class="stage" id="stage">
       <img class="phone" src="../acc/phone-cased-natural.png" alt="iPhone 18 Pro">
       <img class="ring" id="ring" src="../acc/lens-ring-natural.png" alt="鏡頭底座貼">
+      <div class="glint" id="glint"><span></span></div>
+      <div class="spark" id="s1" style="left:21%;top:9.7%"></div>
+      <div class="spark" id="s2" style="left:21%;top:22.4%"></div>
+      <div class="spark" id="s3" style="left:44.5%;top:16.1%"></div>
       <img class="charger" id="charger" src="../acc/charger-20w.png" alt="20W 充電頭">
     </div>
     <div class="name">
@@ -57,20 +71,47 @@
 <script>
 (function(){
   var ring=document.getElementById("ring"), charger=document.getElementById("charger");
-  var SPRING="cubic-bezier(.34,1.35,.4,1)";
+  var glint=document.getElementById("glint"), bar=glint.firstElementChild;
+  var sparks=[document.getElementById("s1"),document.getElementById("s2"),document.getElementById("s3")];
+  var SPRING="cubic-bezier(.3,1.15,.4,1)", EASE="cubic-bezier(.22,1,.36,1)";
+
   function play(){
+    // reset
+    [ring,charger,glint].forEach(function(el){el.getAnimations().forEach(function(a){a.cancel();});});
+    sparks.forEach(function(s){s.getAnimations().forEach(function(a){a.cancel();}); s.style.opacity=0;});
+
+    // 1) lens ring descends slowly and snaps on (~2.3s)
     ring.animate([
-      {opacity:0, transform:"translate(0,-46vh) scale(1.5)"},
-      {opacity:1, transform:"translate(0,-46vh) scale(1.5)", offset:.12},
-      {opacity:1, transform:"translate(0,6px) scale(.97)", offset:.82},
+      {opacity:0, transform:"translate(0,-42vh) scale(1.42)"},
+      {opacity:1, transform:"translate(0,-42vh) scale(1.42)", offset:.14},
+      {opacity:1, transform:"translate(0,14px) scale(.985)", offset:.86},
       {opacity:1, transform:"translate(0,0) scale(1)"}
-    ], {duration:1050, delay:350, easing:SPRING, fill:"both"});
+    ], {duration:1900, delay:550, easing:SPRING, fill:"both"});
+
+    var landAt=550+1900; // ring settled
+
+    // 2) shine: glint sweep + sparkle twinkle right after it lands
+    setTimeout(function(){
+      glint.style.opacity=1;
+      bar.animate([{transform:"translateX(-120%) rotate(18deg)"},{transform:"translateX(360%) rotate(18deg)"}],
+                  {duration:900, easing:EASE, fill:"forwards"});
+      setTimeout(function(){ glint.style.opacity=0; }, 850);
+      sparks.forEach(function(s,i){
+        s.animate([
+          {opacity:0, transform:"translate(-50%,-50%) scale(0) rotate(0deg)"},
+          {opacity:1, transform:"translate(-50%,-50%) scale(1.1) rotate(35deg)", offset:.45},
+          {opacity:0, transform:"translate(-50%,-50%) scale(.3) rotate(70deg)"}
+        ], {duration:1000, delay:i*180, easing:EASE, fill:"both"});
+      });
+    }, landAt);
+
+    // 3) charger flies in from the right, settles beside the phone
     charger.animate([
-      {opacity:0, transform:"translate(60vw,10vh) rotate(12deg) scale(1.15)"},
-      {opacity:1, transform:"translate(60vw,10vh) rotate(12deg) scale(1.15)", offset:.15},
-      {opacity:1, transform:"translate(-2%,-1%) rotate(-2deg) scale(1)", offset:.8},
+      {opacity:0, transform:"translate(70vw,8vh) rotate(14deg) scale(1.12)"},
+      {opacity:1, transform:"translate(70vw,8vh) rotate(14deg) scale(1.12)", offset:.16},
+      {opacity:1, transform:"translate(-3%,-1%) rotate(-3deg) scale(1)", offset:.82},
       {opacity:1, transform:"translate(0,0) rotate(0) scale(1)"}
-    ], {duration:1050, delay:1000, easing:SPRING, fill:"both"});
+    ], {duration:1500, delay:1700, easing:SPRING, fill:"both"});
   }
   document.getElementById("replay").addEventListener("click",play);
   requestAnimationFrame(function(){ requestAnimationFrame(play); });
