@@ -23,21 +23,21 @@
     width:var(--w);left:var(--x);top:var(--y);opacity:0;will-change:transform,opacity}
   .charger{--w:58%; --x:66%; --y:62%;
     width:var(--w);left:var(--x);top:var(--y);opacity:0;
-    filter:drop-shadow(0 18px 26px rgba(0,0,0,.55));will-change:transform,opacity}
+    filter:drop-shadow(0 10px 16px rgba(0,0,0,.55)) drop-shadow(0 2px 4px rgba(0,0,0,.4));will-change:transform,opacity}
 
-  /* glint sweep over the camera module (same box as the ring) */
-  .glint{position:absolute;left:var(--gx,8.5%);top:var(--gy,3.8%);width:var(--gw,80.4%);
-    aspect-ratio:460/283;border-radius:20%;overflow:hidden;pointer-events:none;opacity:0}
-  .glint span{position:absolute;top:-40%;left:-60%;width:45%;height:180%;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);
-    transform:translateX(-120%) rotate(18deg);filter:blur(2px)}
-  /* sparkles at the three lens centres */
-  .spark{position:absolute;width:16%;aspect-ratio:1;transform:translate(-50%,-50%) scale(0);
-    pointer-events:none;opacity:0;
-    background:radial-gradient(closest-side, rgba(255,255,255,.95), rgba(255,255,255,.25) 40%, transparent 70%)}
-  .spark::before,.spark::after{content:"";position:absolute;inset:0;
-    background:conic-gradient(from 0deg, transparent 0 78deg, rgba(255,255,255,.9) 90deg, transparent 102deg 168deg, rgba(255,255,255,.9) 180deg, transparent 192deg 258deg, rgba(255,255,255,.9) 270deg, transparent 282deg 348deg, rgba(255,255,255,.9) 360deg);
-    -webkit-mask:radial-gradient(closest-side, #000 0 6%, transparent 30%);mask:radial-gradient(closest-side,#000 0 6%,transparent 30%)}
+  /* camera-module box shared by the shine layers */
+  .cam{position:absolute;left:8.5%;top:3.8%;width:80.4%;aspect-ratio:460/283;pointer-events:none}
+  /* bloom = brightness flash over the whole module */
+  .bloom{position:absolute;inset:-18%;border-radius:24%;opacity:0;mix-blend-mode:screen;
+    background:radial-gradient(closest-side, rgba(255,255,255,.9), rgba(255,255,255,.35) 45%, transparent 72%)}
+  /* glint = specular streak sweeping across */
+  .glint{position:absolute;inset:0;border-radius:20%;overflow:hidden;opacity:0}
+  .glint span{position:absolute;top:-40%;height:180%;width:42%;left:-60%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);transform:translateX(-120%) rotate(18deg);filter:blur(2px)}
+  /* 4-point star glints */
+  .spark{position:absolute;width:13%;aspect-ratio:1;transform:translate(-50%,-50%) scale(0);opacity:0;
+    background:#fff;filter:drop-shadow(0 0 5px rgba(255,255,255,.95));
+    clip-path:polygon(50% 0,57% 43%,100% 50%,57% 57%,50% 100%,43% 57%,0 50%,43% 43%)}
 
   .name{margin-top:clamp(18px,4vh,40px);text-align:center}
   .name .t{font-size:clamp(1.3rem,5vw,1.7rem);font-weight:600;letter-spacing:-.02em}
@@ -55,7 +55,8 @@
     <div class="stage" id="stage">
       <img class="phone" src="../acc/phone-cased-natural.png" alt="iPhone 18 Pro">
       <img class="ring" id="ring" src="../acc/lens-ring-natural.png" alt="鏡頭底座貼">
-      <div class="glint" id="glint"><span></span></div>
+      <!-- shine layers over the camera module -->
+      <div class="cam"><div class="bloom" id="bloom"></div><div class="glint" id="glint"><span></span></div></div>
       <div class="spark" id="s1" style="left:21%;top:9.7%"></div>
       <div class="spark" id="s2" style="left:21%;top:22.4%"></div>
       <div class="spark" id="s3" style="left:44.5%;top:16.1%"></div>
@@ -71,37 +72,37 @@
 <script>
 (function(){
   var ring=document.getElementById("ring"), charger=document.getElementById("charger");
-  var glint=document.getElementById("glint"), bar=glint.firstElementChild;
+  var glint=document.getElementById("glint"), bar=glint.firstElementChild, bloom=document.getElementById("bloom");
   var sparks=[document.getElementById("s1"),document.getElementById("s2"),document.getElementById("s3")];
   var SPRING="cubic-bezier(.3,1.15,.4,1)", EASE="cubic-bezier(.22,1,.36,1)";
 
   function play(){
-    // reset
-    [ring,charger,glint].forEach(function(el){el.getAnimations().forEach(function(a){a.cancel();});});
+    [ring,charger,glint,bloom].forEach(function(el){el.getAnimations().forEach(function(a){a.cancel();});});
     sparks.forEach(function(s){s.getAnimations().forEach(function(a){a.cancel();}); s.style.opacity=0;});
+    glint.style.opacity=0; bloom.style.opacity=0;
 
-    // 1) lens ring descends slowly and snaps on (~2.3s)
+    // 1) lens ring descends slowly and snaps on
     ring.animate([
       {opacity:0, transform:"translate(0,-42vh) scale(1.42)"},
       {opacity:1, transform:"translate(0,-42vh) scale(1.42)", offset:.14},
       {opacity:1, transform:"translate(0,14px) scale(.985)", offset:.86},
       {opacity:1, transform:"translate(0,0) scale(1)"}
     ], {duration:1900, delay:550, easing:SPRING, fill:"both"});
+    var landAt=550+1900;
 
-    var landAt=550+1900; // ring settled
-
-    // 2) shine: glint sweep + sparkle twinkle right after it lands
+    // 2) shine right after it lands: bloom flash + glint sweep + sparkle twinkle
     setTimeout(function(){
+      bloom.animate([{opacity:0},{opacity:1,offset:.3},{opacity:0}],{duration:900,easing:EASE,fill:"both"});
       glint.style.opacity=1;
       bar.animate([{transform:"translateX(-120%) rotate(18deg)"},{transform:"translateX(360%) rotate(18deg)"}],
-                  {duration:900, easing:EASE, fill:"forwards"});
-      setTimeout(function(){ glint.style.opacity=0; }, 850);
+                  {duration:950,easing:EASE,fill:"forwards"});
+      setTimeout(function(){ glint.style.opacity=0; }, 900);
       sparks.forEach(function(s,i){
         s.animate([
           {opacity:0, transform:"translate(-50%,-50%) scale(0) rotate(0deg)"},
-          {opacity:1, transform:"translate(-50%,-50%) scale(1.1) rotate(35deg)", offset:.45},
-          {opacity:0, transform:"translate(-50%,-50%) scale(.3) rotate(70deg)"}
-        ], {duration:1000, delay:i*180, easing:EASE, fill:"both"});
+          {opacity:1, transform:"translate(-50%,-50%) scale(1.15) rotate(45deg)", offset:.45},
+          {opacity:0, transform:"translate(-50%,-50%) scale(.2) rotate(90deg)"}
+        ], {duration:1100, delay:150+i*180, easing:EASE, fill:"both"});
       });
     }, landAt);
 
