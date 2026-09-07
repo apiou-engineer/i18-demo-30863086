@@ -51,10 +51,10 @@
 </style>
 </head>
 <body>
-  <div class="eyebrow">APIOU · 基礎防護組 · 銀白色</div>
+  <div class="eyebrow" id="eyebrow">APIOU · 基礎防護組 · 銀白色</div>
   <div class="wrap">
     <div class="stage" id="stage">
-      <img class="phone" src="../acc/phone-cased-natural.png" alt="iPhone 18 Pro">
+      <img class="phone" id="phone" src="../acc/phone-cased-natural.png" alt="iPhone 18 Pro">
       <img class="ring" id="ring" src="../acc/lens-ring-natural.png" alt="鏡頭底座貼">
       <!-- shine layers over the camera module -->
       <div class="cam"><div class="bloom" id="bloom"></div><div class="glint" id="glint"><span></span></div></div>
@@ -72,6 +72,20 @@
 
 <script>
 (function(){
+  // colour-aware: ?c=natural|blue|plum|black
+  var COLORS={
+    natural:{nm:"銀白色", bg:["#2a2c31","#131417"]},
+    blue:{nm:"藍色", bg:["#20304a","#0e1420"]},
+    plum:{nm:"梅色", bg:["#33203a","#160e1a"]},
+    black:{nm:"黑色", bg:["#3a3d44","#1c1e22"]}
+  };
+  var cid=new URLSearchParams(location.search).get("c"); if(!COLORS[cid]) cid="natural";
+  var C=COLORS[cid];
+  document.getElementById("phone").src="../acc/phone-cased-"+cid+".png";
+  document.getElementById("ring").src="../acc/lens-ring-"+cid+".png";
+  document.getElementById("eyebrow").textContent="APIOU · 基礎防護組 · "+C.nm;
+  document.body.style.background="radial-gradient(120% 70% at 50% 20%, "+C.bg[0]+" 0%, "+C.bg[1]+" 48%, #0a0a0b 100%)";
+
   var ring=document.getElementById("ring"), charger=document.getElementById("charger");
   var glint=document.getElementById("glint"), bar=glint.firstElementChild, bloom=document.getElementById("bloom");
   var sparks=[document.getElementById("s1"),document.getElementById("s2"),document.getElementById("s3")];
