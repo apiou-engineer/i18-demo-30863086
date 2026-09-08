@@ -4,143 +4,65 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>APIOU · 打造你的組合</title>
+<title>APIOU · 選擇你的組合</title>
 <style>
   :root{
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",Roboto,sans-serif;
     --mono:ui-monospace,"SF Mono",Menlo,monospace;
-    --ink:#f4f3f0; --soft:rgba(244,243,240,.6); --line:rgba(244,243,240,.2);
-    --card:rgba(24,24,27,.82); --good:#7fd0a0;
+    --ink:#f4f3f0; --soft:rgba(244,243,240,.6); --line:rgba(244,243,240,.16);
+    --card:rgba(255,255,255,.06); --hot:#e9b04a;
     --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;position:relative;-webkit-font-smoothing:antialiased;
-    --bgc:#0a0a0b}
-  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.7);--line:rgba(27,27,30,.2);--card:rgba(255,255,255,.86);--bgc:#d6d2ca;background:#d6d2ca}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;-webkit-font-smoothing:antialiased;min-height:100%}
+  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.66);--line:rgba(27,27,30,.14);--card:rgba(255,255,255,.6)}
 
-  canvas#bg{position:fixed;inset:0;z-index:0;display:block}
+  .hd{display:flex;flex-direction:column;align-items:center;text-align:center;
+    padding:clamp(38px,7vh,74px) 22px clamp(8px,2vh,16px)}
+  .eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:var(--soft)}
+  .thumb{height:clamp(120px,22vh,220px);width:auto;margin:clamp(14px,3vh,26px) 0;
+    filter:drop-shadow(0 22px 34px rgba(0,0,0,.4))}
+  .hd h1{font-weight:600;font-size:clamp(1.7rem,5vw,2.4rem);letter-spacing:-.03em;line-height:1.02}
+  .hd p{margin-top:10px;color:var(--soft);font-size:clamp(.9rem,1.4vw,1.05rem);font-weight:300}
 
-  .stage{position:absolute;inset:0;z-index:1;display:grid;place-items:center;perspective:1500px;pointer-events:none}
-  .phone-wrap{position:relative;transition:transform .7s var(--ease)}
-  .phone{position:relative;height:min(64vh,560px);transition:height .6s var(--ease),transform .6s var(--ease)}
-  .phone img{height:100%;width:auto;filter:drop-shadow(0 46px 60px rgba(0,0,0,.55))}
-  body.light .phone img{filter:drop-shadow(0 26px 34px rgba(120,116,106,.32))}
-  /* result: phone slides left to make room for the bundle card (desktop) */
-  body.result .phone-wrap{transform:translateX(-14vw)}
-  @media (max-aspect-ratio:1/1){
-    .stage{place-items:start center;padding-top:12vh}
-    /* Strip heavy GPU compositing on mobile: will-change + drop-shadow filter + the infinite
-       float animation together made iOS drop every composited layer (the screen collapsed to
-       just the body colour) the moment the result card faded in. */
-    .phone{height:min(38vh,340px);animation:none;will-change:auto}
-    .phone-wrap{will-change:auto}
-    .phone img,body.light .phone img{filter:none}
-    body.result .phone-wrap{transform:translateY(-2vh)}
-    body.result .phone{height:min(32vh,290px)}
-  }
+  .cards{max-width:520px;margin:0 auto;padding:clamp(14px,3vh,26px) 18px calc(env(safe-area-inset-bottom,0px) + 56px);
+    display:flex;flex-direction:column;gap:12px}
+  .card{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;
+    background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;
+    transition:transform .35s var(--spring),border-color .3s,background .3s}
+  .card:hover{transform:translateY(-3px);border-color:var(--ink)}
+  .card:active{transform:scale(.99)}
+  .card .info{flex:1;min-width:0}
+  .card .nm{font-size:1.12rem;font-weight:600;letter-spacing:-.01em}
+  .card .it{font-size:.78rem;color:var(--soft);margin-top:4px;line-height:1.4;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card .pr{flex:0 0 auto;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+  .card .now{font-family:var(--mono);font-weight:700;font-size:1.06rem}
+  .card .was{font-size:.7rem;color:var(--soft);text-decoration:line-through}
+  .card .off{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;color:var(--hot);
+    border:1px solid color-mix(in srgb,var(--hot) 55%,transparent);border-radius:100px;padding:2px 7px;margin-top:2px}
+  .card .arr{color:var(--soft);font-size:1.1rem;flex:0 0 auto}
 
-  .ui{position:absolute;inset:0;z-index:3;pointer-events:none}
-  .eyebrow{position:absolute;top:clamp(20px,4vh,40px);left:0;right:0;text-align:center;
-    font-family:var(--mono);font-size:.72rem;letter-spacing:.4em;text-transform:uppercase;color:var(--soft)}
+  .back{display:block;text-align:center;margin-top:6px;font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--soft);text-decoration:none}
 
-  /* STEP 1 — usage question */
-  .ask{position:absolute;left:0;right:0;bottom:clamp(34px,7vh,72px);display:flex;flex-direction:column;align-items:center;gap:20px;
-    padding:0 24px;transition:opacity .5s var(--ease),transform .5s var(--ease)}
-  @media (max-aspect-ratio:1/1){ .ask{bottom:clamp(30px,6vh,64px);gap:14px} }
-  .ask h2{font-weight:300;font-size:clamp(1.4rem,3vw,2.1rem);letter-spacing:-.02em;text-align:center;text-wrap:balance}
-  @media (max-aspect-ratio:1/1){ .ask h2{font-size:clamp(1.3rem,5.2vw,1.8rem)} }
-  .chips{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:760px}
-  .chip{pointer-events:auto;background:var(--card);border:1px solid var(--line);color:var(--ink);
-    padding:13px 22px;border-radius:100px;font-size:.98rem;cursor:pointer;
-    transition:transform .4s var(--spring),border-color .3s,background .3s}
-  .chip:hover{transform:translateY(-3px);border-color:var(--ink)}
-  body.result .ask{opacity:0;transform:translateY(20px);pointer-events:none}
-
-  /* STEP 2 — recommendation card */
-  .result{position:absolute;top:50%;right:clamp(28px,6vw,90px);transform:translateY(-50%);width:min(90vw,380px);
-    opacity:0;pointer-events:none}
-  @media (max-aspect-ratio:1/1){
-    .result{top:auto;bottom:clamp(24px,5vh,54px);right:0;left:0;margin:0 auto;transform:none}
-  }
-  .r-eyebrow{font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
-  .r-name{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:600;letter-spacing:-.02em;margin:6px 0 4px}
-  .r-for{color:var(--soft);font-size:.92rem;margin-bottom:16px}
-  .r-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
-  .r-item{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem}
-  .r-item:last-of-type{border-bottom:none}
-  .r-item .d{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5;flex:0 0 auto}
-  .r-sum{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
-  .r-sum .lab{font-size:.9rem;color:var(--soft)}
-  .r-sum .val{font-family:var(--mono);font-size:1.4rem;font-weight:600}
-  .r-note{font-family:var(--mono);font-size:.62rem;color:var(--soft);margin-top:8px;letter-spacing:.04em}
-  .r-actions{display:flex;gap:10px;margin-top:18px;align-items:center}
-  .btn{pointer-events:auto;appearance:none;border:none;font-family:inherit;font-size:1rem;font-weight:500;cursor:pointer;
-    padding:14px 26px;border-radius:100px;transition:transform .5s var(--spring),box-shadow .4s,background .3s,color .3s,opacity .3s}
-  .btn.primary{background:var(--ink);color:var(--bgc);box-shadow:0 12px 30px -14px rgba(0,0,0,.6)}
-  .btn.primary:hover{transform:translateY(-2px)}
-  .btn.ghost{background:none;color:var(--soft);padding:14px 8px}
-  .btn.ghost:hover{color:var(--ink)}
-
-  /* accessory tags that snap in around the phone (magnetic feel) */
-  .accessories{position:absolute;inset:0;z-index:2;pointer-events:none}
-  .acc{position:absolute;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;
-    color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:100px;padding:7px 13px;
-    white-space:nowrap;
-    opacity:0;transform:translate(var(--fromx,0),var(--fromy,0)) scale(.7)}
-  .acc.snap{animation:snap .7s var(--spring) forwards}
-  @keyframes snap{0%{opacity:0}60%{opacity:1}100%{opacity:1;transform:translate(0,0) scale(1)}}
-  @media (max-aspect-ratio:1/1){ .accessories{display:none} }
-
-  .toast{position:absolute;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);z-index:9;
-    background:rgba(20,20,20,.92);color:#fff;padding:12px 22px;border-radius:100px;font-size:.9rem;
-    opacity:0;transition:opacity .5s var(--ease),transform .5s var(--spring);pointer-events:none}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-  .veil{position:absolute;inset:0;z-index:40;background:#d3cfc6;pointer-events:none;opacity:1;transition:opacity .5s var(--ease)}
+  .veil{position:fixed;inset:0;z-index:40;background:#0a0a0b;pointer-events:none;opacity:1;transition:opacity .5s var(--ease)}
   .veil.gone{opacity:0}
-
-  /* iOS drops the whole position:fixed layer (phone + UI vanish, only the body bg shows) when a
-     descendant transitions/animates on the ask→result state change. Make the swap instant. */
-  .stage,.phone-wrap,.phone,.phone img,.ask,.result,.r-item{transition:none !important;animation:none !important}
 </style>
 </head>
 <body>
-
-  <div class="stage"><div class="phone-wrap" id="phoneWrap">
-    <div class="phone" id="phone"><img id="phoneImg" src="../color/titanium-natural.png" alt="iPhone 18"></div>
-  </div></div>
-
-  <div class="ui">
-    <div class="eyebrow">APIOU &middot; iPhone 18</div>
-
-    <div class="ask" id="ask">
-      <h2>你最常怎麼使用手機?</h2>
-      <div class="chips" id="chips"></div>
-    </div>
-
-    <div class="result" id="result">
-      <div class="r-eyebrow">你的 APIOU 組合</div>
-      <div class="r-name" id="rName">—</div>
-      <div class="r-for" id="rFor"></div>
-      <div class="r-card">
-        <div id="rItems"></div>
-        <div class="r-sum"><span class="lab">組合價</span><span class="val" id="rPrice">—</span></div>
-        <div class="r-note">早鳥組合優惠價</div>
-      </div>
-      <div class="r-actions">
-        <button class="btn primary" id="takeBtn">選這組 &rarr;</button>
-        <button class="btn ghost" id="restartBtn">重新開始</button>
-      </div>
-    </div>
+  <div class="hd">
+    <div class="eyebrow" id="eyebrow">APIOU &middot; iPhone 18</div>
+    <img class="thumb" id="thumb" src="../color/titanium-natural.png" alt="iPhone 18">
+    <h1>選擇你的組合</h1>
+    <p>挑一個最適合你的,看看早鳥價。</p>
   </div>
-
-  <div class="toast" id="toast"></div>
+  <div class="cards" id="cards"></div>
   <div class="veil" id="veil"></div>
 
 <script>
 (function(){
-  var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
   var MODELS={
     base:{ nm:"iPhone 18", colors:[
       {id:"white", nm:"白色",   img:"../color/titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
@@ -161,94 +83,54 @@
       {id:"blue",   nm:"藍色鈦金屬", img:"../color/titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
     ]}
   };
-  MODELS.promax={ nm:"iPhone 18 Pro Max", colors:MODELS.pro.colors };
-  var params=new URLSearchParams(location.search);
-  var mid=params.get("m"); if(!MODELS[mid]) mid="pro";
-  var model=MODELS[mid];
-  var cid=params.get("c");
-  var col=model.colors.filter(function(c){return c.id===cid;})[0] || model.colors[0];
-  document.getElementById("phoneImg").src=col.img;
-  document.body.classList.toggle("light", !!col.neg);
-  document.querySelector(".eyebrow").innerHTML="APIOU &middot; "+model.nm;
+  MODELS.promax={ nm:"iPhone 18 Pro / Pro Max", colors:MODELS.pro.colors };
 
-  // static CSS backdrop tinted to the chosen colour — no live <canvas> layer, so the page
-  // can't hit the GPU compositing collapse that blanked the screen on the result transition.
+  var BUNDLES=[
+    {key:"minimal", nm:"新機必備組合", items:"透明殼 · 鏡頭底座貼 · 20W 充電頭", was:1497, sale:999},
+    {key:"creator", nm:"創作者組合",   items:"液態矽膠殼 · 指環支架 · 磁吸吸盤", was:1797, sale:1199},
+    {key:"leather", nm:"皮革造型組合", items:"皮革手機殼 · 鏡面支架卡包 · 皮革掛繩＋墊片 · 4 種花色", was:2697, sale:1799},
+    {key:"fan",     nm:"追星必備組合", items:"鏡面手機殼 · 旋轉支架卡夾", was:1598, sale:1199},
+    {key:"home",    nm:"居家快充組合", items:"透明磁吸殼 · 四合一無線充 · 磁吸線 · 65W 快充", was:3787, sale:2599}
+  ];
+
+  var p=new URLSearchParams(location.search);
+  var mid=p.get("m"); if(!MODELS[mid]) mid="pro";
+  var model=MODELS[mid];
+  var col=model.colors.filter(function(c){return c.id===p.get("c");})[0] || model.colors[0];
+
+  document.body.classList.toggle("light", !!col.neg);
+  document.getElementById("thumb").src=col.img;
+  document.getElementById("eyebrow").innerHTML="APIOU &middot; "+model.nm+" &middot; "+col.nm;
+
+  // colour-tinted background (matches the colour world; light for negative colours)
   (function(){
-    var b=col.base, bl=col.bloom;
+    var b=col.base, bl=col.bloom, neg=!!col.neg;
     function mix(a,c,t){return "rgb("+Math.round(a[0]+(c[0]-a[0])*t)+","+Math.round(a[1]+(c[1]-a[1])*t)+","+Math.round(a[2]+(c[2]-a[2])*t)+")";}
-    var base="rgb("+b[0]+","+b[1]+","+b[2]+")";
-    var glow=mix(b,bl,col.neg?0.5:0.3);
-    var edge=mix(b,[0,0,0],0.14);
-    document.body.style.background="radial-gradient(135% 105% at 30% 18%, "+glow+" 0%, "+base+" 48%, "+edge+" 100%)";
+    var basec="rgb("+b[0]+","+b[1]+","+b[2]+")";
+    var glow=mix(b,bl,neg?0.5:0.32);
+    var edge=mix(b,[0,0,0],neg?0.1:0.28);
+    document.body.style.background="radial-gradient(135% 90% at 30% 12%, "+glow+" 0%, "+basec+" 44%, "+edge+" 100%)";
   })();
 
-  // usage → bundle mapping
-  var USES=[
-    {id:"photo", t:"拍照與錄影",   b:"creator"},
-    {id:"fan",   t:"追星與蒐集",   b:"fan"},
-    {id:"cards", t:"通勤與卡片",   b:"leather"},
-    {id:"home",  t:"居家充電",     b:"home"},
-    {id:"basic", t:"只要基本款",   b:"minimal"}
-  ];
-  var BUNDLES={
-    minimal:{nm:"新機必備組合", forWho:"基礎保護,也適合想秀出機身顏色的你", items:["透明殼(非磁吸)","鏡頭底座貼","20W 充電頭"], was:1497, sale:999},
-    creator:{nm:"創作者組合",   forWho:"拍照、錄影、經營自媒體都合拍", items:["液態矽膠殼","指環支架","磁吸吸盤"], was:1797, sale:1199},
-    leather:{nm:"皮革造型組合", forWho:"日常質感,卡片隨身 · 4 種花色", items:["皮革手機殼","鏡面支架卡包","皮革掛繩＋墊片"], was:2697, sale:1799},
-    fan:{nm:"追星必備組合",     forWho:"自拍、小卡與鏡面光澤", items:["鏡面手機殼","旋轉支架卡夾"], was:1598, sale:1199},
-    home:{nm:"居家快充組合",     forWho:"居家充電,多裝置一次到位", items:["透明磁吸殼","四合一無線充","磁吸線","65W 快充"], was:3787, sale:2599}
-  };
-  var ACC_POS=[ {x:"-30vw",y:"-24vh"},{x:"30vw",y:"-20vh"},{x:"-32vw",y:"18vh"},{x:"30vw",y:"22vh"} ];
-
-  var state={bundle:null};
-  // chips
-  var chipsEl=document.getElementById("chips");
-  USES.forEach(function(u){
-    var b=document.createElement("button");b.className="chip";b.textContent=u.t;
-    b.addEventListener("click",function(){ choose(u); });
-    chipsEl.appendChild(b);
+  // build the 5 bundle cards → each links straight to its offer
+  var wrap=document.getElementById("cards");
+  BUNDLES.forEach(function(b){
+    var off=Math.round(b.sale/b.was*100);
+    var a=document.createElement("a"); a.className="card";
+    a.href="../offer/?m="+mid+"&c="+col.id+"&b="+b.key;
+    a.innerHTML='<div class="info"><div class="nm">'+b.nm+'</div><div class="it">'+b.items+'</div></div>'
+      +'<div class="pr"><span class="was">NT$'+b.was+'</span><span class="now">NT$'+b.sale+'</span><span class="off">'+off+'折</span></div>'
+      +'<span class="arr">&rsaquo;</span>';
+    wrap.appendChild(a);
   });
+  var back=document.createElement("a"); back.className="back"; back.href="../color/?m="+mid+"#flip"; back.textContent="← 重新選顏色";
+  wrap.appendChild(back);
 
-  function choose(u){
-    var key=u.b, b=BUNDLES[key]; state.bundle=key;
-    document.getElementById("rName").textContent=b.nm;
-    document.getElementById("rFor").textContent=b.forWho;
-    var it=document.getElementById("rItems"); it.innerHTML="";
-    b.items.forEach(function(x,i){
-      var d=document.createElement("div"); d.className="r-item"; d.style.animationDelay=(0.25+i*0.09)+"s";
-      d.innerHTML='<span class="d"></span><span>'+x+'</span>'; it.appendChild(d);
-    });
-    document.getElementById("rPrice").textContent="NT$"+b.sale;
-    var noteEl=document.querySelector(".r-note"); if(noteEl){ noteEl.textContent="早鳥組合價 · 原價 NT$"+b.was; }
-    // Drive the reveal via INLINE styles, not a class on <body>. iOS Safari doesn't reliably
-    // restyle descendants when an ancestor class toggles (proven by the diagnostic page:
-    // class-toggle failed, inline styles worked) — that was blanking the whole screen.
-    var isM=window.matchMedia("(max-aspect-ratio:1/1)").matches;
-    var ask=document.getElementById("ask"), res=document.getElementById("result");
-    ask.style.opacity="0"; ask.style.pointerEvents="none";
-    res.style.opacity="1"; res.style.pointerEvents="auto";
-    document.getElementById("phoneWrap").style.transform = isM ? "translateY(-2vh)" : "translateX(-14vw)";
-    if(isM){ document.getElementById("phone").style.height="min(32vh,290px)"; }
-  }
-
-  document.getElementById("restartBtn").addEventListener("click",function(){
-    var ask=document.getElementById("ask"), res=document.getElementById("result");
-    ask.style.opacity=""; ask.style.pointerEvents="";
-    res.style.opacity=""; res.style.pointerEvents="";
-    document.getElementById("phoneWrap").style.transform="";
-    document.getElementById("phone").style.height="";
-  });
-  document.getElementById("takeBtn").addEventListener("click",function(){
-    document.querySelector(".ui").style.transition="opacity .3s"; document.querySelector(".ui").style.opacity="0";
-    setTimeout(function(){ location.href="../offer/?m="+mid+"&c="+col.id+"&b="+state.bundle; }, 280);
-  });
-  var toastT; function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},3000);}
-
-  // entrance veil fade (veil matches the chosen colour's world so there's no flash)
+  // entrance veil (matches the colour) fades — inline, iOS-safe
   var veil=document.getElementById("veil");
-  var vb=col.neg?col.base:[col.base[0]+8,col.base[1]+8,col.base[2]+8];
-  veil.style.background="rgb("+(vb[0]|0)+","+(vb[1]|0)+","+(vb[2]|0)+")";
-  requestAnimationFrame(function(){ requestAnimationFrame(function(){ veil.classList.add("gone"); }); });
-  setTimeout(function(){ if(veil.parentNode) veil.parentNode.removeChild(veil); }, 900);
+  veil.style.background="rgb("+(col.base[0]|0)+","+(col.base[1]|0)+","+(col.base[2]|0)+")";
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ veil.style.opacity="0"; }); });
+  setTimeout(function(){ if(veil.parentNode) veil.parentNode.removeChild(veil); }, 800);
 })();
 </script>
 </body>
