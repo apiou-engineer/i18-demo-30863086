@@ -14,119 +14,199 @@
     --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;-webkit-font-smoothing:antialiased;min-height:100%}
-  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.66);--line:rgba(27,27,30,.14);--card:rgba(255,255,255,.6)}
+  html,body{height:100%}
+  body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;position:relative;-webkit-font-smoothing:antialiased}
+  body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.66);--line:rgba(27,27,30,.14);--card:rgba(255,255,255,.62)}
 
-  .hd{display:flex;flex-direction:column;align-items:center;text-align:center;
-    padding:clamp(38px,7vh,74px) 22px clamp(8px,2vh,16px)}
-  .eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:var(--soft)}
-  .thumb{height:clamp(120px,22vh,220px);width:auto;margin:clamp(14px,3vh,26px) 0;
-    filter:drop-shadow(0 22px 34px rgba(0,0,0,.4))}
-  .hd h1{font-weight:600;font-size:clamp(1.7rem,5vw,2.4rem);letter-spacing:-.03em;line-height:1.02}
-  .hd p{margin-top:10px;color:var(--soft);font-size:clamp(.9rem,1.4vw,1.05rem);font-weight:300}
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;z-index:2}
+  .eyebrow{flex:0 0 auto;text-align:center;padding:clamp(24px,5vh,46px) 20px 0;
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:var(--soft)}
 
-  .cards{max-width:520px;margin:0 auto;padding:clamp(14px,3vh,26px) 18px calc(env(safe-area-inset-bottom,0px) + 56px);
-    display:flex;flex-direction:column;gap:12px}
-  .card{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;
-    background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;
-    transition:transform .35s var(--spring),border-color .3s,background .3s}
-  .card:hover{transform:translateY(-3px);border-color:var(--ink)}
-  .card:active{transform:scale(.99)}
-  .card .info{flex:1;min-width:0}
-  .card .nm{font-size:1.12rem;font-weight:600;letter-spacing:-.01em}
-  .card .it{font-size:.78rem;color:var(--soft);margin-top:4px;line-height:1.4;
-    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  .card .pr{flex:0 0 auto;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:2px}
-  .card .now{font-family:var(--mono);font-weight:700;font-size:1.06rem}
-  .card .was{font-size:.7rem;color:var(--soft);text-decoration:line-through}
-  .card .off{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;color:var(--hot);
-    border:1px solid color-mix(in srgb,var(--hot) 55%,transparent);border-radius:100px;padding:2px 7px;margin-top:2px}
-  .card .arr{color:var(--soft);font-size:1.1rem;flex:0 0 auto}
+  /* STATE 1 — usage */
+  .usage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(20px,4vh,34px);padding:0 24px;
+    transition:opacity .4s var(--ease)}
+  .usage h1{font-weight:600;font-size:clamp(1.8rem,6vw,2.6rem);letter-spacing:-.03em;text-align:center;text-wrap:balance}
+  .chips{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:560px}
+  .chip{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:100px;
+    padding:14px 24px;font-size:1rem;cursor:pointer;transition:transform .35s var(--spring),border-color .3s}
+  .chip:hover{transform:translateY(-3px);border-color:var(--ink)}
 
-  .back{display:block;text-align:center;margin-top:6px;font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--soft);text-decoration:none}
+  /* STATE 2 — recommended bundle carousel */
+  .sets{position:absolute;inset:0;display:none;flex-direction:column;opacity:0;transition:opacity .5s var(--ease)}
+  .sets .head{flex:0 0 auto;text-align:center;padding:clamp(58px,10vh,96px) 20px clamp(6px,1.5vh,14px)}
+  .sets .head .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--hot)}
+  .sets .head h2{font-weight:600;font-size:clamp(1.4rem,5vw,2rem);letter-spacing:-.02em;margin-top:6px}
+  .track{flex:1 1 auto;display:flex;gap:14px;align-items:center;overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+    padding:8px max(20px, calc((100% - min(84vw,540px)) / 2));scrollbar-width:none}
+  .track::-webkit-scrollbar{display:none}
+  .slide{flex:0 0 min(84vw,540px);scroll-snap-align:center}
+  .set{position:relative;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px 22px 22px;
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .set.rec{border-color:color-mix(in srgb,var(--hot) 60%,transparent)}
+  .set .badge{position:absolute;top:-11px;left:22px;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;
+    text-transform:uppercase;color:#1b1512;background:var(--hot);border-radius:100px;padding:5px 11px}
+  .set .nm{font-size:1.35rem;font-weight:600;letter-spacing:-.02em}
+  .set .items{margin:14px 0;display:flex;flex-direction:column;gap:9px}
+  .set .item{display:flex;align-items:center;gap:10px;font-size:.95rem;color:var(--ink);
+    padding-bottom:9px;border-bottom:1px solid var(--line)}
+  .set .item:last-child{border-bottom:none;padding-bottom:0}
+  .set .item .d{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5;flex:0 0 auto}
+  .set .price{display:flex;align-items:baseline;gap:10px;margin:4px 0 18px}
+  .set .price .was{color:var(--soft);text-decoration:line-through;font-size:.9rem}
+  .set .price .now{font-family:var(--mono);font-size:1.5rem;font-weight:700}
+  .set .price .off{margin-left:auto;font-family:var(--mono);font-size:.68rem;color:var(--hot);
+    border:1px solid color-mix(in srgb,var(--hot) 55%,transparent);border-radius:100px;padding:3px 9px}
+  .set .cta{display:block;text-align:center;text-decoration:none;background:var(--ink);color:var(--bgc,#0a0a0b);
+    font-weight:600;font-size:1rem;padding:15px;border-radius:100px}
+  body.light .set .cta{--bgc:#f4f3f0}
 
-  .veil{position:fixed;inset:0;z-index:40;background:#0a0a0b;pointer-events:none;opacity:1;transition:opacity .5s var(--ease)}
+  .dots{flex:0 0 auto;display:flex;gap:8px;justify-content:center;padding:clamp(12px,2.5vh,22px) 0 clamp(6px,1.5vh,12px)}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--soft);opacity:.4;transition:opacity .3s,transform .3s}
+  .dot.on{opacity:1;transform:scale(1.3);background:var(--hot)}
+  .reselect{flex:0 0 auto;text-align:center;padding:0 0 clamp(24px,5vh,44px);font-family:var(--mono);
+    font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);text-decoration:none;cursor:pointer}
+
+  .veil{position:absolute;inset:0;z-index:40;background:#0a0a0b;pointer-events:none;opacity:1;transition:opacity .5s var(--ease)}
   .veil.gone{opacity:0}
 </style>
 </head>
 <body>
-  <div class="hd">
+  <div class="screen">
     <div class="eyebrow" id="eyebrow">APIOU &middot; iPhone 18</div>
-    <img class="thumb" id="thumb" src="../color/titanium-natural.png" alt="iPhone 18">
-    <h1>選擇你的組合</h1>
-    <p>挑一個最適合你的,看看早鳥價。</p>
+
+    <div class="usage" id="usage">
+      <h1>你最常怎麼使用手機?</h1>
+      <div class="chips" id="chips"></div>
+    </div>
+
+    <div class="sets" id="sets">
+      <div class="head"><div class="k">為你推薦</div><h2 id="recName">—</h2></div>
+      <div class="track" id="track"></div>
+      <div class="dots" id="dots"></div>
+      <a class="reselect" id="reselect">← 重選用途</a>
+    </div>
   </div>
-  <div class="cards" id="cards"></div>
   <div class="veil" id="veil"></div>
 
 <script>
 (function(){
   var MODELS={
     base:{ nm:"iPhone 18", colors:[
-      {id:"white", nm:"白色",   img:"../color/titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
-      {id:"black", nm:"黑色",   img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
-      {id:"blue",  nm:"群青色", img:"../color/titanium-blue.png",    base:[10,16,34],    bloom:[120,150,235]},
-      {id:"pink",  nm:"粉紅色", img:"../color/titanium-plum.png",    base:[30,14,22],    bloom:[236,170,196]}
+      {id:"white", nm:"白色",   base:[228,227,224], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"黑色",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"群青色", base:[10,16,34],    bloom:[120,150,235]},
+      {id:"pink",  nm:"粉紅色", base:[30,14,22],    bloom:[236,170,196]}
     ]},
     air:{ nm:"iPhone 18 Air", colors:[
-      {id:"white", nm:"雲白色", img:"../color/titanium-natural.png", base:[224,223,219], bloom:[40,40,44], neg:true},
-      {id:"black", nm:"太空黑", img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
-      {id:"blue",  nm:"天藍色", img:"../color/titanium-blue.png",    base:[12,20,32],    bloom:[150,190,224]},
-      {id:"gold",  nm:"淺金色", img:"../color/titanium-natural.png", base:[222,212,190], bloom:[74,58,32], neg:true}
+      {id:"white", nm:"雲白色", base:[224,223,219], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"太空黑", base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"天藍色", base:[12,20,32],    bloom:[150,190,224]},
+      {id:"gold",  nm:"淺金色", base:[222,212,190], bloom:[74,58,32], neg:true}
     ]},
     pro:{ nm:"iPhone 18 Pro", colors:[
-      {id:"natural",nm:"原色鈦金屬", img:"../color/titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
-      {id:"black",  nm:"黑色鈦金屬", img:"../color/titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
-      {id:"plum",   nm:"梅色鈦金屬", img:"../color/titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
-      {id:"blue",   nm:"藍色鈦金屬", img:"../color/titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
+      {id:"natural",nm:"原色鈦金屬", base:[214,210,202], bloom:[36,34,30], neg:true},
+      {id:"black",  nm:"黑色鈦金屬", base:[10,10,11],  bloom:[216,220,226]},
+      {id:"plum",   nm:"梅色鈦金屬", base:[18,10,16],  bloom:[203,150,182]},
+      {id:"blue",   nm:"藍色鈦金屬", base:[9,15,23],   bloom:[150,186,220]}
     ]}
   };
   MODELS.promax={ nm:"iPhone 18 Pro / Pro Max", colors:MODELS.pro.colors };
 
-  var BUNDLES=[
-    {key:"minimal", nm:"新機必備組合", items:"透明殼 · 鏡頭底座貼 · 20W 充電頭", was:1497, sale:999},
-    {key:"creator", nm:"創作者組合",   items:"液態矽膠殼 · 指環支架 · 磁吸吸盤", was:1797, sale:1199},
-    {key:"leather", nm:"皮革造型組合", items:"皮革手機殼 · 鏡面支架卡包 · 皮革掛繩＋墊片 · 4 種花色", was:2697, sale:1799},
-    {key:"fan",     nm:"追星必備組合", items:"鏡面手機殼 · 旋轉支架卡夾", was:1598, sale:1199},
-    {key:"home",    nm:"居家快充組合", items:"透明磁吸殼 · 四合一無線充 · 磁吸線 · 65W 快充", was:3787, sale:2599}
+  var USES=[
+    {t:"拍照與錄影", b:"creator"},
+    {t:"追星與蒐集", b:"fan"},
+    {t:"通勤與卡片", b:"leather"},
+    {t:"居家充電",   b:"home"},
+    {t:"只要基本款", b:"minimal"}
   ];
+  var BUNDLES={
+    minimal:{nm:"新機必備組合", items:["透明殼(非磁吸)","鏡頭底座貼","20W 充電頭"], was:1497, sale:999},
+    creator:{nm:"創作者組合",   items:["液態矽膠殼","指環支架","磁吸吸盤"], was:1797, sale:1199},
+    leather:{nm:"皮革造型組合", items:["皮革手機殼","鏡面支架卡包","皮革掛繩＋墊片 · 4 種花色"], was:2697, sale:1799},
+    fan:{nm:"追星必備組合",     items:["鏡面手機殼","旋轉支架卡夾"], was:1598, sale:1199},
+    home:{nm:"居家快充組合",     items:["透明磁吸殼","四合一無線充","磁吸線","65W 快充"], was:3787, sale:2599}
+  };
+  var ORDER=["minimal","creator","leather","fan","home"];
 
   var p=new URLSearchParams(location.search);
   var mid=p.get("m"); if(!MODELS[mid]) mid="pro";
   var model=MODELS[mid];
   var col=model.colors.filter(function(c){return c.id===p.get("c");})[0] || model.colors[0];
+  var cid=col.id;
 
   document.body.classList.toggle("light", !!col.neg);
-  document.getElementById("thumb").src=col.img;
   document.getElementById("eyebrow").innerHTML="APIOU &middot; "+model.nm+" &middot; "+col.nm;
 
-  // colour-tinted background (matches the colour world; light for negative colours)
   (function(){
     var b=col.base, bl=col.bloom, neg=!!col.neg;
     function mix(a,c,t){return "rgb("+Math.round(a[0]+(c[0]-a[0])*t)+","+Math.round(a[1]+(c[1]-a[1])*t)+","+Math.round(a[2]+(c[2]-a[2])*t)+")";}
     var basec="rgb("+b[0]+","+b[1]+","+b[2]+")";
-    var glow=mix(b,bl,neg?0.5:0.32);
-    var edge=mix(b,[0,0,0],neg?0.1:0.28);
-    document.body.style.background="radial-gradient(135% 90% at 30% 12%, "+glow+" 0%, "+basec+" 44%, "+edge+" 100%)";
+    document.body.style.background="radial-gradient(135% 90% at 30% 12%, "+mix(b,bl,neg?0.5:0.32)+" 0%, "+basec+" 44%, "+mix(b,[0,0,0],neg?0.1:0.28)+" 100%)";
   })();
 
-  // build the 5 bundle cards → each links straight to its offer
-  var wrap=document.getElementById("cards");
-  BUNDLES.forEach(function(b){
-    var off=Math.round(b.sale/b.was*100);
-    var a=document.createElement("a"); a.className="card";
-    a.href="../offer/?m="+mid+"&c="+col.id+"&b="+b.key;
-    a.innerHTML='<div class="info"><div class="nm">'+b.nm+'</div><div class="it">'+b.items+'</div></div>'
-      +'<div class="pr"><span class="was">NT$'+b.was+'</span><span class="now">NT$'+b.sale+'</span><span class="off">'+off+'折</span></div>'
-      +'<span class="arr">&rsaquo;</span>';
-    wrap.appendChild(a);
+  // usage chips
+  var chipsEl=document.getElementById("chips");
+  USES.forEach(function(u){
+    var btn=document.createElement("button"); btn.className="chip"; btn.textContent=u.t;
+    btn.addEventListener("click",function(){ showSets(u.b); });
+    chipsEl.appendChild(btn);
   });
-  var back=document.createElement("a"); back.className="back"; back.href="../color/?m="+mid+"#flip"; back.textContent="← 重新選顏色";
-  wrap.appendChild(back);
 
-  // entrance veil (matches the colour) fades — inline, iOS-safe
+  var track=document.getElementById("track"), dotsEl=document.getElementById("dots"), built=false, slides=[];
+  function buildSets(){
+    ORDER.forEach(function(key,i){
+      var b=BUNDLES[key], off=Math.round(b.sale/b.was*100);
+      var slide=document.createElement("div"); slide.className="slide"; slide.dataset.i=i;
+      var items=b.items.map(function(x){return '<div class="item"><span class="d"></span><span>'+x+'</span></div>';}).join("");
+      slide.innerHTML='<div class="set" data-key="'+key+'">'
+        +'<div class="badge" style="display:none">★ 為你推薦</div>'
+        +'<div class="nm">'+b.nm+'</div>'
+        +'<div class="items">'+items+'</div>'
+        +'<div class="price"><span class="was">NT$'+b.was+'</span><span class="now">NT$'+b.sale+'</span><span class="off">'+off+'折</span></div>'
+        +'<a class="cta" href="../offer/?m='+mid+'&c='+cid+'&b='+key+'">選這組 &rarr;</a></div>';
+      track.appendChild(slide); slides.push(slide);
+      var dot=document.createElement("span"); dot.className="dot"; dotsEl.appendChild(dot);
+    });
+    // active dot follows scroll
+    var dots=dotsEl.children;
+    track.addEventListener("scroll",function(){
+      var c=track.scrollLeft+track.clientWidth/2, best=0, bd=1e9;
+      slides.forEach(function(s,i){ var m=s.offsetLeft+s.offsetWidth/2; var d=Math.abs(m-c); if(d<bd){bd=d;best=i;} });
+      for(var i=0;i<dots.length;i++) dots[i].className="dot"+(i===best?" on":"");
+    });
+    built=true;
+  }
+
+  function showSets(recKey){
+    if(!built) buildSets();
+    var recIdx=ORDER.indexOf(recKey); if(recIdx<0) recIdx=0;
+    // mark recommended
+    slides.forEach(function(s,i){
+      var set=s.firstElementChild, bd=set.querySelector(".badge");
+      set.classList.toggle("rec", i===recIdx); bd.style.display=(i===recIdx)?"":"none";
+    });
+    document.getElementById("recName").textContent=BUNDLES[recKey].nm;
+    for(var i=0;i<dotsEl.children.length;i++) dotsEl.children[i].className="dot"+(i===recIdx?" on":"");
+    // switch state via inline styles (iOS-safe)
+    var usage=document.getElementById("usage"), sets=document.getElementById("sets");
+    usage.style.opacity="0"; usage.style.pointerEvents="none";
+    setTimeout(function(){
+      usage.style.display="none"; sets.style.display="flex";
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){
+        sets.style.opacity="1";
+        var s=slides[recIdx]; track.scrollLeft = s.offsetLeft - (track.clientWidth - s.offsetWidth)/2;
+      }); });
+    }, 260);
+  }
+
+  document.getElementById("reselect").addEventListener("click",function(){
+    var usage=document.getElementById("usage"), sets=document.getElementById("sets");
+    sets.style.opacity="0";
+    setTimeout(function(){ sets.style.display="none"; usage.style.display="flex"; usage.style.pointerEvents="";
+      requestAnimationFrame(function(){ usage.style.opacity="1"; }); }, 260);
+  });
+
   var veil=document.getElementById("veil");
   veil.style.background="rgb("+(col.base[0]|0)+","+(col.base[1]|0)+","+(col.base[2]|0)+")";
   requestAnimationFrame(function(){ requestAnimationFrame(function(){ veil.style.opacity="0"; }); });
