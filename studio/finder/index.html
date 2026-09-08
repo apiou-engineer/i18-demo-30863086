@@ -50,6 +50,7 @@
   .set .badge{position:absolute;top:-11px;left:22px;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;
     text-transform:uppercase;color:#1b1512;background:var(--hot);border-radius:100px;padding:5px 11px}
   .set .nm{font-size:1.35rem;font-weight:600;letter-spacing:-.02em}
+  .set .reason{font-size:.86rem;color:var(--soft);margin-top:8px;line-height:1.5;text-wrap:balance}
   .set .items{margin:14px 0;display:flex;flex-direction:column;gap:9px}
   .set .item{display:flex;align-items:center;gap:10px;font-size:.95rem;color:var(--ink);
     padding-bottom:9px;border-bottom:1px solid var(--line)}
@@ -125,11 +126,11 @@
     {t:"只要基本款", b:"minimal"}
   ];
   var BUNDLES={
-    minimal:{nm:"新機必備組合", items:["透明殼(非磁吸)","鏡頭底座貼","20W 充電頭"], was:1497, sale:999},
-    creator:{nm:"創作者組合",   items:["液態矽膠殼","指環支架","磁吸吸盤"], was:1797, sale:1199},
-    leather:{nm:"皮革造型組合", items:["皮革手機殼","鏡面支架卡包","皮革掛繩＋墊片 · 4 種花色"], was:2697, sale:1799},
-    fan:{nm:"追星必備組合",     items:["鏡面手機殼","旋轉支架卡夾"], was:1598, sale:1199},
-    home:{nm:"居家快充組合",     items:["透明磁吸殼","四合一無線充","磁吸線","65W 快充"], was:3787, sale:2599}
+    minimal:{nm:"新機必備組合", reason:"適合只想要基礎防護、想展示新機原色的你", items:["透明殼(非磁吸)","鏡頭底座貼","20W 充電頭"], was:1497, sale:999},
+    creator:{nm:"創作者組合",   reason:"適合喜歡隨手記錄生活、拍照拍片、經營自媒體的你", items:["液態矽膠殼","指環支架","磁吸吸盤"], was:1797, sale:1199},
+    leather:{nm:"皮革造型組合", reason:"適合追求質感手感、卡片隨身的你", items:["皮革手機殼","鏡面支架卡包","皮革掛繩＋墊片 · 4 種花色"], was:2697, sale:1799},
+    fan:{nm:"追星必備組合",     reason:"適合愛自拍、蒐集小卡、想要鏡面亮澤的你", items:["鏡面手機殼","旋轉支架卡夾"], was:1598, sale:1199},
+    home:{nm:"居家快充組合",     reason:"適合在家充電、多裝置想一次到位的你", items:["透明磁吸殼","四合一無線充","磁吸線","65W 快充"], was:3787, sale:2599}
   };
   var ORDER=["minimal","creator","leather","fan","home"];
 
@@ -167,6 +168,7 @@
       slide.innerHTML='<div class="set" data-key="'+key+'">'
         +'<div class="badge" style="display:none">★ 為你推薦</div>'
         +'<div class="nm">'+b.nm+'</div>'
+        +'<div class="reason">'+b.reason+'</div>'
         +'<div class="items">'+items+'</div>'
         +'<div class="price"><span class="was">NT$'+b.was+'</span><span class="now">NT$'+b.sale+'</span><span class="off">'+off+'折</span></div>'
         +'<a class="cta" href="../offer/?m='+mid+'&c='+cid+'&b='+key+'">選這組 &rarr;</a></div>';
