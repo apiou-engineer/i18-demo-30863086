@@ -193,10 +193,9 @@
     usage.style.opacity="0"; usage.style.pointerEvents="none";
     setTimeout(function(){
       usage.style.display="none"; sets.style.display="flex";
-      requestAnimationFrame(function(){ requestAnimationFrame(function(){
-        sets.style.opacity="1";
-        var s=slides[recIdx]; track.scrollLeft = s.offsetLeft - (track.clientWidth - s.offsetWidth)/2;
-      }); });
+      void sets.offsetWidth; // force layout so scroll math is valid
+      var s=slides[recIdx]; track.scrollLeft = s.offsetLeft - (track.clientWidth - s.offsetWidth)/2;
+      requestAnimationFrame(function(){ sets.style.opacity="1"; });
     }, 260);
   }
 
