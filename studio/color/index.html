@@ -142,7 +142,8 @@
   var model=MODELS[mid];
   var COLORS=model.colors;
   document.querySelector(".eyebrow").innerHTML="APIOU &middot; "+model.nm;
-  var state={color:COLORS[0]};
+  var preC=new URLSearchParams(location.search).get("c");
+  var state={color:COLORS.filter(function(x){return x.id===preC;})[0]||COLORS[0]};
 
   // preload + stack phone images (cross-fade between colours)
   var phoneEl=document.getElementById("phone"), imgs={};
