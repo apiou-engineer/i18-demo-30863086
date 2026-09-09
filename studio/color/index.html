@@ -236,29 +236,44 @@
   var target={base:state.color.base.slice(), bloom:state.color.bloom.slice(), neg:state.color.neg?1:0};
   function lerp(a,b,t){return a+(b-a)*t;}
   function rgb(a){return "rgb("+(a[0]|0)+","+(a[1]|0)+","+(a[2]|0)+")";}
+  // one soft radial bloom of colour `col` at (cx,cy), radius R, peak alpha a
+  function blob(cx,cy,R,col,a){
+    var g=ctx.createRadialGradient(cx,cy,0,cx,cy,R);
+    g.addColorStop(0,   "rgba("+(col[0]|0)+","+(col[1]|0)+","+(col[2]|0)+","+a+")");
+    g.addColorStop(0.42,"rgba("+(col[0]*0.72|0)+","+(col[1]*0.72|0)+","+(col[2]*0.72|0)+","+(a*0.38)+")");
+    g.addColorStop(1,   "rgba("+(col[0]|0)+","+(col[1]|0)+","+(col[2]|0)+",0)");
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  }
+  var T=0;
   function draw(){
+    T+=reduce?0:0.0045;
     lx=lerp(lx,tlx,.05); ly=lerp(ly,tly,.05);
     for(var i=0;i<3;i++){ cur.base[i]=lerp(cur.base[i],target.base[i],.05); cur.bloom[i]=lerp(cur.bloom[i],target.bloom[i],.05); }
     cur.neg=lerp(cur.neg,target.neg,.05);
-    var b=cur.bloom;
-    // base fill (dark for normal worlds, light for the negative/Natural world)
+    var b=cur.bloom, neg=cur.neg>0.5, R=Math.max(W,H);
+    function br(base,amp,ph){return base+amp*Math.sin(T*1.05+ph);}  // brightness breathing
+    ctx.globalCompositeOperation="source-over";
     ctx.fillStyle=rgb(cur.base); ctx.fillRect(0,0,W,H);
-    // soft diffuse halo from the light position — bright bloom on dark worlds,
-    // dark bloom on the light world (photo-negative), stronger alpha when neg
-    var bx=lx*W, by=ly*H, R=Math.max(W,H)*1.25;
-    var a0=lerp(0.5,0.62,cur.neg), a1=lerp(0.2,0.26,cur.neg), a2=lerp(0.07,0.10,cur.neg);
-    var g=ctx.createRadialGradient(bx,by,0,bx,by,R);
-    g.addColorStop(0,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+","+a0+")");
-    g.addColorStop(0.22,"rgba("+(b[0]*0.7|0)+","+(b[1]*0.7|0)+","+(b[2]*0.7|0)+","+a1+")");
-    g.addColorStop(0.5,"rgba("+(b[0]*0.3|0)+","+(b[1]*0.3|0)+","+(b[2]*0.3|0)+","+a2+")");
-    g.addColorStop(1,"rgba(0,0,0,0)");
-    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    if(neg){
+      // light / Natural world: slow drifting soft shadows (photo-negative)
+      var dk=[b[0]*0.5,b[1]*0.5,b[2]*0.5];
+      blob((0.30+0.08*Math.sin(T*0.6))*W,      (0.24+0.06*Math.cos(T*0.7))*H,      R*1.2, dk, br(0.30,0.10,0));
+      blob((0.72+0.10*Math.sin(T*0.45+1.3))*W, (0.64+0.08*Math.cos(T*0.5+2.0))*H,  R*1.0, dk, br(0.20,0.08,1.7));
+      blob(lx*W,ly*H, R*0.7, [255,255,255], 0.05);  // soft pointer light
+    }else{
+      // dark world: additive luminous aurora — blooms brighten as they overlap
+      ctx.globalCompositeOperation="lighter";
+      blob((0.30+0.10*Math.sin(T*0.7))*W,      (0.20+0.08*Math.cos(T*0.9))*H,      R*1.15, b, br(0.40,0.15,0));
+      blob((0.72+0.12*Math.sin(T*0.5+1.3))*W,  (0.34+0.10*Math.cos(T*0.6+2.1))*H,  R*0.95, b, br(0.28,0.13,1.7));
+      blob((0.50+0.14*Math.sin(T*0.4+3.0))*W,  (0.80+0.09*Math.cos(T*0.55+0.6))*H, R*1.05, b, br(0.22,0.11,3.4));
+      blob(lx*W,ly*H, R*0.6, b, 0.16);              // pointer bloom
+      ctx.globalCompositeOperation="source-over";
+    }
     // floor grounding — inverts with neg (dark floor on dark worlds, soft on light)
     var fg=ctx.createLinearGradient(0,H*0.8,0,H);
     var floorA=lerp(0.25,0.10,cur.neg);
     fg.addColorStop(0,"rgba(0,0,0,0)"); fg.addColorStop(.7,"rgba(255,255,255,0.03)"); fg.addColorStop(1,"rgba(0,0,0,"+floorA+")");
     ctx.fillStyle=fg; ctx.fillRect(0,0,W,H);
-    // grain overlay
     if(grain){ ctx.globalAlpha=1; ctx.drawImage(grain,0,0,W,H); }
     if(!reduce) requestAnimationFrame(draw);
   }
