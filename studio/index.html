@@ -11,10 +11,9 @@
     --mono:ui-monospace,"SF Mono",Menlo,monospace;
     --btn-bg:#f4f4f2; --btn-fg:#141414;
     --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
-    --serif:"Fraunces","Noto Serif TC",Georgia,"Songti TC",serif;
+    --serif:"Fraunces",Georgia,"Times New Roman",serif;
   }
   @font-face{font-family:"Fraunces";src:url(fonts/Fraunces-disp.woff2) format("woff2");font-weight:300 700;font-display:swap}
-  @font-face{font-family:"Noto Serif TC";src:url(fonts/NotoSerifTC-title.woff2) format("woff2");font-weight:400 600;font-display:swap}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{font-family:var(--sans);color:#f3f2ef;background:#1a1a1a;overflow:hidden;-webkit-font-smoothing:antialiased}
@@ -56,7 +55,7 @@
   .bottom.focusq{animation:focusq 1.3s var(--ease)}
   @keyframes focusq{0%{transform:translateY(0)}30%{transform:translateY(-8px)}60%{transform:translateY(0)}}
   .bottom.focusq .subq{animation:fade .01s forwards}
-  .subq{font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,4.4vw,3rem);letter-spacing:-.01em;line-height:1.05;color:#f3f2ef;
+  .subq{font-family:var(--sans);font-weight:300;font-size:clamp(1.5rem,4vw,2.6rem);letter-spacing:.01em;line-height:1.12;color:#f3f2ef;
     text-shadow:0 1px 20px rgba(0,0,0,.6);opacity:0;animation:fade .9s var(--ease) 1.2s forwards}
   .btn-row{display:flex;gap:15px;flex-wrap:wrap;justify-content:center;opacity:0;animation:fade .9s var(--ease) 1.4s forwards}
   .btn{pointer-events:auto;appearance:none;border:none;font-family:inherit;font-size:1.02rem;font-weight:500;letter-spacing:.01em;

@@ -11,10 +11,9 @@
     --mono:ui-monospace,"SF Mono",Menlo,monospace;
     --ink:#f4f3f0; --soft:rgba(244,243,240,.6); --line:rgba(244,243,240,.2);
     --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
-    --serif:"Fraunces","Noto Serif TC",Georgia,"Songti TC",serif;
+    --serif:"Fraunces",Georgia,"Times New Roman",serif;
   }
   @font-face{font-family:"Fraunces";src:url(../fonts/Fraunces-disp.woff2) format("woff2");font-weight:300 700;font-display:swap}
-  @font-face{font-family:"Noto Serif TC";src:url(../fonts/NotoSerifTC-title.woff2) format("woff2");font-weight:400 600;font-display:swap}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;-webkit-font-smoothing:antialiased;
@@ -52,11 +51,11 @@
   @keyframes fade{to{opacity:1}}
 
   .head{position:absolute;top:clamp(70px,12vh,140px);left:clamp(24px,6vw,86px);max-width:12ch}
-  .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.7rem,5.6vw,4.8rem);line-height:.98;letter-spacing:-.01em;text-wrap:balance}
-  .head p{font-family:var(--serif);margin-top:18px;color:var(--soft);font-size:clamp(1.05rem,1.6vw,1.25rem);font-weight:500;max-width:26ch}
+  .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(3rem,6.2vw,5.4rem);line-height:.98;letter-spacing:-.01em;text-wrap:balance}
+  .head p{font-family:var(--sans);margin-top:18px;color:var(--soft);font-size:clamp(1rem,1.5vw,1.18rem);font-weight:400;letter-spacing:.02em;max-width:26ch}
   .cname{position:absolute;left:0;right:0;text-align:center;bottom:clamp(56px,8vh,96px);z-index:3;pointer-events:none;
     font-family:var(--mono);font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);transition:opacity .4s}
-  @media (max-aspect-ratio:1/1){ .cname{bottom:auto;top:66vh} }
+  @media (max-aspect-ratio:1/1){ .cname{bottom:auto;top:72vh} }
   .cont{position:absolute;left:50%;bottom:clamp(20px,4vh,40px);transform:translateX(-50%);pointer-events:auto;
     font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);
     background:none;border:1px solid var(--line);border-radius:100px;padding:11px 22px;cursor:pointer;
@@ -70,10 +69,10 @@
   }
   @media (max-aspect-ratio:1/1){
     .head{top:clamp(40px,6vh,80px);left:0;right:0;text-align:center;max-width:none;padding:0 24px}
-    .head h1{font-size:clamp(2.3rem,9vw,3.1rem)}
+    .head h1{font-size:clamp(2.9rem,12vw,4rem)}
     .head p{margin-left:auto;margin-right:auto;font-size:1.02rem;max-width:28ch}
-    .stage{place-items:start center;padding-top:21vh}
-    .phone{height:min(43vh,390px)}
+    .stage{place-items:start center;padding-top:27vh}
+    .phone{height:min(41vh,375px)}
     .colors{left:0;right:0;bottom:clamp(94px,15vh,130px);justify-content:center;gap:clamp(22px,8vw,40px)}
     .swatch{flex-direction:column;gap:0;align-items:center}
     .swatch .nm{display:none}

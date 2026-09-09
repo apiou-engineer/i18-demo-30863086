@@ -13,8 +13,7 @@
     --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
   }
   @font-face{font-family:"Fraunces";src:url(../fonts/Fraunces-disp.woff2) format("woff2");font-weight:300 700;font-display:swap}
-  @font-face{font-family:"Noto Serif TC";src:url(../fonts/NotoSerifTC-title.woff2) format("woff2");font-weight:400 600;font-display:swap}
-  :root{--serif:"Fraunces","Noto Serif TC",Georgia,"Songti TC",serif}
+  :root{--serif:"Fraunces",Georgia,"Times New Roman",serif}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{font-family:var(--sans);color:var(--ink);background:#d6d2ca;overflow:hidden;-webkit-font-smoothing:antialiased}
@@ -27,7 +26,7 @@
   @keyframes fade{to{opacity:1}}
   .head{text-align:center;margin-top:clamp(16px,3vh,28px);max-width:20ch}
   .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.3rem,5.6vw,3.9rem);line-height:1;letter-spacing:-.01em;text-wrap:balance}
-  .head p{font-family:var(--serif);margin-top:15px;color:var(--soft);font-size:clamp(1rem,1.6vw,1.2rem);font-weight:500;max-width:30ch;margin-left:auto;margin-right:auto}
+  .head p{font-family:var(--sans);margin-top:15px;color:var(--soft);font-size:clamp(.98rem,1.5vw,1.16rem);font-weight:400;letter-spacing:.02em;max-width:30ch;margin-left:auto;margin-right:auto}
 
   .grid{margin-top:auto;margin-bottom:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,22px);
     width:min(820px,94vw)}
