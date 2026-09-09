@@ -62,6 +62,16 @@
   .set.centered{opacity:1;box-shadow:0 0 0 1px rgba(255,255,255,.14), 0 18px 70px -12px rgba(255,255,255,.2)}
   .set.rec{border-color:color-mix(in srgb,var(--hot) 60%,transparent)}
   .set.rec.centered{box-shadow:0 0 0 1px color-mix(in srgb,var(--hot) 55%,transparent), 0 18px 74px -10px color-mix(in srgb,var(--hot) 32%,transparent)}
+  /* light beam travelling around the border of the focused card */
+  @property --beam{syntax:"<angle>";inherits:false;initial-value:0deg}
+  .set::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:2px;opacity:0;pointer-events:none;
+    background:conic-gradient(from var(--beam,0deg), transparent 0deg 232deg,
+      color-mix(in srgb,var(--hot) 30%,transparent) 288deg, #fff 324deg, color-mix(in srgb,var(--hot) 55%,transparent) 348deg, transparent 360deg);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor;
+    mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite:exclude;
+    transition:opacity .45s var(--ease)}
+  .set.centered::after{opacity:1;animation:beam 3.4s linear infinite}
+  @keyframes beam{to{--beam:360deg}}
   .set .badge{position:absolute;top:-11px;left:22px;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;
     text-transform:uppercase;color:#1b1512;background:var(--hot);border-radius:100px;padding:5px 11px}
   .set .nm{font-size:1.35rem;font-weight:600;letter-spacing:-.02em}

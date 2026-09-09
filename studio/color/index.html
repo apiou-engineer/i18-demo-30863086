@@ -51,7 +51,9 @@
   .head{position:absolute;top:clamp(70px,12vh,140px);left:clamp(24px,6vw,86px);max-width:12ch}
   .head h1{font-weight:600;font-size:clamp(2.4rem,5vw,4.2rem);line-height:.98;letter-spacing:-.03em;text-wrap:balance}
   .head p{margin-top:16px;color:var(--soft);font-size:clamp(.95rem,1.4vw,1.1rem);font-weight:300;max-width:26ch}
-  .head .cname{margin-top:22px;font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);transition:opacity .4s}
+  .cname{position:absolute;left:0;right:0;text-align:center;bottom:clamp(56px,8vh,96px);z-index:3;pointer-events:none;
+    font-family:var(--mono);font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);transition:opacity .4s}
+  @media (max-aspect-ratio:1/1){ .cname{bottom:19vh} }
   .cont{position:absolute;left:50%;bottom:clamp(20px,4vh,40px);transform:translateX(-50%);pointer-events:auto;
     font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);
     background:none;border:1px solid var(--line);border-radius:100px;padding:11px 22px;cursor:pointer;
@@ -101,12 +103,11 @@
   <div class="veil" id="veil"></div>
 
   <div class="ui">
-    <div class="eyebrow">APIOU &middot; iPhone 18</div>
     <div class="head">
       <h1>What is your iPhone color?</h1>
       <p>選擇你的手機顏色</p>
-      <div class="cname" id="cname">原色鈦金屬</div>
     </div>
+    <div class="cname" id="cname">Natural</div>
     <div class="colors" id="colors"></div>
     <button class="cont" id="cont" aria-label="繼續">繼續&nbsp;&nbsp;&darr;</button>
   </div>
@@ -119,29 +120,28 @@
   // as placeholders until per-model images are provided.
   var MODELS={
     base:{ nm:"iPhone 18", colors:[
-      {id:"white", nm:"白色",   hex:"#e7e6e3", img:"titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
-      {id:"black", nm:"黑色",   hex:"#1c1c20", img:"titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
-      {id:"blue",  nm:"群青色", hex:"#3f52d6", img:"titanium-blue.png",    base:[10,16,34],    bloom:[120,150,235]},
-      {id:"pink",  nm:"粉紅色", hex:"#e6a6bd", img:"titanium-plum.png",    base:[30,14,22],    bloom:[236,170,196]}
+      {id:"white", nm:"白色",   en:"White",       hex:"#e7e6e3", img:"titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"黑色",   en:"Black",       hex:"#1c1c20", img:"titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"群青色", en:"Ultramarine", hex:"#3f52d6", img:"titanium-blue.png",    base:[10,16,34],    bloom:[120,150,235]},
+      {id:"pink",  nm:"粉紅色", en:"Pink",        hex:"#e6a6bd", img:"titanium-plum.png",    base:[30,14,22],    bloom:[236,170,196]}
     ]},
     air:{ nm:"iPhone 18 Air", colors:[
-      {id:"white", nm:"雲白色", hex:"#e9e8e4", img:"titanium-natural.png", base:[224,223,219], bloom:[40,40,44], neg:true},
-      {id:"black", nm:"太空黑", hex:"#1a1a1e", img:"titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
-      {id:"blue",  nm:"天藍色", hex:"#9cc2e0", img:"titanium-blue.png",    base:[12,20,32],    bloom:[150,190,224]},
-      {id:"gold",  nm:"淺金色", hex:"#dcc9a2", img:"titanium-natural.png", base:[222,212,190], bloom:[74,58,32], neg:true}
+      {id:"white", nm:"雲白色", en:"Cloud White", hex:"#e9e8e4", img:"titanium-natural.png", base:[224,223,219], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"太空黑", en:"Space Black", hex:"#1a1a1e", img:"titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"天藍色", en:"Sky Blue",    hex:"#9cc2e0", img:"titanium-blue.png",    base:[12,20,32],    bloom:[150,190,224]},
+      {id:"gold",  nm:"淺金色", en:"Light Gold",  hex:"#dcc9a2", img:"titanium-natural.png", base:[222,212,190], bloom:[74,58,32], neg:true}
     ]},
     pro:{ nm:"iPhone 18 Pro", colors:[
-      {id:"natural",nm:"原色鈦金屬", hex:"#cfcabf", img:"titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
-      {id:"black",  nm:"黑色鈦金屬", hex:"#1c1c20", img:"titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
-      {id:"plum",   nm:"梅色鈦金屬", hex:"#6f4258", img:"titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
-      {id:"blue",   nm:"藍色鈦金屬", hex:"#7fa3cf", img:"titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
+      {id:"natural",nm:"原色鈦金屬", en:"Natural", hex:"#cfcabf", img:"titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
+      {id:"black",  nm:"黑色鈦金屬", en:"Black",   hex:"#1c1c20", img:"titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
+      {id:"plum",   nm:"梅色鈦金屬", en:"Plum",    hex:"#6f4258", img:"titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
+      {id:"blue",   nm:"藍色鈦金屬", en:"Blue",    hex:"#7fa3cf", img:"titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
     ]}
   };
   MODELS.promax={ nm:"iPhone 18 Pro Max", colors:MODELS.pro.colors };
   var mid=new URLSearchParams(location.search).get("m"); if(!MODELS[mid]) mid="pro";
   var model=MODELS[mid];
   var COLORS=model.colors;
-  document.querySelector(".eyebrow").innerHTML="APIOU &middot; "+model.nm;
   var preC=new URLSearchParams(location.search).get("c");
   var state={color:COLORS.filter(function(x){return x.id===preC;})[0]||COLORS[0]};
 
@@ -174,14 +174,14 @@
     target.base=c.base.slice(); target.bloom=c.bloom.slice(); target.neg=c.neg?1:0;
     document.body.classList.toggle("light", !!c.neg);
     var nmEl=document.getElementById("cname"); nmEl.style.opacity=0;
-    setTimeout(function(){ nmEl.textContent=c.nm; nmEl.style.opacity=1; },220);
+    setTimeout(function(){ nmEl.textContent=c.en; nmEl.style.opacity=1; },220);
     if(!reduce){ document.getElementById("phoneWrap").animate(
       [{transform:"scale(1)"},{transform:"scale(1.035)"},{transform:"scale(1)"}],{duration:640,easing:"cubic-bezier(.34,1.4,.5,1)"}); }
   }
   showColor(state.color);
   // init to the default (Natural, negative/light) world
   document.body.classList.toggle("light", !!state.color.neg);
-  document.getElementById("cname").textContent=state.color.nm;
+  document.getElementById("cname").textContent=state.color.en;
 
   // continue → carry the chosen colour to the bundle finder
   document.getElementById("cont").addEventListener("click",function(){
