@@ -41,7 +41,7 @@
   .acc-layer .spk{position:absolute;width:13%;aspect-ratio:1;transform:translate(-50%,-50%) scale(0);opacity:0;background:#fff;
     filter:drop-shadow(0 0 5px rgba(255,255,255,.95));clip-path:polygon(50% 0,57% 43%,100% 50%,57% 57%,50% 100%,43% 57%,0 50%,43% 43%)}
   /* generic back-centre magnetic snap (fan / creator bundles) */
-  .acc-layer .a-snap{position:absolute;opacity:0;will-change:transform,opacity;
+  .acc-layer .a-snap{position:absolute;height:auto;opacity:0;will-change:transform,opacity;
     filter:drop-shadow(0 16px 24px rgba(0,0,0,.5)) drop-shadow(0 3px 6px rgba(0,0,0,.4))}
   .acc-layer .snap-bloom{position:absolute;aspect-ratio:1;border-radius:50%;opacity:0;mix-blend-mode:screen;pointer-events:none;
     transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(255,255,255,.85),rgba(255,255,255,.32) 45%,transparent 72%)}
@@ -249,13 +249,10 @@
     setTimeout(playSnap, 900);
   } else if(bk==="fan" && haveCol){
     phoneImg.src="../acc/phone-mirror-"+cc+".png";
-    buildBackSnap([{src:"../acc/fan-clip.png", cx:50, cy:57, w:54, dir:"up", d:0}]);
+    buildBackSnap([{src:"../acc/fan-clip.png", cx:50, cy:58, w:44, dir:"up", d:0}]);
   } else if(bk==="creator" && haveCol){
     phoneImg.src="../acc/phone-silicone-"+cc+".png";
-    buildBackSnap([
-      {src:"../acc/creator-pad-"+cc+".png",  cx:50, cy:70, w:40, dir:"down", d:0},
-      {src:"../acc/creator-ring-"+cc+".png", cx:50, cy:47, w:50, dir:"up",   d:750}
-    ]);
+    buildBackSnap([{src:"../acc/creator-ring-"+cc+".png", cx:50, cy:55, w:48, dir:"up", d:0}]);
   }
 
   // accessories fly in from off-screen and snap onto the back centre (MagSafe), each with a light flash
