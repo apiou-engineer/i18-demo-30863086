@@ -136,12 +136,11 @@
 
   <div class="ui">
     <div class="top">
-      <div class="topline">APIOU &middot; iPhone 18 專區</div>
     </div>
     <div class="bottom">
-      <div class="subq">你已經有 iPhone 18 了嗎?</div>
+      <div class="subq">你買 iPhone 18 了嗎?</div>
       <div class="btn-row">
-        <button class="btn primary" id="yesBtn">已經有了</button>
+        <button class="btn primary" id="yesBtn">已買/打算買</button>
         <button class="btn secondary" id="noBtn">還沒有</button>
       </div>
     </div>
@@ -253,7 +252,7 @@
     if(veil){ requestAnimationFrame(function(){ veil.style.opacity="1"; }); }
     setTimeout(function(){ location.href="model/"; }, 640);
   }
-  document.getElementById("noBtn").addEventListener("click",function(e){e.stopPropagation();toast("這裡會導向「現役機型 + 配件」頁(待接連結)");});
+  document.getElementById("noBtn").addEventListener("click",function(e){e.stopPropagation();location.href="https://www.apeelcase.com/categories/for-iphone";});
 })();
 </script>
 </body>

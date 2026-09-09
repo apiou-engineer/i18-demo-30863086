@@ -27,9 +27,13 @@
     transition:opacity .4s var(--ease)}
   .usage h1{font-weight:600;font-size:clamp(1.8rem,6vw,2.6rem);letter-spacing:-.03em;text-align:center;text-wrap:balance}
   .chips{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:560px}
-  .chip{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:100px;
-    padding:14px 24px;font-size:1rem;cursor:pointer;transition:transform .35s var(--spring),border-color .3s}
+  .chip{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:20px;
+    min-width:104px;padding:16px 18px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;
+    transition:transform .35s var(--spring),border-color .3s}
   .chip:hover{transform:translateY(-3px);border-color:var(--ink)}
+  .chip .e{font-size:1.6rem;line-height:1}
+  .chip .zh{font-size:1rem;font-weight:500;letter-spacing:-.01em}
+  .chip .en{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
   .reselect-color{position:absolute;bottom:clamp(24px,5vh,44px);left:50%;transform:translateX(-50%);
     font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);text-decoration:none}
   .reselect-color:hover{color:var(--ink)}
@@ -119,11 +123,11 @@
   MODELS.promax={ nm:"iPhone 18 Pro / Pro Max", colors:MODELS.pro.colors };
 
   var USES=[
-    {t:"拍照與錄影", b:"creator"},
-    {t:"追星與蒐集", b:"fan"},
-    {t:"通勤與卡片", b:"leather"},
-    {t:"居家充電",   b:"home"},
-    {t:"只要基本款", b:"minimal"}
+    {e:"📸", t:"拍照攝影", en:"Capture",       b:"creator"},
+    {e:"🎤", t:"追星娛樂", en:"Entertainment", b:"fan"},
+    {e:"🚇", t:"通勤生活", en:"Commute",       b:"leather"},
+    {e:"🔋", t:"居家充電", en:"Home",          b:"home"},
+    {e:"✨", t:"日常使用", en:"Essential",     b:"minimal"}
   ];
   var BUNDLES={
     minimal:{nm:"新機必備組合", reason:"適合只想要基礎防護、想展示新機原色的你", items:["透明殼(非磁吸)","鏡頭底座貼","20W 充電頭"], was:1497, sale:999},
@@ -154,7 +158,8 @@
   // usage chips
   var chipsEl=document.getElementById("chips");
   USES.forEach(function(u){
-    var btn=document.createElement("button"); btn.className="chip"; btn.textContent=u.t;
+    var btn=document.createElement("button"); btn.className="chip";
+    btn.innerHTML='<span class="e">'+u.e+'</span><span class="zh">'+u.t+'</span><span class="en">'+u.en+'</span>';
     btn.addEventListener("click",function(){ showSets(u.b); });
     chipsEl.appendChild(btn);
   });
