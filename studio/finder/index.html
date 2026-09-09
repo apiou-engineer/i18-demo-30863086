@@ -57,8 +57,11 @@
   .track::-webkit-scrollbar{display:none}
   .slide{flex:0 0 min(84vw,540px);scroll-snap-align:center}
   .set{position:relative;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px 22px 22px;
-    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    opacity:.45;transition:opacity .4s var(--ease),box-shadow .45s var(--ease)}
+  .set.centered{opacity:1;box-shadow:0 0 0 1px rgba(255,255,255,.14), 0 18px 70px -12px rgba(255,255,255,.2)}
   .set.rec{border-color:color-mix(in srgb,var(--hot) 60%,transparent)}
+  .set.rec.centered{box-shadow:0 0 0 1px color-mix(in srgb,var(--hot) 55%,transparent), 0 18px 74px -10px color-mix(in srgb,var(--hot) 32%,transparent)}
   .set .badge{position:absolute;top:-11px;left:22px;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;
     text-transform:uppercase;color:#1b1512;background:var(--hot);border-radius:100px;padding:5px 11px}
   .set .nm{font-size:1.35rem;font-weight:600;letter-spacing:-.02em}
@@ -194,6 +197,7 @@
       var c=track.scrollLeft+track.clientWidth/2, best=0, bd=1e9;
       slides.forEach(function(s,i){ var m=s.offsetLeft+s.offsetWidth/2; var d=Math.abs(m-c); if(d<bd){bd=d;best=i;} });
       for(var i=0;i<dots.length;i++) dots[i].className="dot"+(i===best?" on":"");
+      slides.forEach(function(s,i){ s.firstElementChild.classList.toggle("centered", i===best); });
     });
     built=true;
   }
@@ -205,6 +209,7 @@
     slides.forEach(function(s,i){
       var set=s.firstElementChild, bd=set.querySelector(".badge");
       set.classList.toggle("rec", i===recIdx); bd.style.display=(i===recIdx)?"":"none";
+      set.classList.toggle("centered", i===recIdx);
     });
     document.getElementById("recName").textContent=BUNDLES[recKey].nm;
     for(var i=0;i<dotsEl.children.length;i++) dotsEl.children[i].className="dot"+(i===recIdx?" on":"");
