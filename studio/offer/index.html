@@ -242,10 +242,12 @@
 
   if(bk==="minimal" && (mid==="pro"||mid==="promax") && ["natural","black","plum","blue"].indexOf(cc)>=0){
     phoneImg.src="../acc/phone-cased-"+cc+".png";
+    phoneImg.style.height="min(44vh,380px)";                              // smaller phone (room for the larger charger)
+    document.querySelector(".phone").style.transform="translateX(-57%)";  // shift left so phone+charger reads centred
     acc.innerHTML='<div class="cam"><div class="bloom"></div><div class="glint2"><span></span></div></div>'
       +'<div class="spk" style="left:21%;top:9.7%"></div><div class="spk" style="left:21%;top:22.4%"></div><div class="spk" style="left:44.5%;top:16.1%"></div>'
       +'<img class="a-ring" src="../acc/lens-ring-'+cc+'.png" alt="">'
-      +'<img class="a-charger" src="../acc/charger-20w.png" alt="">';
+      +'<img class="a-charger" style="left:120%;top:60%;width:95%" src="../acc/charger-20w.png" alt="">';
     setTimeout(playSnap, 900);
   } else if(bk==="fan" && haveCol){
     phoneImg.src="../acc/phone-mirror-"+cc+".png";
@@ -307,7 +309,7 @@
       if(glint){ glint.style.opacity=1; bar.animate([{transform:"translateX(-120%) rotate(18deg)"},{transform:"translateX(360%) rotate(18deg)"}],{duration:950,easing:E,fill:"forwards"}); setTimeout(function(){glint.style.opacity=0;},900); }
       sparks.forEach(function(s,i){ s.animate([{opacity:0,transform:"translate(-50%,-50%) scale(0) rotate(0)"},{opacity:1,transform:"translate(-50%,-50%) scale(1.15) rotate(45deg)",offset:.45},{opacity:0,transform:"translate(-50%,-50%) scale(.2) rotate(90deg)"}],{duration:1100,delay:150+i*180,easing:E,fill:"both"}); });
     }, 2450);
-    charger.animate([{opacity:0,transform:"translate(70vw,8vh) rotate(14deg) scale(1.12)"},{opacity:1,transform:"translate(70vw,8vh) rotate(14deg) scale(1.12)",offset:.16},{opacity:1,transform:"translate(-3%,-1%) rotate(-3deg) scale(1)",offset:.82},{opacity:1,transform:"translate(0,0) rotate(0) scale(1)"}],{duration:1500,delay:1700,easing:SP,fill:"both"});
+    charger.animate([{opacity:0,transform:"translate(-50%,-50%) translate(70vw,8vh) rotate(14deg) scale(1.12)"},{opacity:1,transform:"translate(-50%,-50%) translate(70vw,8vh) rotate(14deg) scale(1.12)",offset:.16},{opacity:1,transform:"translate(-50%,-50%) translate(-3%,-1%) rotate(-3deg) scale(1)",offset:.82},{opacity:1,transform:"translate(-50%,-50%) translate(0,0) rotate(0) scale(1)"}],{duration:1500,delay:1700,easing:SP,fill:"both"});
   }
   document.getElementById("eyebrow").innerHTML="APIOU &middot; "+model.nm;
 
