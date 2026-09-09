@@ -249,13 +249,15 @@
     setTimeout(playSnap, 900);
   } else if(bk==="fan" && haveCol){
     phoneImg.src="../acc/phone-mirror-"+cc+".png";
-    buildBackSnap([{src:"../acc/fan-clip.png", cx:50, cy:60, w:60, dir:"up", d:0}]);
+    phoneImg.style.height="min(44vh,380px)";   // smaller phone so the clip reads larger
+    buildBackSnap([{src:"../acc/fan-clip.png", cx:50, cy:61, w:70, dir:"up", d:0}]);
   } else if(bk==="creator" && haveCol){
     phoneImg.src="../acc/phone-silicone-"+cc+".png";
-    document.querySelector(".phone").style.transform="translateX(-21%)";  // shift phone left so phone+side-ring reads centred
+    phoneImg.style.height="min(44vh,380px)";                              // smaller phone
+    document.querySelector(".phone").style.transform="translateX(-27%)";  // shift left so phone+side-ring reads centred
     buildBackSnap([
-      {src:"../acc/creator-pad-"+cc+".png",  cx:50,  cy:57, w:60, dir:"up",    d:0},              // suction pad snaps onto the back
-      {src:"../acc/creator-ring-"+cc+".png", cx:122, cy:57, w:40, dir:"right", d:600, snap:false} // ring rests beside the phone
+      {src:"../acc/creator-pad-"+cc+".png",  cx:50,  cy:57, w:70, dir:"up",    d:0},              // suction pad snaps onto the back
+      {src:"../acc/creator-ring-"+cc+".png", cx:130, cy:56, w:54, dir:"right", d:600, snap:false} // ring rests beside the phone
     ]);
   }
 
