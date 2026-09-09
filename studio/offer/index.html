@@ -268,6 +268,14 @@
     buildBackSnap([
       {src:"../acc/home-kit.png", cx:134, cy:57, w:78, dir:"right", d:0, snap:false} // 4-in-1 stand + 65W + cable rests beside
     ]);
+  } else if(bk==="leather" && ["natural","plum","blue","black"].indexOf(cc)>=0){
+    phoneImg.src="../acc/leather-phone-"+cc+".png";
+    phoneImg.style.height="min(44vh,380px)";                              // smaller phone
+    document.querySelector(".phone").style.transform="translateX(-34%)";  // shift left so phone+strap reads centred
+    buildBackSnap([
+      {src:"../acc/leather-pocket-"+cc+".png", cx:50,  cy:60, w:46, dir:"up",    d:0},              // card pocket snaps onto the back
+      {src:"../acc/leather-strap-"+cc+".png",  cx:130, cy:57, w:60, dir:"right", d:600, snap:false} // strap rests beside
+    ]);
   }
 
   // accessories fly in from off-screen and snap onto the back centre (MagSafe), each with a light flash
