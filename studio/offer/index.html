@@ -253,8 +253,8 @@
   } else if(bk==="creator" && haveCol){
     phoneImg.src="../acc/phone-silicone-"+cc+".png";
     buildBackSnap([
-      {src:"../acc/creator-pad-"+cc+".png",  cx:50, cy:68, w:36, dir:"down", d:0},
-      {src:"../acc/creator-ring-"+cc+".png", cx:50, cy:43, w:42, dir:"up",   d:600}
+      {src:"../acc/creator-pad-"+cc+".png",  cx:50,  cy:57, w:42, dir:"up",    d:0},              // suction pad snaps onto the back
+      {src:"../acc/creator-ring-"+cc+".png", cx:122, cy:57, w:40, dir:"right", d:600, snap:false} // ring rests beside the phone
     ]);
   }
 
@@ -272,14 +272,15 @@
     var SP="cubic-bezier(.3,1.15,.4,1)", E="cubic-bezier(.22,1,.36,1)";
     var snaps=acc.querySelectorAll(".a-snap"), blooms=acc.querySelectorAll(".snap-bloom");
     list.forEach(function(a,i){
-      var off=(a.dir==="down")?"46vh":"-46vh", over=(a.dir==="down")?"-9px":"11px";
+      var start = a.dir==="down"?"0,46vh" : a.dir==="right"?"54vw,0" : a.dir==="left"?"-54vw,0" : "0,-46vh";
+      var over  = a.dir==="down"?"0,-9px" : a.dir==="right"?"-10px,0" : a.dir==="left"?"10px,0" : "0,11px";
       snaps[i].animate([
-        {opacity:0, transform:"translate(-50%,-50%) translate(0,"+off+") scale(1.32)"},
-        {opacity:1, transform:"translate(-50%,-50%) translate(0,"+off+") scale(1.32)", offset:.14},
-        {opacity:1, transform:"translate(-50%,-50%) translate(0,"+over+") scale(.985)", offset:.86},
+        {opacity:0, transform:"translate(-50%,-50%) translate("+start+") scale(1.32)"},
+        {opacity:1, transform:"translate(-50%,-50%) translate("+start+") scale(1.32)", offset:.14},
+        {opacity:1, transform:"translate(-50%,-50%) translate("+over+") scale(.985)", offset:.86},
         {opacity:1, transform:"translate(-50%,-50%) translate(0,0) scale(1)"}
       ],{duration:1700, delay:a.d, easing:SP, fill:"both"});
-      (function(bl){ if(!bl)return;
+      if(a.snap!==false)(function(bl){ if(!bl)return;   // flash only when it magnetically attaches
         setTimeout(function(){ bl.animate([{opacity:0},{opacity:1,offset:.3},{opacity:0}],{duration:820,easing:E,fill:"both"}); }, a.d+1520);
       })(blooms[i]);
     });
