@@ -40,6 +40,11 @@
     background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);transform:translateX(-120%) rotate(18deg);filter:blur(2px)}
   .acc-layer .spk{position:absolute;width:13%;aspect-ratio:1;transform:translate(-50%,-50%) scale(0);opacity:0;background:#fff;
     filter:drop-shadow(0 0 5px rgba(255,255,255,.95));clip-path:polygon(50% 0,57% 43%,100% 50%,57% 57%,50% 100%,43% 57%,0 50%,43% 43%)}
+  /* generic back-centre magnetic snap (fan / creator bundles) */
+  .acc-layer .a-snap{position:absolute;opacity:0;will-change:transform,opacity;
+    filter:drop-shadow(0 16px 24px rgba(0,0,0,.5)) drop-shadow(0 3px 6px rgba(0,0,0,.4))}
+  .acc-layer .snap-bloom{position:absolute;aspect-ratio:1;border-radius:50%;opacity:0;mix-blend-mode:screen;pointer-events:none;
+    transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(255,255,255,.85),rgba(255,255,255,.32) 45%,transparent 72%)}
 
   .hero-foot{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
   .hero-name{font-size:clamp(1.5rem,5vw,2rem);font-weight:600;letter-spacing:-.02em}
@@ -230,16 +235,54 @@
 
   document.getElementById("phoneImg").src=col.img;
 
-  // basic-protection bundle on a Pro colour → play the magnetic snap-on animation in the hero
-  var SNAP=(mid==="pro"||mid==="promax") && ["natural","black","plum","blue"].indexOf(col.id)>=0 && p.get("b")==="minimal";
-  if(SNAP){
-    var cc=col.id, acc=document.getElementById("accLayer");
-    document.getElementById("phoneImg").src="../acc/phone-cased-"+cc+".png";
+  // ---- magnetic snap-on hero animation, per bundle ----
+  var bk=p.get("b")||"minimal";
+  var cc=col.id, acc=document.getElementById("accLayer"), phoneImg=document.getElementById("phoneImg");
+  var haveCol=["natural","plum","blue"].indexOf(cc)>=0;   // colours with bundle art so far (black pending)
+
+  if(bk==="minimal" && (mid==="pro"||mid==="promax") && ["natural","black","plum","blue"].indexOf(cc)>=0){
+    phoneImg.src="../acc/phone-cased-"+cc+".png";
     acc.innerHTML='<div class="cam"><div class="bloom"></div><div class="glint2"><span></span></div></div>'
       +'<div class="spk" style="left:21%;top:9.7%"></div><div class="spk" style="left:21%;top:22.4%"></div><div class="spk" style="left:44.5%;top:16.1%"></div>'
       +'<img class="a-ring" src="../acc/lens-ring-'+cc+'.png" alt="">'
       +'<img class="a-charger" src="../acc/charger-20w.png" alt="">';
     setTimeout(playSnap, 900);
+  } else if(bk==="fan" && haveCol){
+    phoneImg.src="../acc/phone-mirror-"+cc+".png";
+    buildBackSnap([{src:"../acc/fan-clip.png", cx:50, cy:57, w:54, dir:"up", d:0}]);
+  } else if(bk==="creator" && haveCol){
+    phoneImg.src="../acc/phone-silicone-"+cc+".png";
+    buildBackSnap([
+      {src:"../acc/creator-pad-"+cc+".png",  cx:50, cy:70, w:40, dir:"down", d:0},
+      {src:"../acc/creator-ring-"+cc+".png", cx:50, cy:47, w:50, dir:"up",   d:750}
+    ]);
+  }
+
+  // accessories fly in from off-screen and snap onto the back centre (MagSafe), each with a light flash
+  function buildBackSnap(list){
+    var html="";
+    list.forEach(function(a,i){
+      html+='<img class="a-snap" src="'+a.src+'" alt="" style="left:'+a.cx+'%;top:'+a.cy+'%;width:'+a.w+'%">';
+      html+='<div class="snap-bloom" style="left:'+a.cx+'%;top:'+a.cy+'%;width:'+(a.w*1.5)+'%"></div>';
+    });
+    acc.innerHTML=html;
+    setTimeout(function(){ playBackSnap(list); }, 900);
+  }
+  function playBackSnap(list){
+    var SP="cubic-bezier(.3,1.15,.4,1)", E="cubic-bezier(.22,1,.36,1)";
+    var snaps=acc.querySelectorAll(".a-snap"), blooms=acc.querySelectorAll(".snap-bloom");
+    list.forEach(function(a,i){
+      var off=(a.dir==="down")?"46vh":"-46vh", over=(a.dir==="down")?"-9px":"11px";
+      snaps[i].animate([
+        {opacity:0, transform:"translate(-50%,-50%) translate(0,"+off+") scale(1.32)"},
+        {opacity:1, transform:"translate(-50%,-50%) translate(0,"+off+") scale(1.32)", offset:.14},
+        {opacity:1, transform:"translate(-50%,-50%) translate(0,"+over+") scale(.985)", offset:.86},
+        {opacity:1, transform:"translate(-50%,-50%) translate(0,0) scale(1)"}
+      ],{duration:1700, delay:a.d, easing:SP, fill:"both"});
+      (function(bl){ if(!bl)return;
+        setTimeout(function(){ bl.animate([{opacity:0},{opacity:1,offset:.3},{opacity:0}],{duration:820,easing:E,fill:"both"}); }, a.d+1520);
+      })(blooms[i]);
+    });
   }
   function playSnap(){
     var acc=document.getElementById("accLayer");
