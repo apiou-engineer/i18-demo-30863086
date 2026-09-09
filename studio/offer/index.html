@@ -243,11 +243,11 @@
   if(bk==="minimal" && (mid==="pro"||mid==="promax") && ["natural","black","plum","blue"].indexOf(cc)>=0){
     phoneImg.src="../acc/phone-cased-"+cc+".png";
     phoneImg.style.height="min(44vh,380px)";                              // smaller phone (room for the larger charger)
-    document.querySelector(".phone").style.transform="translateX(-57%)";  // shift left so phone+charger reads centred
+    document.querySelector(".phone").style.transform="translateX(-49%)";  // shift left so phone+charger reads centred
     acc.innerHTML='<div class="cam"><div class="bloom"></div><div class="glint2"><span></span></div></div>'
       +'<div class="spk" style="left:21%;top:9.7%"></div><div class="spk" style="left:21%;top:22.4%"></div><div class="spk" style="left:44.5%;top:16.1%"></div>'
       +'<img class="a-ring" src="../acc/lens-ring-'+cc+'.png" alt="">'
-      +'<img class="a-charger" style="left:120%;top:60%;width:95%" src="../acc/charger-20w.png" alt="">';
+      +'<img class="a-charger" style="left:150%;top:64%;width:95%" src="../acc/charger-20w.png" alt="">';
     setTimeout(playSnap, 900);
   } else if(bk==="fan" && haveCol){
     phoneImg.src="../acc/phone-mirror-"+cc+".png";
