@@ -252,7 +252,10 @@
     buildBackSnap([{src:"../acc/fan-clip.png", cx:50, cy:58, w:44, dir:"up", d:0}]);
   } else if(bk==="creator" && haveCol){
     phoneImg.src="../acc/phone-silicone-"+cc+".png";
-    buildBackSnap([{src:"../acc/creator-ring-"+cc+".png", cx:50, cy:55, w:48, dir:"up", d:0}]);
+    buildBackSnap([
+      {src:"../acc/creator-pad-"+cc+".png",  cx:50, cy:68, w:36, dir:"down", d:0},
+      {src:"../acc/creator-ring-"+cc+".png", cx:50, cy:43, w:42, dir:"up",   d:600}
+    ]);
   }
 
   // accessories fly in from off-screen and snap onto the back centre (MagSafe), each with a light flash
