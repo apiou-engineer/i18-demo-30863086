@@ -20,9 +20,10 @@
   body{font-family:var(--sans);color:#f3f2ef;background:#1a1a1a;overflow:hidden;-webkit-font-smoothing:antialiased}
 
   /* fullscreen frame sequence, edge to edge */
-  /* pan-y lets a vertical swipe scroll the page (needed inside the SHOPLINE iframe on mobile);
-     horizontal rubbing still fires pointermove so the crack can heal */
-  .stage{position:fixed;inset:0;z-index:0;cursor:pointer;touch-action:pan-y;overflow:hidden}
+  /* the full-screen backdrop stays passive so a swipe scroll-chains to the SHOPLINE page on
+     mobile; only the small #rub zone (sized over the phone) captures the heal gesture */
+  .stage{position:fixed;inset:0;z-index:0;overflow:hidden}
+  #rub{position:fixed;z-index:1;touch-action:none;cursor:pointer}
   #frame{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;user-select:none;-webkit-user-drag:none;pointer-events:none}
   /* desktop: shrink the phone photo so it doesn't crowd the headline; reveal blends into the
      photo's own uniform warm-grey edge colour, so it just reads as a smaller phone */
@@ -143,6 +144,7 @@
   <div class="stage" id="stage">
     <img id="frame" src="frames/f_000.jpg" alt="broken iPhone screen">
   </div>
+  <div id="rub" aria-hidden="true"></div>
   <div class="scrim"></div>
 
   <div class="invite" id="invite">
@@ -176,7 +178,7 @@
 <script>
 (function(){
   var N=48;
-  var stage=document.getElementById("stage"), frame=document.getElementById("frame"), invite=document.getElementById("invite");
+  var stage=document.getElementById("stage"), frame=document.getElementById("frame"), invite=document.getElementById("invite"), rub=document.getElementById("rub");
   var yesBtn=document.getElementById("yesBtn");
 
   var DIR = window.matchMedia("(min-aspect-ratio:1/1)").matches ? "frames-desktop" : "frames";
@@ -214,7 +216,11 @@
     return r;
   }
   function inHot(x,y){ var h=hotRect(); return x>=h.x0&&x<=h.x1&&y>=h.y0&&y<=h.y1; }
-  function placeInvite(){ var h=hotRect(); invite.style.left=((h.x0+h.x1)/2)+"px"; invite.style.top=((h.y0+h.y1)/2)+"px"; }
+  function placeInvite(){ var h=hotRect();
+    invite.style.left=((h.x0+h.x1)/2)+"px"; invite.style.top=((h.y0+h.y1)/2)+"px";
+    // size the heal-capture zone to just the phone so the rest of the screen scrolls freely
+    rub.style.left=h.x0+"px"; rub.style.top=h.y0+"px"; rub.style.width=(h.x1-h.x0)+"px"; rub.style.height=(h.y1-h.y0)+"px";
+  }
   frame.addEventListener("load",placeInvite); addEventListener("resize",placeInvite); placeInvite();
 
   // progress 0..1 (0 broken → 1 healed). Direction-agnostic: ANY movement inside
@@ -247,9 +253,9 @@
     }
     lastX=x; lastY=y;
   }
-  stage.addEventListener("pointermove",function(e){ move(e.clientX,e.clientY); });
-  stage.addEventListener("pointerdown",function(e){ if(inHot(e.clientX,e.clientY)){ lastX=e.clientX; lastY=e.clientY; } });
-  stage.addEventListener("pointerleave",function(){ lastX=null; lastY=null; });
+  rub.addEventListener("pointermove",function(e){ move(e.clientX,e.clientY); });
+  rub.addEventListener("pointerdown",function(e){ if(inHot(e.clientX,e.clientY)){ lastX=e.clientX; lastY=e.clientY; } });
+  rub.addEventListener("pointerleave",function(){ lastX=null; lastY=null; });
   document.addEventListener("keydown",function(e){ if(e.key==="ArrowRight"||e.key==="ArrowLeft"||e.key===" "){ heal(0.08); } });
 
   // notification: close (X) dismisses; tapping body dismisses + draws attention to the question
