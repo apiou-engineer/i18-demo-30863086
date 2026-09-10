@@ -53,13 +53,16 @@
   .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--soft)}
   .hero-stage{flex:1;display:flex;align-items:center;justify-content:center;width:100%;position:relative;min-height:0}
   .phone{position:relative;display:inline-block}
-  .phone img{height:min(58vh,510px);width:auto;display:block;filter:drop-shadow(0 40px 55px rgba(0,0,0,.5))}
-  body.light .phone img{filter:drop-shadow(0 26px 34px rgba(120,116,106,.3))}
+  .phone img{height:min(58vh,510px);width:auto;display:block}
+  /* soft contact shadow via a gradient ellipse (NO filter) — a drop-shadow filter over the
+     fixed aurora canvas makes iOS Safari snapshot a flat grey rectangle around the phone */
+  .phone::after{content:"";position:absolute;left:50%;bottom:2%;width:80%;height:13%;transform:translateX(-50%);z-index:-1;
+    background:radial-gradient(ellipse closest-side,rgba(0,0,0,.5),rgba(0,0,0,.22) 46%,transparent 76%)}
+  body.light .phone::after{background:radial-gradient(ellipse closest-side,rgba(90,86,78,.32),rgba(90,86,78,.13) 46%,transparent 76%)}
   /* accessory layer — reserved for the magnetic snap-on animation (assets pending) */
   .acc-layer{position:absolute;inset:0;pointer-events:none}
   .acc-layer .a-ring{position:absolute;display:block;width:80.4%;height:auto;left:8.5%;top:3.8%;opacity:0;will-change:transform,opacity}
-  .acc-layer .a-charger{position:absolute;display:block;width:58%;height:auto;left:66%;top:62%;opacity:0;
-    filter:drop-shadow(0 10px 16px rgba(0,0,0,.5)) drop-shadow(0 2px 4px rgba(0,0,0,.4));will-change:transform,opacity}
+  .acc-layer .a-charger{position:absolute;display:block;width:58%;height:auto;left:66%;top:62%;opacity:0;will-change:transform,opacity}
   .acc-layer .cam{position:absolute;left:8.5%;top:3.8%;width:80.4%;aspect-ratio:460/283}
   .acc-layer .bloom{position:absolute;inset:-18%;border-radius:24%;opacity:0;mix-blend-mode:screen;
     background:radial-gradient(closest-side,rgba(255,255,255,.9),rgba(255,255,255,.35) 45%,transparent 72%)}
@@ -69,8 +72,7 @@
   .acc-layer .spk{position:absolute;width:13%;aspect-ratio:1;transform:translate(-50%,-50%) scale(0);opacity:0;background:#fff;
     filter:drop-shadow(0 0 5px rgba(255,255,255,.95));clip-path:polygon(50% 0,57% 43%,100% 50%,57% 57%,50% 100%,43% 57%,0 50%,43% 43%)}
   /* generic back-centre magnetic snap (fan / creator bundles) */
-  .acc-layer .a-snap{position:absolute;height:auto;opacity:0;will-change:transform,opacity;
-    filter:drop-shadow(0 16px 24px rgba(0,0,0,.5)) drop-shadow(0 3px 6px rgba(0,0,0,.4))}
+  .acc-layer .a-snap{position:absolute;height:auto;opacity:0;will-change:transform,opacity}
   .acc-layer .snap-bloom{position:absolute;aspect-ratio:1;border-radius:50%;opacity:0;mix-blend-mode:screen;pointer-events:none;
     transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(255,255,255,.85),rgba(255,255,255,.32) 45%,transparent 72%)}
 

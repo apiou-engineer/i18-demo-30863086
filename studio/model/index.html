@@ -170,7 +170,7 @@
     var c=document.createElement("button"); c.className="card "+(m.soon?"soon":"active"); c.setAttribute("aria-label",m.nm);
     var top = m.soon
       ? '<span class="chip">'+m.chip+'</span>'+LOCK
-      : '<span class="chip live"><span class="dot"></span>'+m.chip+'</span><span class="c-cta">'+m.cta+ARR+'</span>';
+      : '<span class="chip live"><span class="dot"></span>'+m.chip+'</span>';
     var foot = '<div class="c-foot center"><span class="txt">'+m.foot+'</span><span class="arr">&rarr;</span></div>';
     c.innerHTML='<div class="c-top">'+top+'</div><div class="c-mid"><h2 class="m-name">'+m.nm+'</h2></div>'+foot;
     // Duo looks unavailable (dimmed + lock) but still links out to its accessory category; Pro runs the selection flow
