@@ -13,7 +13,8 @@
     --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
     --serif:"Fraunces",Georgia,"Times New Roman",serif;
   }
-  @font-face{font-family:"Fraunces";src:url(../fonts/Fraunces-disp.woff2) format("woff2");font-weight:300 700;font-display:swap}
+  @font-face{font-family:"Fraunces";src:url(../fonts/Fraunces-disp.woff2) format("woff2");font-weight:300 700;font-style:normal;font-display:swap}
+  @font-face{font-family:"Fraunces";src:url(../fonts/Fraunces-italic.woff2) format("woff2");font-weight:300 700;font-style:italic;font-display:swap}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;-webkit-font-smoothing:antialiased;
@@ -45,20 +46,37 @@
     background:radial-gradient(closest-side,rgba(0,0,0,.55),transparent);filter:blur(6px)}
 
   .ui{position:fixed;inset:0;z-index:3;pointer-events:none}
-  .eyebrow{position:absolute;top:clamp(20px,4vh,40px);left:0;right:0;text-align:center;
-    font-family:var(--mono);font-size:.72rem;letter-spacing:.4em;text-transform:uppercase;color:var(--soft);
-    opacity:0;animation:fade 1s var(--ease) .2s forwards}
   @keyframes fade{to{opacity:1}}
+
+  /* ---- shared chrome: top progress bar + footer ---- */
+  .hd{position:absolute;top:0;left:0;right:0;z-index:6;display:flex;align-items:center;justify-content:space-between;
+    padding:clamp(18px,3vh,30px) clamp(20px,5vw,54px);pointer-events:none;opacity:0;animation:fade .9s var(--ease) .3s forwards}
+  .hd .back,.hd .step{pointer-events:auto}
+  .hd .back{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);text-decoration:none;transition:color .2s}
+  .hd .back:hover{color:var(--ink)} .hd .back svg{width:13px;height:13px}
+  .hd .brand{font-weight:600;letter-spacing:.28em;font-size:.85rem;text-transform:uppercase;color:var(--ink)}
+  .hd .step{display:flex;align-items:center;gap:10px}
+  .hd .step .lbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
+  .hd .step .dots{display:flex;gap:6px} .hd .step .dots i{width:6px;height:6px;border-radius:50%;background:var(--line)} .hd .step .dots i.on{background:var(--ink)}
+  @media (max-width:560px){ .hd .step .lbl{display:none} .hd .brand{font-size:.78rem} }
+
+  .ft{position:absolute;left:0;right:0;bottom:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:clamp(14px,2vh,20px) clamp(20px,5vw,54px);pointer-events:none;font-size:.66rem;letter-spacing:.06em;color:var(--soft);
+    opacity:0;animation:fade 1s var(--ease) .5s forwards}
+  .ft .copy{display:flex;gap:8px;font-family:var(--mono)} .ft .copy .sep{opacity:.4}
+  .ft .mid{font-family:var(--serif);font-style:italic;font-size:.75rem;color:var(--soft)}
+  .ft .links{display:flex;gap:12px;pointer-events:auto} .ft .links a{color:var(--soft);text-decoration:none;transition:color .2s} .ft .links a:hover{color:var(--ink)} .ft .links .sep{opacity:.35}
+  @media (max-aspect-ratio:1/1){ .ft{display:none} }
 
   .head{position:absolute;top:clamp(70px,12vh,140px);left:clamp(24px,6vw,86px);max-width:12ch}
   .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(3rem,6.2vw,5.4rem);line-height:.98;letter-spacing:-.01em;text-wrap:balance}
   .head p{font-family:var(--sans);margin-top:18px;color:var(--soft);font-size:clamp(1rem,1.5vw,1.18rem);font-weight:400;letter-spacing:.02em;max-width:26ch}
-  .cname{position:absolute;left:0;right:0;text-align:center;bottom:clamp(56px,8vh,96px);z-index:3;pointer-events:none;
+  .cname{position:absolute;left:0;right:0;text-align:center;bottom:clamp(92px,13vh,140px);z-index:3;pointer-events:none;
     font-family:var(--serif);font-size:1.35rem;font-weight:400;letter-spacing:.02em;text-transform:lowercase;color:var(--soft);transition:opacity .4s}
   .cname::before{content:"( "}
   .cname::after{content:" )"}
   @media (max-aspect-ratio:1/1){ .cname{bottom:auto;top:68vh} }
-  .cont{position:absolute;left:50%;bottom:clamp(20px,4vh,40px);transform:translateX(-50%);pointer-events:auto;
+  .cont{position:absolute;left:50%;bottom:clamp(56px,8vh,84px);transform:translateX(-50%);pointer-events:auto;
     font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);
     background:none;border:1px solid var(--line);border-radius:100px;padding:11px 22px;cursor:pointer;
     transition:color .4s,border-color .4s,transform .4s var(--spring)}
@@ -107,6 +125,11 @@
   <div class="veil" id="veil"></div>
 
   <div class="ui">
+    <header class="hd">
+      <a class="back" href="../model/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 19l-7-7 7-7" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg><span>返回</span></a>
+      <div class="brand">APIOU</div>
+      <div class="step"><span class="lbl">Step 02 / 04</span><div class="dots"><i></i><i class="on"></i><i></i><i></i></div></div>
+    </header>
     <div class="head">
       <h1>What is your iPhone color?</h1>
       <p>選擇你的手機顏色</p>
@@ -114,6 +137,11 @@
     <div class="cname" id="cname">Natural</div>
     <div class="colors" id="colors"></div>
     <button class="cont" id="cont" aria-label="繼續">繼續&nbsp;&nbsp;&darr;</button>
+    <footer class="ft">
+      <div class="copy"><span>© APIOU DESIGN</span><span class="sep">/</span><span>TAIPEI</span></div>
+      <div class="mid">Designed for iPhone, refined for daily life.</div>
+      <div class="links"><a href="#">規格指南</a><span class="sep">·</span><a href="#">顧客支援</a><span class="sep">·</span><a href="#">隱私權政策</a></div>
+    </footer>
   </div>
 
 <script>
