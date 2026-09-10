@@ -254,7 +254,7 @@
     chipsEl.appendChild(btn);
   });
 
-  var track=document.getElementById("track"), dotsEl=document.getElementById("dots"), built=false, slides=[];
+  var track=document.getElementById("track"), dotsEl=document.getElementById("dots"), built=false, slides=[], recIdx=0;
   function buildSets(){
     ORDER.forEach(function(key,i){
       var b=BUNDLES[key], off=Math.round(b.sale/b.was*100);
@@ -277,13 +277,16 @@
       slides.forEach(function(s,i){ var m=s.offsetLeft+s.offsetWidth/2; var d=Math.abs(m-c); if(d<bd){bd=d;best=i;} });
       for(var i=0;i<dots.length;i++) dots[i].className="dot"+(i===best?" on":"");
       slides.forEach(function(s,i){ s.firstElementChild.classList.toggle("centered", i===best); });
+      // keep the top heading in sync with the centred card
+      document.getElementById("recName").textContent=BUNDLES[ORDER[best]].nm;
+      var k=document.querySelector(".sets .head .k"); if(k) k.textContent=(best===recIdx)?"為你推薦":"精選組合";
     });
     built=true;
   }
 
   function showSets(recKey){
     if(!built) buildSets();
-    var recIdx=ORDER.indexOf(recKey); if(recIdx<0) recIdx=0;
+    recIdx=ORDER.indexOf(recKey); if(recIdx<0) recIdx=0;
     // mark recommended
     slides.forEach(function(s,i){
       var set=s.firstElementChild, bd=set.querySelector(".badge");
