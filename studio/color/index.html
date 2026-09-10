@@ -123,23 +123,15 @@
   // from the (light) model page stays silky. Phone images are shared Pro cutouts
   // as placeholders until per-model images are provided.
   var MODELS={
-    base:{ nm:"iPhone 18", colors:[
-      {id:"white", nm:"白色",   en:"White",       hex:"#e7e6e3", img:"titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
-      {id:"black", nm:"黑色",   en:"Black",       hex:"#1c1c20", img:"titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
-      {id:"blue",  nm:"群青色", en:"Ultramarine", hex:"#3f52d6", img:"titanium-blue.png",    base:[10,16,34],    bloom:[120,150,235]},
-      {id:"pink",  nm:"粉紅色", en:"Pink",        hex:"#e6a6bd", img:"titanium-plum.png",    base:[30,14,22],    bloom:[236,170,196]}
-    ]},
-    air:{ nm:"iPhone 18 Air", colors:[
-      {id:"white", nm:"雲白色", en:"Cloud White", hex:"#e9e8e4", img:"titanium-natural.png", base:[224,223,219], bloom:[40,40,44], neg:true},
-      {id:"black", nm:"太空黑", en:"Space Black", hex:"#1a1a1e", img:"titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
-      {id:"blue",  nm:"天藍色", en:"Sky Blue",    hex:"#9cc2e0", img:"titanium-blue.png",    base:[12,20,32],    bloom:[150,190,224]},
-      {id:"gold",  nm:"淺金色", en:"Light Gold",  hex:"#dcc9a2", img:"titanium-natural.png", base:[222,212,190], bloom:[74,58,32], neg:true}
+    duo:{ nm:"iPhone Duo", colors:[
+      {id:"starwhite", nm:"星光白", en:"Star White", hex:"#e9e8e4", img:"duo-starwhite.png", base:[224,223,219], bloom:[40,40,44], neg:true},
+      {id:"nightsky",  nm:"夜空色", en:"Night Sky",  hex:"#232838", img:"duo-nightsky.png",  base:[10,13,20],    bloom:[70,90,140]}
     ]},
     pro:{ nm:"iPhone 18 Pro", colors:[
-      {id:"natural",nm:"原色鈦金屬", en:"Natural", hex:"#cfcabf", img:"titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
-      {id:"black",  nm:"黑色鈦金屬", en:"Black",   hex:"#1c1c20", img:"titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
-      {id:"plum",   nm:"梅色鈦金屬", en:"Plum",    hex:"#6f4258", img:"titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
-      {id:"blue",   nm:"藍色鈦金屬", en:"Blue",    hex:"#7fa3cf", img:"titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
+      {id:"natural",nm:"銀色",    en:"Silver",   hex:"#cfcabf", img:"titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
+      {id:"black",  nm:"黑色",    en:"Black",    hex:"#1c1c20", img:"titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
+      {id:"plum",   nm:"勃根地紅", en:"Burgundy", hex:"#6f4258", img:"titanium-plum.png",    base:[18,10,16],  bloom:[203,150,182]},
+      {id:"blue",   nm:"冰川藍",   en:"Glacier",  hex:"#7fa3cf", img:"titanium-blue.png",    base:[9,15,23],   bloom:[150,186,220]}
     ]}
   };
   MODELS.promax={ nm:"iPhone 18 Pro Max", colors:MODELS.pro.colors };
@@ -190,7 +182,9 @@
   // continue → carry the chosen colour to the bundle finder
   document.getElementById("cont").addEventListener("click",function(){
     document.querySelector(".ui").style.transition="opacity .35s"; document.querySelector(".ui").style.opacity="0";
-    setTimeout(function(){ location.href="../finder/?c="+state.color.id+"&m="+mid; }, 300);
+    var next = (mid==="duo") ? "https://www.apeelcase.com/categories/for-iphone"   // Duo has no APIOU bundle flow yet (placeholder)
+                             : "../finder/?c="+state.color.id+"&m="+mid;
+    setTimeout(function(){ location.href=next; }, 300);
   });
 
   // entrance: if we arrived from the home flip (#flip), run the flip-in + veil fade

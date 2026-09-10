@@ -28,8 +28,8 @@
   .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.3rem,5.6vw,3.9rem);line-height:1;letter-spacing:-.01em;text-wrap:balance}
   .head p{font-family:var(--sans);margin-top:15px;color:var(--soft);font-size:clamp(.98rem,1.5vw,1.16rem);font-weight:400;letter-spacing:.02em;max-width:30ch;margin-left:auto;margin-right:auto}
 
-  .grid{margin-top:auto;margin-bottom:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,22px);
-    width:min(820px,94vw)}
+  .grid{margin-top:auto;margin-bottom:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,1.6vw,22px);
+    width:min(600px,94vw)}
   /* frosted glass tiles over the grainy gradient */
   .card{position:relative;overflow:hidden;pointer-events:auto;cursor:pointer;
     min-height:clamp(118px,20vh,164px);display:grid;place-items:center;text-align:center;
@@ -76,9 +76,8 @@
 (function(){
   var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
   var MODELS=[
-    {id:"base", nm:"iPhone 18"},
-    {id:"air",  nm:"iPhone 18 Air"},
-    {id:"pro",  nm:"iPhone 18 Pro / Pro Max"}
+    {id:"duo", nm:"iPhone Duo"},
+    {id:"pro", nm:"iPhone 18 Pro / Pro Max"}
   ];
   var gridEl=document.getElementById("grid");
   MODELS.forEach(function(m){
