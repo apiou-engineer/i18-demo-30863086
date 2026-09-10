@@ -129,9 +129,14 @@
   /* MOBILE (portrait): show whole frame (smaller phone) on a matching beige, dark UI text */
   @media (max-aspect-ratio:1/1){
     body{background:radial-gradient(78% 60% at 50% 30%,#c3bfb4,#adab9f)}
-    #frame{object-fit:contain;transform:translateY(-6vh) scale(1.1);transform-origin:center}
+    #frame{object-fit:contain;transform:translateY(3vh) scale(1.1);transform-origin:center}
     .scrim{display:none}
     .topline{color:rgba(28,27,24,.55)}
+    /* mobile: move the question + buttons to the top (fills the empty space above the phone) */
+    .ui{justify-content:flex-start}
+    .top{display:none}
+    .bottom{margin-top:clamp(20px,5vh,48px)}
+    .hero-hook{color:#1c1b18;text-shadow:0 1px 2px rgba(255,255,255,.45);animation:fade 1s var(--ease) 1.0s both}
     .subq{color:#1c1b18;text-shadow:none}
     .btn.primary{background:#161719;color:#f4f4f2}
     .btn.secondary{background:rgba(0,0,0,.05);color:#1c1b18;box-shadow:inset 0 0 0 1px rgba(0,0,0,.22)}
@@ -199,7 +204,7 @@
 
   // mobile: enlarge + shift the frame up (must match the CSS transform below)
   var MOB_SCALE = IS_DESKTOP ? 1 : 1.1;
-  function mobTY(){ return IS_DESKTOP ? 0 : -0.06*innerHeight; } // -6vh
+  function mobTY(){ return IS_DESKTOP ? 0 : 0.03*innerHeight; } // 3vh (phone nudged down so the top holds the question)
 
   // map image-fraction → viewport rect through the actual object-fit + mobile transform
   function hotRect(){
