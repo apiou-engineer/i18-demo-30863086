@@ -48,6 +48,10 @@
     box-shadow:inset 0 1px 0 rgba(255,255,255,.85), 0 30px 50px -26px rgba(0,0,0,.55)}
 
   .m-name{position:relative;font-weight:500;font-size:clamp(1.1rem,1.7vw,1.45rem);letter-spacing:-.02em;line-height:1.18;text-wrap:balance;padding:0 12px;color:var(--ink)}
+  .m-sub{position:relative;margin-top:8px;font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--soft)}
+  .card.soon{cursor:default;opacity:.5}
+  .card.soon:hover{transform:none;background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.5);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.7), 0 22px 42px -30px rgba(0,0,0,.5)}
 
   @media (max-aspect-ratio:1/1){
     .grid{grid-template-columns:1fr;gap:12px;width:min(440px,92vw)}
@@ -76,14 +80,14 @@
 (function(){
   var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
   var MODELS=[
-    {id:"duo", nm:"iPhone Duo"},
+    {id:"duo", nm:"iPhone Duo", soon:"10 / 16 預購開始"},
     {id:"pro", nm:"iPhone 18 Pro / Pro Max"}
   ];
   var gridEl=document.getElementById("grid");
   MODELS.forEach(function(m){
-    var c=document.createElement("button"); c.className="card"; c.setAttribute("aria-label",m.nm);
-    c.innerHTML='<span class="m-name">'+m.nm+'</span>';
-    c.addEventListener("click",function(){ selectModel(m,c); });
+    var c=document.createElement("button"); c.className="card"+(m.soon?" soon":""); c.setAttribute("aria-label",m.nm);
+    c.innerHTML='<span class="m-name">'+m.nm+'</span>'+(m.soon?'<span class="m-sub">'+m.soon+'</span>':'');
+    if(m.soon){ c.disabled=true; } else { c.addEventListener("click",function(){ selectModel(m,c); }); }
     gridEl.appendChild(c);
   });
 
