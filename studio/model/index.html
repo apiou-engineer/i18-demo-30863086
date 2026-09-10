@@ -4,59 +4,114 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>APIOU · 選擇你的 iPhone 18</title>
+<title>APIOU · 選擇你的 iPhone</title>
 <style>
   :root{
-    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",Roboto,sans-serif;
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang TC","Helvetica Neue","Segoe UI",Roboto,sans-serif;
     --mono:ui-monospace,"SF Mono",Menlo,monospace;
-    --ink:#1c1b18; --soft:rgba(28,27,24,.6);
+    --ink:#1c1a18; --soft:#5f5b55; --faint:rgba(28,27,24,.5);
     --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
+    --serif:"Fraunces",Georgia,"Times New Roman",serif;
   }
-  @font-face{font-family:"Fraunces";src:url(../fonts/Fraunces-disp.woff2) format("woff2");font-weight:300 700;font-display:swap}
-  :root{--serif:"Fraunces",Georgia,"Times New Roman",serif}
+  @font-face{font-family:"Fraunces";src:url(../fonts/Fraunces-disp.woff2) format("woff2");font-weight:300 700;font-style:normal;font-display:swap}
+  @font-face{font-family:"Fraunces";src:url(../fonts/Fraunces-italic.woff2) format("woff2");font-weight:300 700;font-style:italic;font-display:swap}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{font-family:var(--sans);color:var(--ink);background:#d6d2ca;overflow:hidden;-webkit-font-smoothing:antialiased}
   canvas#bg{position:fixed;inset:0;z-index:0;display:block}
 
-  .ui{position:fixed;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;
-    padding:clamp(40px,7vh,80px) 24px clamp(30px,6vh,60px)}
-  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.36em;text-transform:uppercase;color:var(--soft);
-    opacity:0;animation:fade 1s var(--ease) .1s forwards}
-  @keyframes fade{to{opacity:1}}
-  .head{text-align:center;margin-top:clamp(16px,3vh,28px);max-width:20ch}
-  .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.3rem,5.6vw,3.9rem);line-height:1;letter-spacing:-.01em;text-wrap:balance}
-  .head p{font-family:var(--sans);margin-top:15px;color:var(--soft);font-size:clamp(.98rem,1.5vw,1.16rem);font-weight:400;letter-spacing:.02em;max-width:30ch;margin-left:auto;margin-right:auto}
+  .ui{position:fixed;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:space-between;
+    padding:clamp(22px,4vh,40px) clamp(20px,5vw,54px)}
 
-  .grid{margin-top:auto;margin-bottom:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,1.6vw,22px);
-    width:min(600px,94vw)}
-  /* frosted glass tiles over the grainy gradient */
-  .card{position:relative;overflow:hidden;pointer-events:auto;cursor:pointer;
-    min-height:clamp(118px,20vh,164px);display:grid;place-items:center;text-align:center;
-    background:rgba(255,255,255,.28);border:1px solid rgba(255,255,255,.5);border-radius:24px;
-    backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.7), 0 22px 42px -30px rgba(0,0,0,.5);
-    transition:transform .5s var(--spring),border-color .35s,background .35s,box-shadow .45s;
+  /* ---- header ---- */
+  .hd{display:flex;align-items:center;justify-content:space-between;opacity:0;animation:fade .9s var(--ease) .1s forwards}
+  .hd a.back{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);text-decoration:none;transition:color .2s}
+  .hd a.back:hover{color:#000}
+  .hd a.back svg{width:13px;height:13px;transition:transform .2s}
+  .hd a.back:hover svg{transform:translateX(-3px)}
+  .brand{font-weight:600;letter-spacing:.28em;font-size:clamp(.8rem,1.1vw,.95rem);text-transform:uppercase;color:#23211f}
+  .step{display:flex;align-items:center;gap:10px}
+  .step .lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:#736f68}
+  @media (max-width:560px){ .step .lbl{display:none} }
+  .step .dots{display:flex;gap:6px}
+  .step .dots i{width:6px;height:6px;border-radius:50%;background:rgba(28,27,24,.2)}
+  .step .dots i.on{background:#23211f}
+
+  /* ---- main ---- */
+  .main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(30px,6vh,64px);min-height:0}
+  .head{text-align:center;max-width:22ch}
+  .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(3rem,6.4vw,5rem);line-height:1.02;letter-spacing:-.02em;color:#1c1a18}
+  .head h1 em{font-style:italic;font-weight:300}
+  .head p{font-family:var(--sans);margin-top:16px;color:var(--soft);font-size:clamp(.82rem,1.3vw,.95rem);font-weight:400;letter-spacing:.25em;padding-left:.25em}
+
+  .grid{width:min(880px,94vw);display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,1.6vw,24px);align-items:stretch}
+
+  .card{position:relative;overflow:hidden;text-align:left;pointer-events:auto;cursor:pointer;font-family:var(--sans);
+    display:flex;flex-direction:column;justify-content:space-between;gap:14px;
+    min-height:clamp(180px,26vh,244px);padding:clamp(22px,2.4vw,36px);
+    border-radius:22px;border:1px solid rgba(255,255,255,.65);
+    background:rgba(238,236,231,.58);backdrop-filter:blur(28px) saturate(1.6);-webkit-backdrop-filter:blur(28px) saturate(1.6);
+    box-shadow:0 10px 30px -4px rgba(0,0,0,.04), inset 0 1px 1px 0 rgba(255,255,255,.8);
+    transition:transform .45s var(--spring),box-shadow .45s var(--ease),border-color .3s;
     opacity:0;transform:translateY(18px);animation:cardIn .7s var(--ease) forwards}
-  .card::before{content:"";position:absolute;inset:0;border-radius:24px;pointer-events:none;
-    background:linear-gradient(160deg,rgba(255,255,255,.5),rgba(255,255,255,0) 44%)}
-  .card:nth-child(1){animation-delay:.14s}
-  .card:nth-child(2){animation-delay:.24s}
-  .card:nth-child(3){animation-delay:.34s}
+  .card:nth-child(1){animation-delay:.16s}
+  .card:nth-child(2){animation-delay:.26s}
   @keyframes cardIn{to{opacity:1;transform:none}}
-  .card:hover{transform:translateY(-6px);background:rgba(255,255,255,.46);border-color:rgba(255,255,255,.82);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.85), 0 30px 50px -26px rgba(0,0,0,.55)}
+  @keyframes fade{to{opacity:1}}
 
-  .m-name{position:relative;font-weight:600;font-size:clamp(1.5rem,2.4vw,1.9rem);letter-spacing:-.02em;line-height:1.15;text-align:center;text-wrap:balance;padding:0 12px;color:var(--ink)}
-  .m-sub{position:relative;margin-top:8px;font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--soft)}
-  .card.soon{cursor:default;opacity:.5}
-  .card.soon:hover{transform:none;background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.5);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.7), 0 22px 42px -30px rgba(0,0,0,.5)}
+  .card.active{background:rgba(246,245,241,.72);border-color:rgba(255,255,255,.9);
+    box-shadow:0 16px 40px -8px rgba(0,0,0,.07), inset 0 1px 2px 0 rgba(255,255,255,1);
+    outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
+  .card.active:hover{transform:translateY(-3px);box-shadow:0 24px 52px -10px rgba(0,0,0,.11), inset 0 1px 2px 0 rgba(255,255,255,1);
+    outline-color:rgba(0,0,0,.22)}
+  .card.soon{cursor:default;opacity:.82}
+
+  .c-top{display:flex;align-items:center;justify-content:space-between}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+    padding:3px 11px;border-radius:100px;background:rgba(0,0,0,.05);color:#5f5c56;border:1px solid rgba(0,0,0,.05)}
+  .chip.live{background:#1e1c1a;color:#fff;border-color:transparent}
+  .chip.live .dot{width:6px;height:6px;border-radius:50%;background:#34d399;animation:pulse 1.8s var(--ease) infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .c-top .lock{width:15px;height:15px;color:#736f68}
+  .c-cta{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:500;color:#524e47;transition:color .2s}
+  .card.active:hover .c-cta{color:#000}
+  .c-cta svg{width:12px;height:12px;transition:transform .2s}
+  .card.active:hover .c-cta svg{transform:translateX(3px)}
+
+  .c-mid{display:flex;align-items:center;flex:1;padding:6px 0}
+  .m-name{font-size:clamp(1.5rem,2.3vw,1.9rem);font-weight:600;letter-spacing:-.015em;line-height:1.12;color:#1a1917}
+
+  .c-foot{padding-top:14px;border-top:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:8px}
+  .c-foot.center{justify-content:center}
+  .c-foot .txt{font-size:.78rem;letter-spacing:.03em;color:#4d4a45;font-weight:500;transition:color .2s}
+  .card.active:hover .c-foot .txt{color:#000}
+  .c-foot .arr{font-size:.9rem;line-height:1;transition:transform .2s}
+  .card.active:hover .c-foot .arr{transform:translateX(3px)}
+  .c-foot.mono{font-family:var(--mono);font-size:.78rem;letter-spacing:.22em;color:#63605a;justify-content:center}
+  .c-foot.mono span{font-family:var(--sans);font-size:.7rem;letter-spacing:.12em}
+
+  /* reassurance line */
+  .note{display:flex;align-items:center;justify-content:center;gap:8px;font-size:.72rem;letter-spacing:.04em;color:#706c64}
+  .note svg{width:14px;height:14px;color:#5e5b54}
+
+  /* ---- footer ---- */
+  .ft{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:clamp(14px,2vh,22px);
+    border-top:1px solid rgba(0,0,0,.06);font-size:.68rem;letter-spacing:.06em;color:#636059;
+    opacity:0;animation:fade 1s var(--ease) .5s forwards}
+  .ft .copy{display:flex;align-items:center;gap:8px;font-family:var(--mono)}
+  .ft .copy .sep{color:rgba(0,0,0,.3)}
+  .ft .mid{font-family:var(--serif);font-style:italic;font-size:.76rem;color:#4d4a45}
+  .ft .links{display:flex;align-items:center;gap:12px}
+  .ft .links a{color:#524f49;text-decoration:none;transition:color .2s}
+  .ft .links a:hover{color:#000}
+  .ft .links .sep{color:rgba(0,0,0,.2)}
 
   @media (max-aspect-ratio:1/1){
-    .grid{grid-template-columns:1fr;gap:12px;width:min(440px,92vw)}
-    .card{min-height:clamp(96px,15vh,120px);border-radius:22px}
-    .card::before{border-radius:20px}
+    .grid{grid-template-columns:1fr;width:min(460px,94vw);gap:14px}
+    .card{min-height:clamp(150px,20vh,190px);text-align:center}
+    .c-mid{justify-content:center}
+    .ft{flex-direction:column;gap:8px;text-align:center}
+    .ft .mid{order:3}
   }
 
   .veil{position:fixed;inset:0;z-index:40;background:#d3cfc6;pointer-events:none;opacity:1;transition:opacity .45s var(--ease)}
@@ -67,11 +122,38 @@
   <canvas id="bg"></canvas>
 
   <div class="ui">
-    <div class="head">
-      <h1>Choose your iPhone</h1>
-      <p>選擇你的手機型號</p>
-    </div>
-    <div class="grid" id="grid"></div>
+    <!-- header -->
+    <header class="hd">
+      <a class="back" href="../">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 19l-7-7 7-7" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>返回</span>
+      </a>
+      <div class="brand">APIOU</div>
+      <div class="step">
+        <span class="lbl">Step 01 / 04</span>
+        <div class="dots"><i class="on"></i><i></i><i></i><i></i></div>
+      </div>
+    </header>
+
+    <!-- main -->
+    <main class="main">
+      <div class="head">
+        <h1>Choose<br><em>your</em> iPhone</h1>
+        <p>選擇你的手機型號</p>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        官方精準 1:1 開模・完美適配最新鏡頭模組與鈦金屬邊框
+      </div>
+    </main>
+
+    <!-- footer -->
+    <footer class="ft">
+      <div class="copy"><span>© APIOU DESIGN</span><span class="sep">/</span><span>TAIPEI</span></div>
+      <div class="mid">Designed for iPhone, refined for daily life.</div>
+      <div class="links"><a href="#">規格指南</a><span class="sep">·</span><a href="#">顧客支援</a><span class="sep">·</span><a href="#">隱私權政策</a></div>
+    </footer>
   </div>
 
   <div class="veil" id="veil"></div>
@@ -80,13 +162,21 @@
 (function(){
   var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
   var MODELS=[
-    {id:"duo", nm:"iPhone Duo", soon:"10 / 16 預購開始"},
-    {id:"pro", nm:"iPhone 18 Pro / Pro Max"}
+    {id:"duo", nm:"iPhone Duo", soon:true, chip:"即將推出", foot:"10 / 16", footsub:"預購開始"},
+    {id:"pro", nm:"iPhone 18 Pro / Pro Max", chip:"現正預購", cta:"選擇配置", foot:"點擊進入配件推薦系列"}
   ];
+  var ARR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var LOCK='<svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var gridEl=document.getElementById("grid");
   MODELS.forEach(function(m){
-    var c=document.createElement("button"); c.className="card"+(m.soon?" soon":""); c.setAttribute("aria-label",m.nm);
-    c.innerHTML='<span class="m-name">'+m.nm+'</span>'+(m.soon?'<span class="m-sub">'+m.soon+'</span>':'');
+    var c=document.createElement("button"); c.className="card "+(m.soon?"soon":"active"); c.setAttribute("aria-label",m.nm);
+    var top = m.soon
+      ? '<span class="chip">'+m.chip+'</span>'+LOCK
+      : '<span class="chip live"><span class="dot"></span>'+m.chip+'</span><span class="c-cta">'+m.cta+ARR+'</span>';
+    var foot = m.soon
+      ? '<div class="c-foot mono">'+m.foot+' <span>'+m.footsub+'</span></div>'
+      : '<div class="c-foot center"><span class="txt">'+m.foot+'</span><span class="arr">&rarr;</span></div>';
+    c.innerHTML='<div class="c-top">'+top+'</div><div class="c-mid"><h2 class="m-name">'+m.nm+'</h2></div>'+foot;
     if(m.soon){ c.disabled=true; } else { c.addEventListener("click",function(){ selectModel(m,c); }); }
     gridEl.appendChild(c);
   });
@@ -94,45 +184,39 @@
   var picking=false;
   function selectModel(m,card){
     if(picking)return; picking=true;
-    if(!reduce){ card.animate([{transform:"translateY(-6px) scale(1)"},{transform:"translateY(-6px) scale(1.03)"}],{duration:240,easing:"cubic-bezier(.34,1.4,.5,1)",fill:"forwards"}); }
-    gridEl.style.transition="opacity .4s var(--ease)"; gridEl.style.opacity=".4";
+    if(!reduce){ card.animate([{transform:"translateY(-3px) scale(1)"},{transform:"translateY(-3px) scale(1.02)"},{transform:"translateY(-3px) scale(.99)"}],{duration:280,easing:"cubic-bezier(.34,1.4,.5,1)",fill:"forwards"}); }
+    document.querySelector(".main").style.transition="opacity .4s var(--ease)"; document.querySelector(".main").style.opacity=".4";
     var veil=document.getElementById("veil"); veil.classList.remove("gone");
     requestAnimationFrame(function(){ veil.style.opacity="1"; });
     setTimeout(function(){ location.href="../color/?m="+m.id+"#flip"; }, 520);
   }
 
-  // entrance: the (beige) veil from the home flip lifts to reveal the grainy studio + the choices.
-  // Keep the veil in the DOM (it's pointer-events:none when gone) — selectModel reuses it to exit.
   var veil=document.getElementById("veil");
   requestAnimationFrame(function(){ requestAnimationFrame(function(){ veil.classList.add("gone"); }); });
 
-  // ---------- grainy studio backdrop — identical engine + palette to the colour page's
-  //            default Natural/White "negative light world", so the two pages match ----------
+  // ---------- grainy studio backdrop — matches the colour page's Natural light world ----------
   var cv=document.getElementById("bg"), ctx=cv.getContext("2d"), W,H,dpr=Math.min(2,window.devicePixelRatio||1);
   var grain=null;
-  function buildGrain(){var gw=Math.ceil(innerWidth),gh=Math.ceil(innerHeight);var g=document.createElement("canvas");g.width=gw;g.height=gh;var gx=g.getContext("2d");var id=gx.createImageData(gw,gh);var d=id.data;for(var i=0;i<d.length;i+=4){var v=(Math.random()*255)|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=16;}gx.putImageData(id,0,0);grain=g;}
+  function buildGrain(){var gw=Math.ceil(innerWidth),gh=Math.ceil(innerHeight);var g=document.createElement("canvas");g.width=gw;g.height=gh;var gx=g.getContext("2d");var id=gx.createImageData(gw,gh);var d=id.data;for(var i=0;i<d.length;i+=4){var v=(Math.random()*255)|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=14;}gx.putImageData(id,0,0);grain=g;}
   function resize(){W=cv.width=innerWidth*dpr;H=cv.height=innerHeight*dpr;cv.style.width=innerWidth+"px";cv.style.height=innerHeight+"px";buildGrain();}
   resize(); addEventListener("resize",resize);
-  // light position eases toward pointer (same mapping as the colour page)
-  var lx=0.22,ly=0.16,tlx=0.22,tly=0.16;
-  addEventListener("pointermove",function(e){tlx=0.14+(e.clientX/innerWidth)*0.3;tly=0.10+(e.clientY/innerHeight)*0.25;});
-  var base=[214,210,202], bloom=[36,34,30];   // Natural / light world
+  var lx=0.5,ly=0.30,tlx=0.5,tly=0.30;
+  addEventListener("pointermove",function(e){tlx=0.30+(e.clientX/innerWidth)*0.4;tly=0.12+(e.clientY/innerHeight)*0.3;});
+  var base=[214,209,200], bloom=[247,245,241];
   function lerp(a,b,t){return a+(b-a)*t;}
   function draw(){
     lx=lerp(lx,tlx,.05); ly=lerp(ly,tly,.05);
     var b=bloom;
     ctx.fillStyle="rgb("+base[0]+","+base[1]+","+base[2]+")"; ctx.fillRect(0,0,W,H);
-    var bx=lx*W,by=ly*H,R=Math.max(W,H)*1.25;
-    var a0=0.62,a1=0.26,a2=0.10;               // negative (light) world alphas
+    var bx=lx*W,by=ly*H,R=Math.max(W,H)*1.1;
     var g=ctx.createRadialGradient(bx,by,0,bx,by,R);
-    g.addColorStop(0,"rgba("+(b[0]|0)+","+(b[1]|0)+","+(b[2]|0)+","+a0+")");
-    g.addColorStop(0.22,"rgba("+(b[0]*0.7|0)+","+(b[1]*0.7|0)+","+(b[2]*0.7|0)+","+a1+")");
-    g.addColorStop(0.5,"rgba("+(b[0]*0.3|0)+","+(b[1]*0.3|0)+","+(b[2]*0.3|0)+","+a2+")");
-    g.addColorStop(1,"rgba(0,0,0,0)");
+    g.addColorStop(0,"rgba("+b[0]+","+b[1]+","+b[2]+",0.9)");
+    g.addColorStop(0.5,"rgba("+b[0]+","+b[1]+","+b[2]+",0.35)");
+    g.addColorStop(1,"rgba(189,184,175,0)");
     ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-    var fg=ctx.createLinearGradient(0,H*0.8,0,H);
-    fg.addColorStop(0,"rgba(0,0,0,0)"); fg.addColorStop(.7,"rgba(255,255,255,0.03)"); fg.addColorStop(1,"rgba(0,0,0,0.10)");
-    ctx.fillStyle=fg; ctx.fillRect(0,0,W,H);
+    var vg=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*0.4,W/2,H/2,Math.max(W,H)*0.75);
+    vg.addColorStop(0,"rgba(0,0,0,0)"); vg.addColorStop(1,"rgba(0,0,0,0.07)");
+    ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
     if(grain){ ctx.drawImage(grain,0,0,W,H); }
     if(!reduce) requestAnimationFrame(draw);
   }
