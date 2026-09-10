@@ -22,9 +22,8 @@
     min-height:100%;--bgc:#0a0a0b}
   body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.66);--line:rgba(27,27,30,.14);--card:rgba(255,255,255,.72);--bgc:#d6d2ca}
 
-  /* fine grain over the gradient (fixed, subtle) */
-  .grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.06;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  /* flowing aurora backdrop (per-colour, animated light) */
+  #bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;pointer-events:none}
   /* ---- shared chrome: top progress bar (absolute over hero) + flow footer ---- */
   .eyebrow{display:none}
   @keyframes fade{to{opacity:1}}
@@ -46,7 +45,7 @@
   .ft .links{display:flex;gap:12px} .ft .links a{color:var(--soft);text-decoration:none;transition:color .2s} .ft .links a:hover{color:var(--ink)} .ft .links .sep{opacity:.35}
 
   /* ---------- HERO (first screen): the phone as the star ---------- */
-  .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;
+  .hero{position:relative;z-index:1;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;
     padding:clamp(40px,7vh,78px) 24px clamp(24px,4vh,44px)}
   .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--soft)}
   .hero-stage{flex:1;display:flex;align-items:center;justify-content:center;width:100%;position:relative;min-height:0}
@@ -82,7 +81,7 @@
   @keyframes bob{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(5px);opacity:1}}
 
   /* ---------- DETAILS (scroll down) ---------- */
-  .details{max-width:460px;margin:0 auto;padding:clamp(24px,5vh,56px) 20px calc(env(safe-area-inset-bottom,0px) + 60px)}
+  .details{position:relative;z-index:1;max-width:460px;margin:0 auto;padding:clamp(24px,5vh,56px) 20px calc(env(safe-area-inset-bottom,0px) + 60px)}
   .badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;
     text-transform:uppercase;color:var(--hot);border:1px solid color-mix(in srgb,var(--hot) 55%,transparent);
     border-radius:100px;padding:6px 12px}
@@ -146,7 +145,7 @@
 </style>
 </head>
 <body>
-  <div class="grain" aria-hidden="true"></div>
+  <canvas id="bg" aria-hidden="true"></canvas>
   <section class="hero">
     <header class="hd">
       <a class="back" id="hdBack" href="../finder/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 19l-7-7 7-7" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg><span>返回</span></a>
@@ -230,22 +229,22 @@
 
   var MODELS={
     base:{ nm:"iPhone 18", colors:[
-      {id:"white", nm:"白色",   img:"../color/titanium-natural.png", base:[228,227,224], neg:true},
-      {id:"black", nm:"黑色",   img:"../color/titanium-black.png",   base:[9,9,11]},
-      {id:"blue",  nm:"群青色", img:"../color/titanium-blue.png",    base:[10,16,34]},
-      {id:"pink",  nm:"粉紅色", img:"../color/titanium-plum.png",    base:[30,14,22]}
+      {id:"white", nm:"白色",   img:"../color/titanium-natural.png", base:[228,227,224], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"黑色",   img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"群青色", img:"../color/titanium-blue.png",    base:[10,16,34],    bloom:[120,150,235]},
+      {id:"pink",  nm:"粉紅色", img:"../color/titanium-plum.png",    base:[30,14,22],    bloom:[236,170,196]}
     ]},
     air:{ nm:"iPhone 18 Air", colors:[
-      {id:"white", nm:"雲白色", img:"../color/titanium-natural.png", base:[224,223,219], neg:true},
-      {id:"black", nm:"太空黑", img:"../color/titanium-black.png",   base:[9,9,11]},
-      {id:"blue",  nm:"天藍色", img:"../color/titanium-blue.png",    base:[12,20,32]},
-      {id:"gold",  nm:"淺金色", img:"../color/titanium-natural.png", base:[222,212,190], neg:true}
+      {id:"white", nm:"雲白色", img:"../color/titanium-natural.png", base:[224,223,219], bloom:[40,40,44], neg:true},
+      {id:"black", nm:"太空黑", img:"../color/titanium-black.png",   base:[9,9,11],      bloom:[210,214,222]},
+      {id:"blue",  nm:"天藍色", img:"../color/titanium-blue.png",    base:[12,20,32],    bloom:[150,190,224]},
+      {id:"gold",  nm:"淺金色", img:"../color/titanium-natural.png", base:[222,212,190], bloom:[74,58,32], neg:true}
     ]},
     pro:{ nm:"iPhone 18 Pro", colors:[
-      {id:"natural",nm:"銀色",    img:"../color/titanium-natural.png", base:[214,210,202], neg:true},
-      {id:"black",  nm:"黑色",    img:"../color/titanium-black.png",   base:[10,10,11]},
-      {id:"plum",   nm:"勃根地紅", img:"../color/titanium-plum.png",    base:[18,10,16]},
-      {id:"blue",   nm:"冰川藍",   img:"../color/titanium-blue.png",    base:[9,15,23]}
+      {id:"natural",nm:"銀色",    img:"../color/titanium-natural.png", base:[214,210,202], bloom:[36,34,30], neg:true},
+      {id:"black",  nm:"黑色",    img:"../color/titanium-black.png",   base:[10,10,11],  bloom:[216,220,226]},
+      {id:"plum",   nm:"勃根地紅", img:"../color/titanium-plum.png",    base:[22,9,12],   bloom:[200,105,110]},
+      {id:"blue",   nm:"冰川藍",   img:"../color/titanium-blue.png",    base:[11,17,25],  bloom:[175,205,230]}
     ]}
   };
   MODELS.promax={ nm:"iPhone 18 Pro / Pro Max", colors:MODELS.pro.colors };
@@ -355,12 +354,49 @@
   document.getElementById("eyebrow").innerHTML="APIOU &middot; "+model.nm;
   document.getElementById("hdBack").href="../finder/?m="+mid+"&c="+col.id;
 
-  // soft light grey→white studio gradient with light-from-top + grounded shadow (光影感),
-  // same for every colour. Light theme flips text/cards to dark-on-light.
+  // flowing aurora backdrop, tinted to the chosen phone colour (same engine as the finder page);
+  // light colours flip to a light world (dark text), dark colours stay a dark world (light text).
+  document.body.classList.toggle("light", !!col.neg);
+  document.body.style.background="rgb("+(col.base[0]|0)+","+(col.base[1]|0)+","+(col.base[2]|0)+")";
   (function(){
-    document.body.classList.add("light");
-    document.body.style.background="radial-gradient(125% 82% at 50% 16%, #f6f4ef 0%, #e6e2da 44%, #c8c4ba 100%)";
-    document.body.style.backgroundAttachment="fixed";
+    var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+    var cv=document.getElementById("bg"), ctx=cv.getContext("2d"), W,H,dpr=Math.min(2,window.devicePixelRatio||1), grain=null;
+    function buildGrain(){var gw=Math.ceil(innerWidth),gh=Math.ceil(innerHeight);var g=document.createElement("canvas");g.width=gw;g.height=gh;var gx=g.getContext("2d");var id=gx.createImageData(gw,gh);var d=id.data;for(var i=0;i<d.length;i+=4){var v=(Math.random()*255)|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=16;}gx.putImageData(id,0,0);grain=g;}
+    function resize(){W=cv.width=innerWidth*dpr;H=cv.height=innerHeight*dpr;cv.style.width=innerWidth+"px";cv.style.height=innerHeight+"px";buildGrain();}
+    resize(); addEventListener("resize",resize);
+    var lx=0.24,ly=0.16,tlx=0.24,tly=0.16;
+    addEventListener("pointermove",function(e){tlx=0.14+(e.clientX/innerWidth)*0.3;tly=0.10+(e.clientY/innerHeight)*0.25;});
+    var b=col.base.slice(), bloom=col.bloom.slice(), neg=!!col.neg, T=0;
+    function rgb(a){return "rgb("+(a[0]|0)+","+(a[1]|0)+","+(a[2]|0)+")";}
+    function lerp(a,c,t){return a+(c-a)*t;}
+    function blob(cx,cy,R,c,a){var g=ctx.createRadialGradient(cx,cy,0,cx,cy,R);g.addColorStop(0,"rgba("+(c[0]|0)+","+(c[1]|0)+","+(c[2]|0)+","+a+")");g.addColorStop(0.42,"rgba("+(c[0]*0.72|0)+","+(c[1]*0.72|0)+","+(c[2]*0.72|0)+","+(a*0.38)+")");g.addColorStop(1,"rgba("+(c[0]|0)+","+(c[1]|0)+","+(c[2]|0)+",0)");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);}
+    function draw(){
+      T+=reduce?0:0.0045;
+      lx=lerp(lx,tlx,.05); ly=lerp(ly,tly,.05);
+      var R=Math.max(W,H);
+      function br(base,amp,ph){return base+amp*Math.sin(T*1.05+ph);}
+      ctx.globalCompositeOperation="source-over";
+      ctx.fillStyle=rgb(b); ctx.fillRect(0,0,W,H);
+      if(neg){
+        var dk=[bloom[0]*0.5,bloom[1]*0.5,bloom[2]*0.5];
+        blob((0.30+0.08*Math.sin(T*0.6))*W,(0.24+0.06*Math.cos(T*0.7))*H,R*1.2,dk,br(0.30,0.10,0));
+        blob((0.72+0.10*Math.sin(T*0.45+1.3))*W,(0.64+0.08*Math.cos(T*0.5+2.0))*H,R*1.0,dk,br(0.20,0.08,1.7));
+        blob(lx*W,ly*H,R*0.7,[255,255,255],0.05);
+      }else{
+        ctx.globalCompositeOperation="lighter";
+        blob((0.30+0.10*Math.sin(T*0.7))*W,(0.20+0.08*Math.cos(T*0.9))*H,R*1.15,bloom,br(0.40,0.15,0));
+        blob((0.72+0.12*Math.sin(T*0.5+1.3))*W,(0.34+0.10*Math.cos(T*0.6+2.1))*H,R*0.95,bloom,br(0.28,0.13,1.7));
+        blob((0.50+0.14*Math.sin(T*0.4+3.0))*W,(0.80+0.09*Math.cos(T*0.55+0.6))*H,R*1.05,bloom,br(0.22,0.11,3.4));
+        blob(lx*W,ly*H,R*0.6,bloom,0.16);
+        ctx.globalCompositeOperation="source-over";
+      }
+      var fg=ctx.createLinearGradient(0,H*0.8,0,H),floorA=neg?0.10:0.25;
+      fg.addColorStop(0,"rgba(0,0,0,0)");fg.addColorStop(.7,"rgba(255,255,255,0.03)");fg.addColorStop(1,"rgba(0,0,0,"+floorA+")");
+      ctx.fillStyle=fg;ctx.fillRect(0,0,W,H);
+      if(grain){ctx.globalAlpha=1;ctx.drawImage(grain,0,0,W,H);}
+      if(!reduce) requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw); if(reduce) draw();
   })();
 
   // hero + details fills
