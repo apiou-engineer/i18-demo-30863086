@@ -254,12 +254,7 @@
   var BUNDLES={
     minimal:{nm:"新機必備組合", items:["透明殼(非磁吸)","鏡頭底座貼","20W 充電頭"], was:1497, sale:999, url:P+"iphone-18-new-phone-essentials-bundle-1"},
     creator:{nm:"創作者組合",   items:["液態矽膠殼","指環支架","磁吸吸盤"], was:1797, sale:1199, url:P+"iphone-18-creator-all-in-one-bundle"},
-    leather:{nm:"皮革造型組合", items:["皮革手機殼","鏡面支架卡包","皮革掛繩＋墊片"], was:2697, sale:1799, variants:[
-      {nm:"侘寂灰", url:P+"iphone-18-wabi-sabi-gray-leather-styling-set"},
-      {nm:"奶油灰鱷魚紋", url:P+"iphone-18-beige-crocodile-grain-leather-styling-set"},
-      {nm:"黑色荔枝紋", url:P+"iphone-18-black-lychee-grain-leather-styling-set"},
-      {nm:"霧面銀",    url:P+"iphone-18-matte-silver-leather-styling-set"}
-    ]},
+    leather:{nm:"皮革造型組合", items:["皮革手機殼","鏡面支架卡包","皮革掛繩＋墊片"], was:2697, sale:1799, url:"https://www.apeelcase.com/categories/iphone-18-pro"},
     fan:{nm:"追星必備組合",     items:["鏡面手機殼","旋轉支架卡夾"], was:1598, sale:1199, url:P+"iphone-18-fan-essentials-bundle"},
     home:{nm:"居家快充組合",     items:["透明磁吸殼","四合一無線充","磁吸線","65W 快充"], was:3787, sale:2599, url:P+"iphone-18-all-in-one-home-charging-bundle"}
   };
@@ -360,10 +355,11 @@
   document.getElementById("eyebrow").innerHTML="APIOU &middot; "+model.nm;
   document.getElementById("hdBack").href="../finder/?m="+mid+"&c="+col.id;
 
-  // unified black→charcoal gradient with a soft charcoal glow behind the phone —
-  // same for every colour, so dark (black) phones keep contrast and the flow stays consistent.
+  // soft light grey→white studio gradient with light-from-top + grounded shadow (光影感),
+  // same for every colour. Light theme flips text/cards to dark-on-light.
   (function(){
-    document.body.style.background="radial-gradient(130% 78% at 50% 30%, #35373d 0%, #212327 42%, #0b0b0d 100%)";
+    document.body.classList.add("light");
+    document.body.style.background="radial-gradient(125% 82% at 50% 16%, #f6f4ef 0%, #e6e2da 44%, #c8c4ba 100%)";
     document.body.style.backgroundAttachment="fixed";
   })();
 
