@@ -16,14 +16,33 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
-  @font-face{font-family:"Fraunces";src:url(../fonts/Fraunces-disp.woff2) format("woff2");font-weight:300 700;font-display:swap}
+  @font-face{font-family:"Fraunces";src:url(../fonts/Fraunces-disp.woff2) format("woff2");font-weight:300 700;font-style:normal;font-display:swap}
+  @font-face{font-family:"Fraunces";src:url(../fonts/Fraunces-italic.woff2) format("woff2");font-weight:300 700;font-style:italic;font-display:swap}
   body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;overflow:hidden;position:relative;-webkit-font-smoothing:antialiased}
   body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.66);--line:rgba(27,27,30,.14);--card:rgba(255,255,255,.62)}
   canvas#bg{position:fixed;inset:0;z-index:0;display:block}
 
   .screen{position:absolute;inset:0;display:flex;flex-direction:column;z-index:2}
-  .eyebrow{flex:0 0 auto;text-align:center;padding:clamp(24px,5vh,46px) 20px 0;
-    font-family:var(--mono);font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:var(--soft)}
+  .eyebrow{display:none}
+  @keyframes fade{to{opacity:1}}
+  /* ---- shared chrome ---- */
+  .hd{position:absolute;top:0;left:0;right:0;z-index:6;display:flex;align-items:center;justify-content:space-between;
+    padding:clamp(18px,3vh,30px) clamp(20px,5vw,54px);pointer-events:none;opacity:0;animation:fade .9s var(--ease) .3s forwards}
+  .hd .back,.hd .step{pointer-events:auto}
+  .hd .back{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);text-decoration:none;transition:color .2s}
+  .hd .back:hover{color:var(--ink)} .hd .back svg{width:13px;height:13px}
+  .hd .brand{font-weight:600;letter-spacing:.28em;font-size:.85rem;text-transform:uppercase;color:var(--ink)}
+  .hd .step{display:flex;align-items:center;gap:10px}
+  .hd .step .lbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
+  .hd .step .dots{display:flex;gap:6px} .hd .step .dots i{width:6px;height:6px;border-radius:50%;background:var(--line)} .hd .step .dots i.on{background:var(--ink)}
+  @media (max-width:560px){ .hd .step .lbl{display:none} .hd .brand{font-size:.78rem} }
+  .ft{position:absolute;left:0;right:0;bottom:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:clamp(14px,2vh,20px) clamp(20px,5vw,54px);pointer-events:none;font-size:.66rem;letter-spacing:.06em;color:var(--soft);
+    opacity:0;animation:fade 1s var(--ease) .5s forwards}
+  .ft .copy{display:flex;gap:8px;font-family:var(--mono)} .ft .copy .sep{opacity:.4}
+  .ft .mid{font-family:var(--serif);font-style:italic;font-size:.75rem;color:var(--soft)}
+  .ft .links{display:flex;gap:12px;pointer-events:auto} .ft .links a{color:var(--soft);text-decoration:none;transition:color .2s} .ft .links a:hover{color:var(--ink)} .ft .links .sep{opacity:.35}
+  @media (max-aspect-ratio:1/1){ .ft{display:none} }
 
   /* STATE 1 — usage */
   .usage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(20px,4vh,34px);padding:0 24px;
@@ -105,6 +124,16 @@
 </head>
 <body>
   <canvas id="bg"></canvas>
+  <header class="hd">
+    <a class="back" id="hdBack" href="../color/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 19l-7-7 7-7" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg><span>返回</span></a>
+    <div class="brand">APIOU</div>
+    <div class="step"><span class="lbl">Step 03 / 04</span><div class="dots"><i></i><i></i><i class="on"></i><i></i></div></div>
+  </header>
+  <footer class="ft">
+    <div class="copy"><span>© APIOU DESIGN</span><span class="sep">/</span><span>TAIPEI</span></div>
+    <div class="mid">Designed for iPhone, refined for daily life.</div>
+    <div class="links"><a href="#">規格指南</a><span class="sep">·</span><a href="#">顧客支援</a><span class="sep">·</span><a href="#">隱私權政策</a></div>
+  </footer>
   <div class="screen">
     <div class="eyebrow" id="eyebrow">APIOU &middot; iPhone 18</div>
 
@@ -172,6 +201,7 @@
   document.body.classList.toggle("light", !!col.neg);
   document.getElementById("eyebrow").innerHTML="APIOU &middot; "+model.nm+" &middot; "+col.nm;
   document.getElementById("reColor").href="../color/?m="+mid+"&c="+cid;
+  document.getElementById("hdBack").href="../color/?m="+mid+"&c="+cid;
 
   // ---------- flowing aurora backdrop (same engine as the colour page) ----------
   (function(){

@@ -13,11 +13,34 @@
     --card:rgba(24,24,27,.72); --good:#7fd0a0; --hot:#e9b04a;
     --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.5,1);
   }
+  @font-face{font-family:"Fraunces";src:url(../fonts/Fraunces-disp.woff2) format("woff2");font-weight:300 700;font-style:normal;font-display:swap}
+  @font-face{font-family:"Fraunces";src:url(../fonts/Fraunces-italic.woff2) format("woff2");font-weight:300 700;font-style:italic;font-display:swap}
+  :root{--serif:"Fraunces",Georgia,"Times New Roman",serif}
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{font-family:var(--sans);color:var(--ink);background:#0a0a0b;-webkit-font-smoothing:antialiased;
     min-height:100%;--bgc:#0a0a0b}
   body.light{--ink:#1b1b1e;--soft:rgba(27,27,30,.66);--line:rgba(27,27,30,.14);--card:rgba(255,255,255,.72);--bgc:#d6d2ca}
+
+  /* ---- shared chrome: top progress bar (absolute over hero) + flow footer ---- */
+  .eyebrow{display:none}
+  @keyframes fade{to{opacity:1}}
+  .hd{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+    padding:clamp(18px,3vh,30px) clamp(20px,5vw,54px);pointer-events:none;opacity:0;animation:fade .9s var(--ease) .3s forwards}
+  .hd .back,.hd .step{pointer-events:auto}
+  .hd .back{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);text-decoration:none;transition:color .2s}
+  .hd .back:hover{color:var(--ink)} .hd .back svg{width:13px;height:13px}
+  .hd .brand{font-weight:600;letter-spacing:.28em;font-size:.85rem;text-transform:uppercase;color:var(--ink)}
+  .hd .step{display:flex;align-items:center;gap:10px}
+  .hd .step .lbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
+  .hd .step .dots{display:flex;gap:6px} .hd .step .dots i{width:6px;height:6px;border-radius:50%;background:var(--line)} .hd .step .dots i.on{background:var(--ink)}
+  @media (max-width:560px){ .hd .step .lbl{display:none} .hd .brand{font-size:.78rem} }
+  .ft{max-width:460px;margin:0 auto;padding:26px 20px calc(env(safe-area-inset-bottom,0px) + 34px);
+    border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;
+    font-size:.66rem;letter-spacing:.06em;color:var(--soft)}
+  .ft .copy{display:flex;gap:8px;font-family:var(--mono)} .ft .copy .sep{opacity:.4}
+  .ft .mid{font-family:var(--serif);font-style:italic;font-size:.78rem;color:var(--soft)}
+  .ft .links{display:flex;gap:12px} .ft .links a{color:var(--soft);text-decoration:none;transition:color .2s} .ft .links a:hover{color:var(--ink)} .ft .links .sep{opacity:.35}
 
   /* ---------- HERO (first screen): the phone as the star ---------- */
   .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;
@@ -121,6 +144,11 @@
 </head>
 <body>
   <section class="hero">
+    <header class="hd">
+      <a class="back" id="hdBack" href="../finder/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 19l-7-7 7-7" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg><span>返回</span></a>
+      <div class="brand">APIOU</div>
+      <div class="step"><span class="lbl">Step 04 / 04</span><div class="dots"><i></i><i></i><i></i><i class="on"></i></div></div>
+    </header>
     <div class="eyebrow" id="eyebrow">APIOU &middot; iPhone 18</div>
     <div class="hero-stage">
       <div class="phone" id="phone">
@@ -175,6 +203,12 @@
       <a class="btn primary" id="shopBtn" target="_blank" rel="noopener">前往選購 &rarr;</a>
       <button class="btn ghost" id="restartBtn">重新開始</button>
     </div>
+
+    <footer class="ft">
+      <div class="mid">Designed for iPhone, refined for daily life.</div>
+      <div class="copy"><span>© APIOU DESIGN</span><span class="sep">/</span><span>TAIPEI</span></div>
+      <div class="links"><a href="#">規格指南</a><span class="sep">·</span><a href="#">顧客支援</a><span class="sep">·</span><a href="#">隱私權政策</a></div>
+    </footer>
   </section>
 
   <div class="toast" id="toast"></div>
@@ -323,6 +357,7 @@
     charger.animate([{opacity:0,transform:"translate(-50%,-50%) translate(70vw,8vh) rotate(14deg) scale(1.12)"},{opacity:1,transform:"translate(-50%,-50%) translate(70vw,8vh) rotate(14deg) scale(1.12)",offset:.16},{opacity:1,transform:"translate(-50%,-50%) translate(-3%,-1%) rotate(-3deg) scale(1)",offset:.82},{opacity:1,transform:"translate(-50%,-50%) translate(0,0) rotate(0) scale(1)"}],{duration:1500,delay:1700,easing:SP,fill:"both"});
   }
   document.getElementById("eyebrow").innerHTML="APIOU &middot; "+model.nm;
+  document.getElementById("hdBack").href="../finder/?m="+mid+"&c="+col.id;
 
   // dark studio background for the whole page (keeps the phone dramatic on every colour),
   // subtly tinted toward the chosen colour for cohesion.
