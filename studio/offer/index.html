@@ -249,7 +249,7 @@
       +'<img class="a-ring" src="../acc/lens-ring-'+cc+'.png" alt="">'
       +'<img class="a-charger" style="left:150%;top:64%;width:95%" src="../acc/charger-20w.png" alt="">';
     setTimeout(playSnap, 900);
-  } else if(bk==="fan" && haveCol){
+  } else if(bk==="fan" && ["natural","plum","blue","black"].indexOf(cc)>=0){
     phoneImg.src="../acc/phone-mirror-"+cc+".png";
     phoneImg.style.height="min(44vh,380px)";   // smaller phone so the clip reads larger
     buildBackSnap([{src:"../acc/fan-clip.png", cx:50, cy:62, w:78, dir:"up", d:0}]);
@@ -261,12 +261,15 @@
       {src:"../acc/creator-pad-"+cc+".png",  cx:50,  cy:64, w:(cc==="natural"?60:70), dir:"up", d:0}, // suction pad snaps onto the back (natural reads larger on the cream case → smaller)
       {src:"../acc/creator-ring-"+cc+".png", cx:134, cy:58, w:67, dir:"right", d:600, snap:false} // ring rests beside the phone
     ]);
-  } else if(bk==="home" && haveCol){
+  } else if(bk==="home" && ["natural","plum","blue","black"].indexOf(cc)>=0){
     phoneImg.src="../acc/home-phone-"+cc+".png";
     phoneImg.style.height="min(44vh,380px)";                              // smaller phone
-    document.querySelector(".phone").style.transform="translateX(-36%)";  // shift left so phone+kit reads centred
+    document.querySelector(".phone").style.transform="translateX(-42%)";  // shift left so phone+kit reads centred
+    var stand=(cc==="black")?"home-stand-black.png":"home-stand.png";
     buildBackSnap([
-      {src:"../acc/home-kit.png", cx:134, cy:57, w:78, dir:"right", d:0, snap:false} // 4-in-1 stand + 65W + cable rests beside
+      {src:"../acc/"+stand,        cx:138, cy:60, w:62, dir:"right", d:0,   snap:false}, // 4-in-1 wireless stand
+      {src:"../acc/home-head.png", cx:108, cy:30, w:20, dir:"up",    d:450, snap:false}, // 65W head
+      {src:"../acc/home-cable.png",cx:112, cy:84, w:36, dir:"down",  d:650, snap:false}  // magnetic cable
     ]);
   } else if(bk==="leather" && ["natural","plum","blue","black"].indexOf(cc)>=0){
     phoneImg.src="../acc/leather-phone-"+cc+".png";
@@ -326,7 +329,7 @@
   (function(){
     var BG={
       natural:["#2b2d32","#141519"], white:["#2b2d32","#141519"], black:["#34373d","#181a1e"],
-      blue:["#1e2c46","#0e1420"], plum:["#301e39","#160e1a"], pink:["#3a2130","#1a0f16"],
+      blue:["#1e3350","#0e1622"], plum:["#3a1922","#1a0c10"], pink:["#3a2130","#1a0f16"],
       ultramarine:["#1c2450","#0d1024"], gold:["#332b1e","#171410"], _def:["#2a2c31","#131417"]
     };
     var g=BG[col.id]||BG._def;
