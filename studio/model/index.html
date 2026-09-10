@@ -24,7 +24,9 @@
     padding:clamp(22px,4vh,40px) clamp(20px,5vw,54px)}
 
   /* ---- header ---- */
-  .hd{display:flex;align-items:center;justify-content:space-between;opacity:0;animation:fade .9s var(--ease) .1s forwards}
+  .hd{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;opacity:0;animation:fade .9s var(--ease) .1s forwards}
+  .hd .brand{text-align:center}
+  .hd .step{justify-self:end}
   .hd a.back{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);text-decoration:none;transition:color .2s}
   .hd a.back:hover{color:#000}
   .hd a.back svg{width:13px;height:13px;transition:transform .2s}
@@ -95,7 +97,7 @@
   .note svg{width:14px;height:14px;color:#5e5b54}
 
   /* ---- footer ---- */
-  .ft{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:clamp(14px,2vh,22px);
+  .ft{display:none;align-items:center;justify-content:space-between;gap:16px;padding-top:clamp(14px,2vh,22px);
     border-top:1px solid rgba(0,0,0,.06);font-size:.68rem;letter-spacing:.06em;color:#636059;
     opacity:0;animation:fade 1s var(--ease) .5s forwards}
   .ft .copy{display:flex;align-items:center;gap:8px;font-family:var(--mono)}

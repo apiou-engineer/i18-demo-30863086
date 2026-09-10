@@ -34,7 +34,7 @@
   /* light veil bridges from the home page's bright bg, then clears quickly so the flip shows */
   .veil{position:fixed;inset:0;z-index:40;background:#d3cfc6;pointer-events:none;opacity:1;transition:opacity .5s var(--ease)}
   .veil.gone{opacity:0}
-  .phone{position:relative;height:min(76vh,660px);animation:float 9s var(--ease) infinite;will-change:transform}
+  .phone{position:relative;height:min(64vh,540px);animation:float 9s var(--ease) infinite;will-change:transform}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
   .phone img{position:absolute;inset:0;height:100%;width:auto;left:50%;transform:translateX(-50%);
     filter:drop-shadow(0 46px 60px rgba(0,0,0,.55));opacity:0;transition:opacity .6s var(--ease)}
@@ -72,12 +72,12 @@
   .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(3rem,6.2vw,5.4rem);line-height:.98;letter-spacing:-.01em;text-wrap:balance}
   .head h1 em{font-style:italic;font-weight:300}
   .head p{font-family:var(--sans);margin-top:16px;color:var(--soft);font-size:clamp(.95rem,1.4vw,1.12rem);font-weight:400;letter-spacing:.2em;max-width:26ch}
-  .cname{position:absolute;left:0;right:0;text-align:center;bottom:clamp(92px,13vh,140px);z-index:3;pointer-events:none;
+  .cname{position:absolute;left:0;right:0;text-align:center;bottom:clamp(104px,15vh,160px);z-index:3;pointer-events:none;
     font-family:var(--serif);font-size:1.35rem;font-weight:400;letter-spacing:.02em;text-transform:lowercase;color:var(--soft);transition:opacity .4s}
   .cname::before{content:"( "}
   .cname::after{content:" )"}
   @media (max-aspect-ratio:1/1){ .cname{bottom:auto;top:68vh} }
-  .cont{position:absolute;left:50%;bottom:clamp(56px,8vh,84px);transform:translateX(-50%);pointer-events:auto;
+  .cont{position:absolute;left:50%;bottom:clamp(40px,6vh,64px);transform:translateX(-50%);pointer-events:auto;
     font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);
     background:none;border:1px solid var(--line);border-radius:100px;padding:11px 22px;cursor:pointer;
     transition:color .4s,border-color .4s,transform .4s var(--spring)}

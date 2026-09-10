@@ -53,7 +53,7 @@
   .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--soft)}
   .hero-stage{flex:1;display:flex;align-items:center;justify-content:center;width:100%;position:relative;min-height:0}
   .phone{position:relative;display:inline-block}
-  .phone img{height:min(50vh,440px);width:auto;display:block;filter:drop-shadow(0 40px 55px rgba(0,0,0,.5))}
+  .phone img{height:min(58vh,510px);width:auto;display:block;filter:drop-shadow(0 40px 55px rgba(0,0,0,.5))}
   body.light .phone img{filter:drop-shadow(0 26px 34px rgba(120,116,106,.3))}
   /* accessory layer — reserved for the magnetic snap-on animation (assets pending) */
   .acc-layer{position:absolute;inset:0;pointer-events:none}
@@ -277,7 +277,7 @@
 
   if(bk==="minimal" && (mid==="pro"||mid==="promax") && ["natural","black","plum","blue"].indexOf(cc)>=0){
     phoneImg.src="../acc/phone-cased-"+cc+".png";
-    phoneImg.style.height="min(44vh,380px)";                              // smaller phone (room for the larger charger)
+    phoneImg.style.height="min(52vh,450px)";                              // smaller phone (room for the larger charger)
     document.querySelector(".phone").style.transform="translateX(-37%)";  // shift left so phone+charger reads centred
     acc.innerHTML='<div class="cam"><div class="bloom"></div><div class="glint2"><span></span></div></div>'
       +'<div class="spk" style="left:21%;top:9.7%"></div><div class="spk" style="left:21%;top:22.4%"></div><div class="spk" style="left:44.5%;top:16.1%"></div>'
@@ -286,11 +286,11 @@
     setTimeout(playSnap, 900);
   } else if(bk==="fan" && ["natural","plum","blue","black"].indexOf(cc)>=0){
     phoneImg.src="../acc/phone-mirror-"+cc+".png";
-    phoneImg.style.height="min(44vh,380px)";   // smaller phone so the clip reads larger
+    phoneImg.style.height="min(52vh,450px)";   // smaller phone so the clip reads larger
     buildBackSnap([{src:"../acc/fan-clip.png", cx:50, cy:62, w:78, dir:"up", d:0}]);
   } else if(bk==="creator" && ["natural","plum","blue","black"].indexOf(cc)>=0){
     phoneImg.src="../acc/phone-silicone-"+cc+".png";
-    phoneImg.style.height="min(44vh,380px)";                              // smaller phone
+    phoneImg.style.height="min(52vh,450px)";                              // smaller phone
     document.querySelector(".phone").style.transform="translateX(-34%)";  // shift left so phone+side-ring reads centred
     buildBackSnap([
       {src:"../acc/creator-pad-"+cc+".png",  cx:50,  cy:64, w:((cc==="natural"||cc==="black")?60:70), dir:"up", d:0}, // suction pad snaps onto the back (light pad on light/dark case reads larger → smaller)
@@ -298,14 +298,14 @@
     ]);
   } else if(bk==="home" && ["natural","plum","blue","black"].indexOf(cc)>=0){
     phoneImg.src="../acc/home-phone-"+cc+".png";
-    phoneImg.style.height="min(40vh,348px)";                              // phone +20%
+    phoneImg.style.height="min(48vh,415px)";                              // phone +20%
     document.querySelector(".phone").style.transform="translateX(-70%)";  // shift left so phone+kit reads centred
     buildBackSnap([
       {src:"../acc/home-kit.png", cx:172, cy:55, w:135, dir:"right", d:0, snap:false} // 4-in-1 stand + 65W + cable, assembled — +30%, clear of the phone
     ]);
   } else if(bk==="leather" && ["natural","plum","blue","black"].indexOf(cc)>=0){
     phoneImg.src="../acc/leather-phone-"+cc+".png";
-    phoneImg.style.height="min(44vh,380px)";                              // smaller phone
+    phoneImg.style.height="min(52vh,450px)";                              // smaller phone
     document.querySelector(".phone").style.transform="translateX(-42%)";  // shift left so phone+strap reads centred
     buildBackSnap([
       {src:"../acc/leather-pocket-"+cc+".png", cx:50,  cy:60, w:70, dir:"up",    d:0},              // card pocket snaps onto the back (+10%)
