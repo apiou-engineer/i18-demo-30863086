@@ -22,6 +22,12 @@
   /* fullscreen frame sequence, edge to edge */
   .stage{position:fixed;inset:0;z-index:0;cursor:pointer;touch-action:none;overflow:hidden}
   #frame{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;user-select:none;-webkit-user-drag:none;pointer-events:none}
+  /* desktop: shrink the phone photo so it doesn't crowd the headline; reveal blends into the
+     photo's own uniform warm-grey edge colour, so it just reads as a smaller phone */
+  @media (min-width:820px){
+    .stage{background:#b1afa3}
+    #frame{transform:scale(.8);transform-origin:center 42%}
+  }
   /* subtle vignette + top/bottom scrims so overlaid text stays legible on any frame */
   .scrim{position:fixed;inset:0;z-index:1;pointer-events:none;
     background:
