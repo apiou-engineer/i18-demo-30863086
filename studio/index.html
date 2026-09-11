@@ -130,7 +130,7 @@
   /* MOBILE (portrait): show whole frame (smaller phone) on a matching beige, dark UI text */
   @media (max-aspect-ratio:1/1){
     body{background:radial-gradient(78% 60% at 50% 30%,#c3bfb4,#adab9f)}
-    #frame{object-fit:contain;transform:translateY(-1vh) scale(.72);transform-origin:center}
+    #frame{object-fit:contain;transform:scale(1.1);transform-origin:center}
     .scrim{display:none}
     .topline{color:rgba(28,27,24,.55)}
     /* mobile: English headline at the top, phone in the middle, question + buttons below it */
@@ -203,8 +203,8 @@
     : {x0:0.29, y0:0.27, x1:0.71, y1:0.74};  // portrait centred crop: phone screen area
 
   // mobile: enlarge + shift the frame up (must match the CSS transform below)
-  var MOB_SCALE = IS_DESKTOP ? 1 : 0.72;
-  function mobTY(){ return IS_DESKTOP ? 0 : -0.01*innerHeight; } // -1vh (phone in the middle, room above + below)
+  var MOB_SCALE = IS_DESKTOP ? 1 : 1.1;
+  function mobTY(){ return IS_DESKTOP ? 0 : 0; } // centred: full-size phone, question above / buttons below sit over the photo's beige margins
 
   // map image-fraction → viewport rect through the actual object-fit + mobile transform
   function hotRect(){
