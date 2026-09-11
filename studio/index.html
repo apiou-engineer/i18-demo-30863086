@@ -261,6 +261,13 @@
   rub.addEventListener("pointermove",function(e){ move(e.clientX,e.clientY); });
   rub.addEventListener("pointerdown",function(e){ if(inHot(e.clientX,e.clientY)){ lastX=e.clientX; lastY=e.clientY; } });
   rub.addEventListener("pointerleave",function(){ lastX=null; lastY=null; });
+  // one tap / click heals the whole screen quickly (rubbing to heal felt tedious on mobile)
+  var healing=false;
+  function autoHeal(){
+    if(healing||progress>=0.999)return; healing=true;
+    (function loop(){ heal(0.07); if(progress<0.999) requestAnimationFrame(loop); })();
+  }
+  rub.addEventListener("click", autoHeal);
   document.addEventListener("keydown",function(e){ if(e.key==="ArrowRight"||e.key==="ArrowLeft"||e.key===" "){ heal(0.08); } });
 
   // notification: close (X) dismisses; tapping body dismisses + draws attention to the question
