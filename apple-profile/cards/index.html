@@ -52,6 +52,11 @@
   .a .stats div{display:flex;flex-direction:column;gap:.5cqh}
   .a .stats b{font-family:var(--serif);font-size:5.5cqw;font-weight:500;line-height:1}
   .a .stats span{font-family:var(--mono);font-size:1.9cqw;letter-spacing:.14em;color:#9a854f}
+  .a .abars{width:66cqw;margin:5cqh auto 0;display:flex;flex-direction:column;gap:1.7cqh}
+  .a .ab{display:flex;align-items:center;gap:3cqw}
+  .a .ab span{font-family:var(--mono);font-size:1.7cqw;letter-spacing:.1em;color:#9a854f;width:33cqw;text-transform:uppercase;text-align:left}
+  .a .ab i{flex:1;height:1cqw;background:rgba(154,133,79,.22);border-radius:2px;position:relative}
+  .a .ab i::after{content:"";position:absolute;top:0;bottom:0;left:0;width:var(--w);background:#9a854f;border-radius:2px}
   .a .total-l{font-family:var(--mono);font-size:2.1cqw;letter-spacing:.24em;color:#9a854f;margin-top:auto}
   .a .total{font-family:var(--serif);font-weight:500;font-size:11cqw;line-height:1.05;letter-spacing:-.01em}
   .a .seal{position:absolute;right:8cqw;bottom:11cqw;width:16cqw;height:16cqw;border-radius:50%;
@@ -70,10 +75,12 @@
   .b .persona{font-family:var(--serif);font-weight:400;font-size:12.5cqw;line-height:.98;letter-spacing:-.02em;margin-top:9cqh}
   .b .persona em{font-style:italic;color:#d8b36a}
   .b .sub{font-family:var(--sans);font-size:3cqw;color:#a9a69c;margin-top:2.4cqh;letter-spacing:.02em}
-  .b .grid{display:grid;grid-template-columns:1fr 1fr;gap:3cqh 0;margin-top:auto}
-  .b .grid .k{font-family:var(--mono);font-size:1.9cqw;letter-spacing:.16em;color:#8f8b80;text-transform:uppercase}
-  .b .grid .v{font-family:var(--serif);font-size:8cqw;font-weight:400;line-height:1;margin-top:.6cqh}
-  .b .grid .v.hot{color:#d8b36a}
+  .b .k{font-family:var(--mono);font-size:1.9cqw;letter-spacing:.16em;color:#8f8b80;text-transform:uppercase}
+  .b .v{font-family:var(--serif);font-weight:400;line-height:1;margin-top:.6cqh}
+  .b .hero-num{margin-top:auto}
+  .b .hero-num .v{font-size:12.5cqw;color:#d8b36a;letter-spacing:-.01em}
+  .b .grid3{display:grid;grid-template-columns:repeat(3,1fr);margin-top:3.4cqh}
+  .b .grid3 .v{font-size:8cqw}
   .b .bars{margin-top:5cqh;display:flex;flex-direction:column;gap:1.7cqh}
   .b .bar{display:flex;align-items:center;gap:3cqw}
   .b .bar .bl{font-family:var(--mono);font-size:1.8cqw;letter-spacing:.1em;color:#a9a69c;width:34cqw;text-transform:uppercase}
@@ -133,6 +140,11 @@
             <div><b>9</b><span>DEVICES</span></div>
             <div><b>4</b><span>CATEGORIES</span></div>
           </div>
+          <div class="abars">
+            <div class="ab"><span>Ecosystem depth</span><i style="--w:100%"></i></div>
+            <div class="ab"><span>Apple loyalty</span><i style="--w:91%"></i></div>
+            <div class="ab"><span>Pro obsession</span><i style="--w:82%"></i></div>
+          </div>
           <div class="total-l">TOTAL CONTRIBUTION</div>
           <div class="total">NT$386,920</div>
           <div class="tagline">You don't use Apple. You financially support it.</div>
@@ -154,10 +166,10 @@
           <div class="top"><span>APIOU · APPLE PROFILE</span><span class="dot">●</span></div>
           <div class="persona">The<br><em>Ecosystem</em><br>Collector</div>
           <div class="sub">You've been quietly investing in Apple for 11 years.</div>
-          <div class="grid">
-            <div><div class="k">Total invested</div><div class="v hot">NT$386,920</div></div>
+          <div class="hero-num"><div class="k">Total invested</div><div class="v hot">NT$386,920</div></div>
+          <div class="grid3">
             <div><div class="k">Apple years</div><div class="v">11</div></div>
-            <div><div class="k">Devices owned</div><div class="v">9</div></div>
+            <div><div class="k">Devices</div><div class="v">9</div></div>
             <div><div class="k">Categories</div><div class="v">4</div></div>
           </div>
           <div class="bars">
