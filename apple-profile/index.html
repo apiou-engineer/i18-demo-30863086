@@ -55,12 +55,14 @@
   .cat-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,8vw,2.6rem);line-height:1.02;letter-spacing:-.01em}
   .cat-head h2 em{font-style:italic}
   .cat-head p{color:var(--soft);font-size:.92rem;margin-top:8px}
-  .tl{flex:1;padding:6px clamp(22px,6vw,34px) 130px;position:relative}
+  #s-cat{overflow:hidden}
+  .catScroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .tl{padding:6px clamp(22px,6vw,34px) 24px}
   .yr{display:flex;align-items:baseline;gap:14px;margin:22px 0 12px}
   .yr:first-child{margin-top:8px}
   .yr b{font-family:var(--serif);font-size:1.5rem;font-weight:500;min-width:3ch}
   .yr .rl{flex:1;border-top:1px solid var(--line)}
-  .opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+  .opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;color:var(--ink);
     background:#fbf8f1;border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:8px 0;
     transition:border-color .2s,background .2s,transform .15s var(--ease)}
   .opt:active{transform:scale(.99)}
@@ -75,8 +77,8 @@
   .opt.sel .pr{color:rgba(244,239,228,.6)}
 
   /* sticky footer button */
-  .foot{position:absolute;left:0;right:0;bottom:0;padding:16px clamp(22px,6vw,34px) calc(env(safe-area-inset-bottom,0) + 20px);
-    background:linear-gradient(transparent,var(--paper) 32%);display:flex;flex-direction:column;gap:8px;z-index:5}
+  .foot{padding:14px clamp(22px,6vw,34px) calc(env(safe-area-inset-bottom,0) + 18px);
+    background:var(--paper);border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
   .foot .next{width:100%;font-family:var(--mono);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
     background:var(--ink);color:var(--paper);border:none;border-radius:100px;padding:17px;cursor:pointer;transition:transform .2s}
   .foot .next:active{transform:scale(.98)}
@@ -142,8 +144,10 @@
   <!-- CATEGORY (rendered by JS) -->
   <section class="screen" id="s-cat">
     <div class="bar"><span class="b-brand">APIOU</span><button class="b-back" id="catBack">← 返回</button><span class="b-step" id="catStep">01 / 05</span></div>
-    <div class="cat-head" id="catHead"></div>
-    <div class="tl" id="catList"></div>
+    <div class="catScroll">
+      <div class="cat-head" id="catHead"></div>
+      <div class="tl" id="catList"></div>
+    </div>
     <div class="foot">
       <button class="next" id="catNext">下一個 →</button>
       <button class="skip" id="catSkip">我沒有這個 · 略過</button>
@@ -280,6 +284,7 @@
     });
     $("catList").innerHTML=html;
     $("catBack").style.visibility = ci===0 ? "hidden":"visible";
+    var sc=document.querySelector(".catScroll"); if(sc)sc.scrollTop=0;
     updNext();
   }
   function updNext(){
