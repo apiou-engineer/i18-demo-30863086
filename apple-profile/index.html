@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>APIOU · Apple Shareholder Profile</title>
+<style>
+  @font-face{font-family:"Fraunces";src:url(../studio/fonts/Fraunces-disp.woff2) format("woff2");font-weight:300 700;font-style:normal;font-display:swap}
+  @font-face{font-family:"Fraunces";src:url(../studio/fonts/Fraunces-italic.woff2) format("woff2");font-weight:300 700;font-style:italic;font-display:swap}
+  :root{
+    --serif:"Fraunces",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+    --paper:#f4efe4; --ink:#26241f; --soft:#7a776e; --line:#ded7c8; --hot:#26241f;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{font-family:var(--sans);background:#100f0d;color:var(--ink);-webkit-font-smoothing:antialiased}
+  /* phone-frame: the whole experience lives in a mobile column, centred on desktop */
+  #app{max-width:460px;margin:0 auto;min-height:100vh;min-height:100svh;position:relative;
+    background:var(--paper);overflow:hidden;box-shadow:0 0 80px rgba(0,0,0,.5)}
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;
+    transition:opacity .5s var(--ease);overflow-y:auto;overflow-x:hidden}
+  .screen.on{opacity:1;pointer-events:auto}
+  .pad{padding:clamp(26px,7vw,40px) clamp(22px,6vw,34px)}
+  .mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.2em}
+
+  /* ---------- top bar (steps) ---------- */
+  .bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;
+    padding:16px clamp(22px,6vw,34px);background:linear-gradient(var(--paper) 70%,transparent)}
+  .bar .b-brand{font-weight:600;letter-spacing:.24em;font-size:.72rem}
+  .bar .b-step{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;color:var(--soft)}
+  .bar .b-back{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;color:var(--soft);background:none;border:none;cursor:pointer}
+  .progress{position:sticky;top:0;height:2px;background:var(--line);z-index:6}
+  .progress i{display:block;height:100%;background:var(--ink);width:0;transition:width .5s var(--ease)}
+
+  /* ---------- landing ---------- */
+  #s-landing{justify-content:center}
+  #s-landing .pad{margin:auto 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:clamp(18px,4vh,30px)}
+  .eye{font-family:var(--mono);font-size:.66rem;letter-spacing:.28em;color:var(--soft)}
+  .big{font-family:var(--serif);font-weight:400;font-size:clamp(2.5rem,11vw,3.4rem);line-height:1.02;letter-spacing:-.02em;text-wrap:balance}
+  .big em{font-style:italic}
+  .sub{color:var(--soft);font-size:1rem;line-height:1.55;max-width:24ch;margin:0 auto}
+  .cta{font-family:var(--mono);font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;
+    background:var(--ink);color:var(--paper);border:none;border-radius:100px;padding:17px 40px;cursor:pointer;
+    transition:transform .3s var(--ease)}
+  .cta:active{transform:scale(.96)}
+  .cta.ghost{background:none;color:var(--soft);padding:14px}
+  .fineprint{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:#b3ab99;margin-top:8px}
+
+  /* ---------- category selection ---------- */
+  .cat-head{padding:6px clamp(22px,6vw,34px) 10px}
+  .cat-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,8vw,2.6rem);line-height:1.02;letter-spacing:-.01em}
+  .cat-head h2 em{font-style:italic}
+  .cat-head p{color:var(--soft);font-size:.92rem;margin-top:8px}
+  .tl{flex:1;padding:6px clamp(22px,6vw,34px) 130px;position:relative}
+  .yr{display:flex;align-items:baseline;gap:14px;margin:22px 0 12px}
+  .yr:first-child{margin-top:8px}
+  .yr b{font-family:var(--serif);font-size:1.5rem;font-weight:500;min-width:3ch}
+  .yr .rl{flex:1;border-top:1px solid var(--line)}
+  .opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+    background:#fbf8f1;border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:8px 0;
+    transition:border-color .2s,background .2s,transform .15s var(--ease)}
+  .opt:active{transform:scale(.99)}
+  .opt.sel{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+  .opt .tick{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--soft);flex:0 0 auto;
+    display:grid;place-items:center;transition:all .2s}
+  .opt.sel .tick{background:var(--paper);border-color:var(--paper)}
+  .opt .tick svg{width:12px;height:12px;opacity:0;transition:opacity .2s;color:var(--ink)}
+  .opt.sel .tick svg{opacity:1}
+  .opt .nm{font-size:1.02rem;font-weight:500;letter-spacing:-.01em}
+  .opt .pr{margin-left:auto;font-family:var(--mono);font-size:.7rem;color:var(--soft);letter-spacing:.05em}
+  .opt.sel .pr{color:rgba(244,239,228,.6)}
+
+  /* sticky footer button */
+  .foot{position:absolute;left:0;right:0;bottom:0;padding:16px clamp(22px,6vw,34px) calc(env(safe-area-inset-bottom,0) + 20px);
+    background:linear-gradient(transparent,var(--paper) 32%);display:flex;flex-direction:column;gap:8px;z-index:5}
+  .foot .next{width:100%;font-family:var(--mono);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+    background:var(--ink);color:var(--paper);border:none;border-radius:100px;padding:17px;cursor:pointer;transition:transform .2s}
+  .foot .next:active{transform:scale(.98)}
+  .foot .skip{background:none;border:none;color:var(--soft);font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;padding:6px}
+  .cnt{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(--paper);opacity:.7}
+
+  /* ---------- reveal ---------- */
+  #s-reveal{justify-content:center;text-align:center}
+  #s-reveal .pad{margin:auto 0;display:flex;flex-direction:column;align-items:center;gap:20px}
+  #s-reveal .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.26em;color:var(--soft)}
+  #s-reveal .amt{font-family:var(--serif);font-weight:500;font-size:clamp(3.2rem,16vw,4.6rem);line-height:1;letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums}
+  #s-reveal .rsub{color:var(--soft);font-size:.95rem;max-width:22ch;line-height:1.5}
+
+  /* ---------- result card ---------- */
+  #s-result{background:#100f0d;justify-content:flex-start;align-items:center;padding:0}
+  #s-result .rwrap{width:100%;padding:clamp(18px,5vh,34px) 16px 40px;display:flex;flex-direction:column;align-items:center;gap:18px}
+  .card{width:min(360px,92%);aspect-ratio:9/16;border-radius:24px;overflow:hidden;position:relative;
+    container-type:size;background:var(--paper);color:var(--ink);box-shadow:0 24px 60px -18px rgba(0,0,0,.6)}
+  .card .in{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:9cqw 8cqw 7.5cqw}
+  .card .cbrand{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:2cqw;letter-spacing:.16em;color:var(--soft);text-transform:uppercase}
+  .card .cbrand b{color:var(--ink);font-weight:600;letter-spacing:.22em}
+  .card .crule{border:none;border-top:1px solid #d8d1c2;margin-top:2.6cqh}
+  .card .cpersona{font-family:var(--serif);font-weight:400;font-size:9cqw;line-height:.98;letter-spacing:-.01em;margin-top:5cqh;text-align:left}
+  .card .cpersona em{font-style:italic}
+  .card .cwho{font-family:var(--mono);font-size:2cqw;letter-spacing:.12em;color:var(--soft);margin-top:2.4cqh;text-transform:uppercase;text-align:left}
+  .card .chero{display:flex;flex-direction:column;align-items:center;gap:1.6cqh}
+  .card .chero .k{font-family:var(--mono);font-size:2.3cqw;letter-spacing:.28em;color:#8a7f5e;text-transform:uppercase}
+  .card .chero .amt{font-family:var(--serif);font-weight:500;font-size:16cqw;line-height:.9;letter-spacing:-.015em}
+  .card .chero .u{border:none;border-top:1px solid #cfc7b6;width:26cqw}
+  .card .chero .note{font-family:var(--mono);font-size:1.7cqw;letter-spacing:.1em;color:#a49c88}
+  .card .cgrid{display:grid;grid-template-columns:repeat(3,1fr)}
+  .card .cgrid .k{font-family:var(--mono);font-size:1.85cqw;letter-spacing:.12em;color:var(--soft);text-transform:uppercase}
+  .card .cgrid .v{font-family:var(--serif);font-size:8cqw;font-weight:400;line-height:1;margin-top:.6cqh}
+  .card .cbars{margin-top:4cqh;display:flex;flex-direction:column;gap:1.6cqh}
+  .card .cbar{display:flex;align-items:center;gap:3cqw}
+  .card .cbar .bl{font-family:var(--mono);font-size:1.75cqw;letter-spacing:.08em;color:var(--soft);width:34cqw;text-transform:uppercase;text-align:left}
+  .card .cbar .tr{flex:1;height:1.1cqw;background:#e2dccd;border-radius:2px;overflow:hidden}
+  .card .cbar .fl{height:100%;background:var(--ink);border-radius:2px;width:0;transition:width 1s var(--ease)}
+  .card .ctag{font-family:var(--serif);font-style:italic;font-size:2.9cqw;color:#4d493f;margin-top:3.6cqh;text-align:left}
+  .card .cdis{font-family:var(--mono);font-size:1.6cqw;letter-spacing:.1em;color:#a49c88;margin-top:1.8cqh;text-align:left}
+  #s-result .ractions{display:flex;flex-direction:column;gap:10px;width:min(360px,92%)}
+  #s-result .ractions .cta{width:100%}
+  #s-result .ractions .cta.ghost{color:#8f8b80}
+  #s-result .rnote{color:#6f6c64;font-size:.72rem;text-align:center;max-width:30ch;line-height:1.5}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="progress"><i id="prog"></i></div>
+
+  <!-- LANDING -->
+  <section class="screen on" id="s-landing">
+    <div class="pad">
+      <div class="eye">APIOU · APPLE PROFILE</div>
+      <h1 class="big">You might be an<br><em>Apple shareholder.</em></h1>
+      <p class="sub">回顧你擁有過的每一台 Apple 裝置，看看這些年你到底「投資」了多少。</p>
+      <button class="cta" id="startBtn">Start</button>
+      <div class="fineprint">2 分鐘 · 不需登入 · Not affiliated with Apple Inc.</div>
+    </div>
+  </section>
+
+  <!-- CATEGORY (rendered by JS) -->
+  <section class="screen" id="s-cat">
+    <div class="bar"><span class="b-brand">APIOU</span><button class="b-back" id="catBack">← 返回</button><span class="b-step" id="catStep">01 / 05</span></div>
+    <div class="cat-head" id="catHead"></div>
+    <div class="tl" id="catList"></div>
+    <div class="foot">
+      <button class="next" id="catNext">下一個 →</button>
+      <button class="skip" id="catSkip">我沒有這個 · 略過</button>
+    </div>
+  </section>
+
+  <!-- REVEAL -->
+  <section class="screen" id="s-reveal">
+    <div class="pad">
+      <div class="rk" id="revK">你在 Apple 的總投資</div>
+      <div class="amt" id="revAmt">NT$0</div>
+      <div class="rsub" id="revSub">加總你選的所有裝置（以台灣上市價估算）。</div>
+      <button class="cta" id="revBtn" style="opacity:0;transition:opacity .6s .2s">看看我是什麼股東 →</button>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="screen" id="s-result">
+    <div class="rwrap">
+      <div class="card" id="card">
+        <div class="in">
+          <div>
+            <div class="cbrand"><b>APIOU</b><span>Apple Profile · 2026</span></div>
+            <hr class="crule">
+            <div class="cpersona" id="cPersona">The<br><em>Ecosystem</em><br>Collector</div>
+            <div class="cwho" id="cWho">Eva · 11 years in the Apple ecosystem</div>
+          </div>
+          <div class="chero">
+            <div class="k">Total invested</div>
+            <div class="amt" id="cAmt">NT$0</div>
+            <hr class="u">
+            <div class="note">estimated at launch prices</div>
+          </div>
+          <div>
+            <div class="cgrid">
+              <div><div class="k">Apple Years</div><div class="v" id="cYears">0</div></div>
+              <div><div class="k">Devices</div><div class="v" id="cDev">0</div></div>
+              <div><div class="k">Categories</div><div class="v" id="cCat">0</div></div>
+            </div>
+            <div class="cbars" id="cBars"></div>
+            <div class="ctag" id="cTag">You don't use Apple. You financially support it.</div>
+            <div class="cdis">Not affiliated with Apple Inc.</div>
+          </div>
+        </div>
+      </div>
+      <div class="ractions">
+        <button class="cta" id="shareBtn">分享到限動 / Threads</button>
+        <button class="cta ghost" id="claimBtn">領取股東股利（優惠）</button>
+        <button class="cta ghost" id="againBtn">重新測一次</button>
+      </div>
+      <div class="rnote">分享會生成一張圖並開啟系統分享面板，你再選 Instagram / Threads 發佈。（原型階段，分享與優惠尚未接上）</div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  // ---------- seed product data (TW launch prices, base config; full list comes from data/products.json) ----------
+  var SEED = {
+    iPhone:[
+      ["iPhone 6",2014,22500],["iPhone 6 Plus",2014,25500],
+      ["iPhone 6s",2015,22500],["iPhone 6s Plus",2015,25500],
+      ["iPhone SE (1st)",2016,13900],["iPhone 7",2016,24500],["iPhone 7 Plus",2016,28900],
+      ["iPhone 8",2017,25500],["iPhone 8 Plus",2017,29500],["iPhone X",2017,35900],
+      ["iPhone XR",2018,26900],["iPhone XS",2018,35900],["iPhone XS Max",2018,39900],
+      ["iPhone 11",2019,24900],["iPhone 11 Pro",2019,35900],["iPhone 11 Pro Max",2019,39900],
+      ["iPhone SE (2nd)",2020,14500],["iPhone 12 mini",2020,23900],["iPhone 12",2020,26900],["iPhone 12 Pro",2020,33900],["iPhone 12 Pro Max",2020,37900],
+      ["iPhone 13 mini",2021,23900],["iPhone 13",2021,25900],["iPhone 13 Pro",2021,32900],["iPhone 13 Pro Max",2021,36900],
+      ["iPhone SE (3rd)",2022,13900],["iPhone 14",2022,27900],["iPhone 14 Plus",2022,30900],["iPhone 14 Pro",2022,34900],["iPhone 14 Pro Max",2022,39900],
+      ["iPhone 15",2023,29900],["iPhone 15 Plus",2023,32900],["iPhone 15 Pro",2023,36900],["iPhone 15 Pro Max",2023,44900],
+      ["iPhone 16",2024,29900],["iPhone 16 Plus",2024,32900],["iPhone 16 Pro",2024,36900],["iPhone 16 Pro Max",2024,44900],
+      ["iPhone 17",2025,29900],["iPhone 17 Pro",2025,37900],["iPhone 17 Pro Max",2025,45900]
+    ],
+    iPad:[
+      ["iPad Air 2",2014,14900],["iPad (5th)",2017,10900],["iPad Pro 11\"",2018,26900],
+      ["iPad Air (3rd)",2019,15900],["iPad (7th)",2019,10900],["iPad (9th)",2021,10900],
+      ["iPad mini (6th)",2021,14900],["iPad Pro 11\" (M1)",2021,24900],["iPad (10th)",2022,14900],
+      ["iPad Air (M2)",2024,19900],["iPad Pro 11\" (M4)",2024,34900]
+    ],
+    Mac:[
+      ["MacBook Air (2017)",2017,29900],["MacBook Air (M1)",2020,32900],["Mac mini (M1)",2020,21900],
+      ["MacBook Pro 14\" (M1 Pro)",2021,59900],["MacBook Air (M2)",2022,37900],["Mac mini (M2)",2023,18900],
+      ["MacBook Air (M3)",2024,36900],["MacBook Pro 14\" (M4)",2024,54900]
+    ],
+    "Apple Watch":[
+      ["Apple Watch Series 3",2017,8900],["Apple Watch Series 5",2019,12900],["Apple Watch SE",2020,8900],
+      ["Apple Watch Series 7",2021,12900],["Apple Watch Ultra",2022,25900],["Apple Watch Series 9",2023,12900],
+      ["Apple Watch Ultra 2",2023,26900],["Apple Watch Series 10",2024,12900]
+    ],
+    AirPods:[
+      ["AirPods (2nd)",2019,5290],["AirPods Pro",2019,7990],["AirPods Max",2020,18490],
+      ["AirPods (3rd)",2021,6199],["AirPods Pro (2nd)",2022,7990],["AirPods (4th)",2024,4290]
+    ]
+  };
+  var CATS=[
+    {key:"iPhone", q:"What about <em>iPhone</em>?", zh:"你有過哪幾支 iPhone?"},
+    {key:"iPad", q:"And <em>iPad</em>?", zh:"iPad 呢?"},
+    {key:"Mac", q:"Any <em>Mac</em>?", zh:"Mac 呢?"},
+    {key:"Apple Watch", q:"<em>Apple Watch</em>?", zh:"Apple Watch 呢?"},
+    {key:"AirPods", q:"<em>AirPods</em>?", zh:"AirPods 呢?"}
+  ];
+
+  var DATA=SEED, NOW=2026;
+  // try to upgrade to the researched full dataset if present
+  fetch("data/products.json").then(function(r){return r.ok?r.json():null;}).then(function(j){
+    if(j&&j.products){ var d={}; j.products.forEach(function(p){ (d[p.category]=d[p.category]||[]).push([p.model,p.year,p.launchPrice]); });
+      Object.keys(d).forEach(function(k){ d[k].sort(function(a,b){return a[1]-b[1];}); }); DATA=d; }
+  }).catch(function(){});
+
+  var owned={};          // {model: [name,year,price,category]}
+  var ci=0;              // current category index
+  function $(id){return document.getElementById(id);}
+  function show(id){ document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("on");}); $(id).classList.add("on"); $(id).scrollTop=0; }
+  function money(n){ return "NT$"+Math.round(n).toLocaleString("en-US"); }
+
+  // ---------- category screen ----------
+  function renderCat(){
+    var c=CATS[ci], list=(DATA[c.key]||[]);
+    $("catStep").textContent=String(ci+1).padStart(2,"0")+" / "+String(CATS.length).padStart(2,"0");
+    $("prog").style.width=((ci)/(CATS.length+1)*100)+"%";
+    $("catHead").innerHTML='<h2>'+c.q+'</h2><p>'+c.zh+' · 可複選，選你擁有過的</p>';
+    // group by year
+    var byYear={}; list.forEach(function(p){ (byYear[p[1]]=byYear[p[1]]||[]).push(p); });
+    var years=Object.keys(byYear).sort();
+    var html="";
+    years.forEach(function(y){
+      html+='<div class="yr"><b>'+y+'</b><span class="rl"></span></div>';
+      byYear[y].forEach(function(p){
+        var id=c.key+"|"+p[0], sel=owned[id]?" sel":"";
+        html+='<button class="opt'+sel+'" data-id="'+id+'" data-nm="'+p[0]+'" data-yr="'+p[1]+'" data-pr="'+p[2]+'">'+
+          '<span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>'+
+          '<span class="nm">'+p[0]+'</span><span class="pr">'+money(p[2])+'</span></button>';
+      });
+    });
+    $("catList").innerHTML=html;
+    $("catBack").style.visibility = ci===0 ? "hidden":"visible";
+    updNext();
+  }
+  function updNext(){
+    var n=0; Object.keys(owned).forEach(function(k){ if(k.indexOf(CATS[ci].key+"|")===0)n++; });
+    $("catNext").innerHTML = (ci<CATS.length-1?"下一個":"看結果")+" →"+(n?' <span class="cnt">已選 '+n+'</span>':'');
+    $("catSkip").style.display = n? "none":"block";
+  }
+  $("catList").addEventListener("click",function(e){
+    var b=e.target.closest(".opt"); if(!b)return;
+    var id=b.dataset.id;
+    if(owned[id]){ delete owned[id]; b.classList.remove("sel"); }
+    else{ owned[id]=[b.dataset.nm, +b.dataset.yr, +b.dataset.pr, CATS[ci].key]; b.classList.add("sel"); }
+    updNext();
+  });
+  function nextCat(){
+    if(ci<CATS.length-1){ ci++; renderCat(); show("s-cat"); }
+    else{ computeReveal(); }
+  }
+  $("catNext").addEventListener("click",nextCat);
+  $("catSkip").addEventListener("click",nextCat);
+  $("catBack").addEventListener("click",function(){ if(ci>0){ci--;renderCat();show("s-cat");} });
+
+  // ---------- compute ----------
+  function compute(){
+    var devs=Object.keys(owned).map(function(k){return owned[k];});
+    var total=devs.reduce(function(s,d){return s+d[2];},0);
+    var cats={}; devs.forEach(function(d){cats[d[3]]=1;});
+    var catCount=Object.keys(cats).length;
+    var years=devs.map(function(d){return d[1];});
+    var first=years.length?Math.min.apply(null,years):NOW;
+    var appleYears=years.length?(NOW-first+1):0;
+    var iphones=devs.filter(function(d){return d[3]==="iPhone";});
+    var proCount=iphones.filter(function(d){return /Pro/.test(d[0]);}).length;
+    var upgrades=Math.max(0,iphones.length-1);
+    // metrics 0..100
+    var ecosystem=Math.round(catCount/CATS.length*100);
+    var proObsession=iphones.length?Math.round(proCount/iphones.length*100):0;
+    var upgradeFreq=Math.min(100,Math.round(iphones.length/Math.max(1,appleYears)*100*2.2));
+    var loyalty=Math.min(100,Math.round(appleYears*7 + (100-upgradeFreq)*0.3));
+    // personality (rule-based)
+    var persona, tag;
+    if(devs.length===0){ persona=["The","<em>Curious</em>","Visitor"]; tag="You're just browsing… for now."; }
+    else if(catCount>=4){ persona=["The","<em>Ecosystem</em>","Collector"]; tag="You don't use Apple. You financially support it."; }
+    else if(iphones.length>=1 && proObsession>=60){ persona=["The","<em>Pro Max</em>","Person"]; tag="If there's a Pro, you buy the Pro."; }
+    else if(catCount<=2 && devs.length<=3){ persona=["The","<em>Minimalist</em>","",]; tag="You don't need the ecosystem. You are the ecosystem."; }
+    else if(upgradeFreq>=70){ persona=["The","<em>Early</em>","Adopter"]; tag="Others read reviews. You already ordered."; }
+    else{ persona=["The","<em>Loyalist</em>","",]; tag="Apple loves you — you don't ask for much."; }
+    return {devs:devs,total:total,catCount:catCount,appleYears:appleYears,first:first,
+      ecosystem:ecosystem,proObsession:proObsession,upgradeFreq:upgradeFreq,loyalty:loyalty,
+      persona:persona,tag:tag,upgrades:upgrades};
+  }
+
+  // ---------- reveal (count-up) ----------
+  var R;
+  function computeReveal(){
+    R=compute();
+    $("prog").style.width=((CATS.length)/(CATS.length+1)*100)+"%";
+    show("s-reveal");
+    var el=$("revAmt"), btn=$("revBtn"); btn.style.opacity=0;
+    var start=null, DUR=1600, target=R.total;
+    if(target<=0){ el.textContent="NT$0"; btn.style.opacity=1; return; }
+    function step(ts){ if(start==null)start=ts; var k=Math.min(1,(ts-start)/DUR);
+      var e=1-Math.pow(1-k,3); el.textContent=money(target*e);
+      if(k<1)requestAnimationFrame(step); else{ el.textContent=money(target); btn.style.opacity=1; } }
+    requestAnimationFrame(step);
+  }
+  $("revBtn").addEventListener("click",function(){ renderResult(); show("s-result"); });
+
+  // ---------- result card ----------
+  function renderResult(){
+    $("prog").style.width="100%";
+    $("cPersona").innerHTML=R.persona[0]+"<br><em>"+R.persona[1].replace(/<\/?em>/g,"")+"</em>"+(R.persona[2]?"<br>"+R.persona[2]:"");
+    $("cWho").textContent="You · "+R.appleYears+" years in the Apple ecosystem";
+    $("cAmt").textContent=money(R.total);
+    $("cYears").textContent=R.appleYears;
+    $("cDev").textContent=R.devs.length;
+    $("cCat").textContent=R.catCount;
+    $("cTag").textContent=R.tag;
+    var bars=[["Ecosystem depth",R.ecosystem],["Apple loyalty",R.loyalty],["Pro obsession",R.proObsession]];
+    $("cBars").innerHTML=bars.map(function(b){return '<div class="cbar"><span class="bl">'+b[0]+'</span><span class="tr"><span class="fl" data-w="'+b[1]+'"></span></span></div>';}).join("");
+    setTimeout(function(){ document.querySelectorAll("#cBars .fl").forEach(function(f){ f.style.width=f.dataset.w+"%"; }); },250);
+  }
+
+  $("startBtn").addEventListener("click",function(){ ci=0; owned={}; renderCat(); show("s-cat"); });
+  $("againBtn").addEventListener("click",function(){ ci=0; owned={}; $("prog").style.width="0"; show("s-landing"); });
+  $("shareBtn").addEventListener("click",function(){ alert("原型階段：這裡之後會生成 9:16 分享圖並開啟系統分享面板。"); });
+  $("claimBtn").addEventListener("click",function(){ alert("原型階段：這裡之後會顯示 APIOU 股東股利折扣碼。"); });
+})();
+</script>
+</body>
+</html>
