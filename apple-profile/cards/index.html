@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>APIOU · Shareholder Card 方向</title>
+<style>
+  @font-face{font-family:"Fraunces";src:url(../../studio/fonts/Fraunces-disp.woff2) format("woff2");font-weight:300 700;font-style:normal;font-display:swap}
+  @font-face{font-family:"Fraunces";src:url(../../studio/fonts/Fraunces-italic.woff2) format("woff2");font-weight:300 700;font-style:italic;font-display:swap}
+  :root{
+    --serif:"Fraunces",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:#16171a;color:#e9e7e2;-webkit-font-smoothing:antialiased;
+    padding:clamp(24px,5vw,60px) 16px 80px;text-align:center}
+  .lede{max-width:640px;margin:0 auto clamp(28px,5vh,56px)}
+  .lede h1{font-family:var(--serif);font-weight:400;font-size:clamp(1.5rem,4vw,2.1rem);letter-spacing:-.01em}
+  .lede p{margin-top:12px;color:#9a988f;font-size:.9rem;line-height:1.5}
+  .row{display:flex;flex-wrap:wrap;gap:clamp(28px,4vw,56px);justify-content:center;align-items:flex-start}
+  .col{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:#8a8880}
+  .tag b{color:#e9e7e2;font-weight:600}
+  .cap{max-width:300px;font-size:.78rem;line-height:1.5;color:#8f8d85}
+
+  /* ---------- shared card frame (9:16) ---------- */
+  .card{width:min(330px,86vw);aspect-ratio:9/16;border-radius:26px;overflow:hidden;position:relative;
+    container-type:size;box-shadow:0 30px 70px -20px rgba(0,0,0,.6);isolation:isolate}
+  .card .dis{position:absolute;left:0;right:0;bottom:2.2cqh;text-align:center;
+    font-family:var(--mono);font-size:1.9cqw;letter-spacing:.12em;opacity:.42}
+
+  /* ===== A · CERTIFICATE ===== */
+  .a{background:#f2ead9;color:#3a3327}
+  .a .guilloche{position:absolute;inset:0;opacity:.5;
+    background:
+      repeating-radial-gradient(circle at 50% 30%, transparent 0 6px, rgba(140,120,74,.10) 6px 7px),
+      repeating-radial-gradient(circle at 50% 78%, transparent 0 7px, rgba(140,120,74,.08) 7px 8px)}
+  .a .frame{position:absolute;inset:4.5cqw;border:1px solid #b49f6e;border-radius:12px}
+  .a .frame::after{content:"";position:absolute;inset:1.6cqw;border:1px solid rgba(180,159,110,.55);border-radius:8px}
+  .a .in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+    padding:11cqw 9cqw 9cqw;text-align:center}
+  .a .head{font-family:var(--mono);font-size:2.1cqw;letter-spacing:.3em;color:#9a854f}
+  .a .rule{width:20cqw;height:1px;background:#b49f6e;margin:2.4cqh auto}
+  .a .kicker{font-family:var(--serif);font-size:3.2cqw;letter-spacing:.02em;color:#6b5f43}
+  .a .cert-of{font-family:var(--serif);font-style:italic;font-size:3cqw;color:#8a7d5c;margin-top:5.5cqh}
+  .a .name{font-family:var(--serif);font-weight:500;font-size:13cqw;line-height:1;letter-spacing:-.01em;margin:.6cqh 0}
+  .a .as{font-family:var(--serif);font-style:italic;font-size:3cqw;color:#8a7d5c}
+  .a .persona{font-family:var(--sans);font-weight:600;font-size:4.4cqw;letter-spacing:.16em;color:#3a3327;margin-top:1.2cqh;text-transform:uppercase}
+  .a .stats{display:flex;justify-content:center;gap:5.5cqw;margin-top:6cqh}
+  .a .stats div{display:flex;flex-direction:column;gap:.5cqh}
+  .a .stats b{font-family:var(--serif);font-size:5.5cqw;font-weight:500;line-height:1}
+  .a .stats span{font-family:var(--mono);font-size:1.9cqw;letter-spacing:.14em;color:#9a854f}
+  .a .total-l{font-family:var(--mono);font-size:2.1cqw;letter-spacing:.24em;color:#9a854f;margin-top:auto}
+  .a .total{font-family:var(--serif);font-weight:500;font-size:11cqw;line-height:1.05;letter-spacing:-.01em}
+  .a .seal{position:absolute;right:8cqw;bottom:11cqw;width:16cqw;height:16cqw;border-radius:50%;
+    border:1px solid #b49f6e;display:grid;place-items:center;transform:rotate(-8deg);color:#9a854f}
+  .a .seal svg{width:100%;height:100%}
+  .a .tagline{font-family:var(--serif);font-style:italic;font-size:2.9cqw;color:#6b5f43;margin-top:3cqh;max-width:70cqw}
+  .a .no{font-family:var(--mono);font-size:1.9cqw;letter-spacing:.14em;color:#a8946a;margin-top:1.4cqh}
+  .a .dis{color:#6b5f43}
+
+  /* ===== B · WRAPPED (dark, bold) ===== */
+  .b{background:radial-gradient(120% 80% at 50% 0%, #26241f 0%, #0c0c0d 55%);color:#f4f1ea}
+  .b .in{position:absolute;inset:0;display:flex;flex-direction:column;padding:11cqw 8cqw 9cqw;text-align:left}
+  .b .top{display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--mono);font-size:2.1cqw;letter-spacing:.2em;color:#8f8b80;text-transform:uppercase}
+  .b .top .dot{color:#d8b36a}
+  .b .persona{font-family:var(--serif);font-weight:400;font-size:12.5cqw;line-height:.98;letter-spacing:-.02em;margin-top:9cqh}
+  .b .persona em{font-style:italic;color:#d8b36a}
+  .b .sub{font-family:var(--sans);font-size:3cqw;color:#a9a69c;margin-top:2.4cqh;letter-spacing:.02em}
+  .b .grid{display:grid;grid-template-columns:1fr 1fr;gap:3cqh 0;margin-top:auto}
+  .b .grid .k{font-family:var(--mono);font-size:1.9cqw;letter-spacing:.16em;color:#8f8b80;text-transform:uppercase}
+  .b .grid .v{font-family:var(--serif);font-size:8cqw;font-weight:400;line-height:1;margin-top:.6cqh}
+  .b .grid .v.hot{color:#d8b36a}
+  .b .bars{margin-top:5cqh;display:flex;flex-direction:column;gap:1.7cqh}
+  .b .bar{display:flex;align-items:center;gap:3cqw}
+  .b .bar .bl{font-family:var(--mono);font-size:1.8cqw;letter-spacing:.1em;color:#a9a69c;width:34cqw;text-transform:uppercase}
+  .b .bar .tr{flex:1;height:1.2cqw;background:rgba(255,255,255,.14);border-radius:2px;overflow:hidden}
+  .b .bar .fl{height:100%;background:#d8b36a;border-radius:2px}
+  .b .tagline{font-family:var(--serif);font-style:italic;font-size:3cqw;color:#cfccc2;margin-top:5cqh}
+  .b .dis{color:#8f8b80}
+
+  /* ===== C · PORTFOLIO STATEMENT (receipt) ===== */
+  .c{background:#f8f5ef;color:#26241f}
+  .c .in{position:absolute;inset:0;display:flex;flex-direction:column;padding:10cqw 8cqw 9cqw}
+  .c .brand{display:flex;justify-content:space-between;align-items:baseline;
+    font-family:var(--mono);font-size:2cqw;letter-spacing:.16em;color:#7a776e;text-transform:uppercase}
+  .c .brand b{color:#26241f;font-weight:600}
+  .c .title{font-family:var(--serif);font-weight:400;font-size:6.4cqw;line-height:1.02;margin-top:3.2cqh;letter-spacing:-.01em}
+  .c .who{font-family:var(--mono);font-size:2cqw;letter-spacing:.14em;color:#7a776e;margin-top:1.4cqh;text-transform:uppercase}
+  .c .dash{border:none;border-top:1px dashed #c7c0b1;margin:4cqh 0}
+  .c .line{display:flex;align-items:baseline;gap:2cqw;font-size:2.9cqw;margin:2cqh 0}
+  .c .line .l{font-family:var(--sans);color:#514d43;white-space:nowrap}
+  .c .line .lead{flex:1;border-bottom:1px dotted #c1baab;transform:translateY(-.4cqw)}
+  .c .line .v{font-family:var(--mono);font-weight:600;white-space:nowrap}
+  .c .cls{margin-top:1cqh}
+  .c .cls .l{color:#7a776e;font-family:var(--mono);font-size:1.9cqw;letter-spacing:.14em;text-transform:uppercase}
+  .c .cls .p{font-family:var(--serif);font-size:5.4cqw;margin-top:.4cqh;letter-spacing:.01em}
+  .c .foot{margin-top:auto}
+  .c .dbl{border:none;border-top:2px solid #26241f;margin:2.4cqh 0 2.6cqh}
+  .c .tot{display:flex;justify-content:space-between;align-items:flex-end}
+  .c .tot .l{font-family:var(--mono);font-size:2.2cqw;letter-spacing:.2em;color:#7a776e;text-transform:uppercase;padding-bottom:1.4cqw}
+  .c .tot .v{font-family:var(--serif);font-weight:500;font-size:11cqw;line-height:.95;letter-spacing:-.01em}
+  .c .tagline{font-family:var(--serif);font-style:italic;font-size:2.9cqw;color:#514d43;margin-top:2.6cqh}
+  .c .dis{color:#7a776e}
+</style>
+</head>
+<body>
+  <div class="lede">
+    <h1>三個結果卡方向</h1>
+    <p>同一組範例資料（EVA · The Ecosystem Collector · 11 年 · 9 台 · NT$386,920），三種調性。挑一個當基底，細節都能再調。手機上看最準。</p>
+  </div>
+
+  <div class="row">
+    <!-- ============ A ============ -->
+    <div class="col">
+      <div class="tag">方向 <b>A</b> · 股東證書</div>
+      <div class="card a">
+        <div class="guilloche"></div>
+        <div class="frame"></div>
+        <div class="in">
+          <div class="head">APIOU ASSET MANAGEMENT</div>
+          <div class="rule"></div>
+          <div class="kicker">Certificate of Apple Ownership</div>
+          <div class="cert-of">This certifies that</div>
+          <div class="name">Eva</div>
+          <div class="as">is hereby recognised as</div>
+          <div class="persona">The Ecosystem Collector</div>
+          <div class="stats">
+            <div><b>11</b><span>YEARS</span></div>
+            <div><b>9</b><span>DEVICES</span></div>
+            <div><b>4</b><span>CATEGORIES</span></div>
+          </div>
+          <div class="total-l">TOTAL CONTRIBUTION</div>
+          <div class="total">NT$386,920</div>
+          <div class="tagline">You don't use Apple. You financially support it.</div>
+          <div class="no">No. 0001 · 2026</div>
+          <div class="seal" aria-hidden="true">
+            <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width=".6"/><path id="sc" d="M50,50 m-32,0 a32,32 0 1,1 64,0 a32,32 0 1,1 -64,0" fill="none"/><text font-family="ui-monospace,monospace" font-size="8.5" letter-spacing="2.4" fill="currentColor"><textPath href="#sc" startOffset="4%">APIOU · SHAREHOLDER · APIOU · </textPath></text><text x="50" y="55" text-anchor="middle" font-family="serif" font-size="20" fill="currentColor">A</text></svg>
+          </div>
+        </div>
+        <div class="dis">Not affiliated with Apple Inc.</div>
+      </div>
+      <div class="cap">古董股權證書 × Apple 極簡。燙金線框＋印章，最有「收藏品／獎狀」的分量，把「股東」這個梗落成一個實體物件。</div>
+    </div>
+
+    <!-- ============ B ============ -->
+    <div class="col">
+      <div class="tag">方向 <b>B</b> · Wrapped</div>
+      <div class="card b">
+        <div class="in">
+          <div class="top"><span>APIOU · APPLE PROFILE</span><span class="dot">●</span></div>
+          <div class="persona">The<br><em>Ecosystem</em><br>Collector</div>
+          <div class="sub">You've been quietly investing in Apple for 11 years.</div>
+          <div class="grid">
+            <div><div class="k">Total invested</div><div class="v hot">NT$386,920</div></div>
+            <div><div class="k">Apple years</div><div class="v">11</div></div>
+            <div><div class="k">Devices owned</div><div class="v">9</div></div>
+            <div><div class="k">Categories</div><div class="v">4</div></div>
+          </div>
+          <div class="bars">
+            <div class="bar"><span class="bl">Ecosystem depth</span><span class="tr"><span class="fl" style="width:100%"></span></span></div>
+            <div class="bar"><span class="bl">Apple loyalty</span><span class="tr"><span class="fl" style="width:91%"></span></span></div>
+            <div class="bar"><span class="bl">Pro obsession</span><span class="tr"><span class="fl" style="width:82%"></span></span></div>
+          </div>
+          <div class="tagline">You don't use Apple. You financially support it.</div>
+        </div>
+        <div class="dis">Not affiliated with Apple Inc.</div>
+      </div>
+      <div class="cap">Spotify Wrapped × Apple 發表會的黑底大字。人格當主角、數字第二層，最現代、最好截圖、最像社群原生內容。</div>
+    </div>
+
+    <!-- ============ C ============ -->
+    <div class="col">
+      <div class="tag">方向 <b>C</b> · 資產月結單</div>
+      <div class="card c">
+        <div class="in">
+          <div class="brand"><b>APIOU</b><span>Statement · 2026</span></div>
+          <div class="title">Apple Portfolio<br>Statement</div>
+          <div class="who">Account holder — Eva · since 2015</div>
+          <hr class="dash">
+          <div class="line"><span class="l">First device</span><span class="lead"></span><span class="v">iPhone 6s · 2015</span></div>
+          <div class="line"><span class="l">Devices owned</span><span class="lead"></span><span class="v">9</span></div>
+          <div class="line"><span class="l">Categories</span><span class="lead"></span><span class="v">4</span></div>
+          <div class="line"><span class="l">Avg. upgrade cycle</span><span class="lead"></span><span class="v">3.2 yrs</span></div>
+          <div class="line cls"><span class="l">Classification</span></div>
+          <div class="cls"><div class="p">The Ecosystem Collector</div></div>
+          <div class="foot">
+            <hr class="dbl">
+            <div class="tot"><span class="l">Total invested</span><span class="v">NT$386,920</span></div>
+            <div class="tagline">You don't use Apple. You financially support it.</div>
+          </div>
+        </div>
+        <div class="dis">Not affiliated with Apple Inc.</div>
+      </div>
+      <div class="cap">像一張高級的資產月結單／收據。虛線引導、月結口吻，把「花費揭曉」放在最下面像收據總計——懷舊又有重量。</div>
+    </div>
+  </div>
+</body>
+</html>
