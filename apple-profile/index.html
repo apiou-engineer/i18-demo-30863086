@@ -290,8 +290,11 @@
       desc:"你的購物邏輯只有一條：有 Pro 就買 Pro，有 Pro Max 就不用問了。規格表你倒背如流，你的錢包則保持沉默。",
       tag:"If there's a Pro, you buy the Pro."},
     minimalist:{en:["The","Quiet","Minimalist"], zh:"極簡主義者",
-      desc:"一支 iPhone、一副 AirPods，然後就沒了。你不需要生態系——因為你本人就是生態系。少，但每一台都用好用滿。",
+      desc:"你的 Apple 很精簡——只留真正天天在用的，沒有多餘。少，但每一台都用好用滿。你不需要生態系，因為你本人就是生態系。",
       tag:"You don't need the ecosystem. You are the ecosystem."},
+    iphoneonly:{en:["The","iPhone","Purist"], zh:"iPhone 一途派",
+      desc:"對你來說 Apple 幾乎等於 iPhone。你不碰其他裝置，但這條 iPhone 路你走得非常徹底、一代接一代。",
+      tag:"For you, Apple is just… iPhone. And that's plenty."},
     loyalist:{en:["The","Devoted","Loyalist"], zh:"死忠長情派",
       desc:"你超級穩定，一台可以用到天荒地老，換機週期長到 Apple 都想寄張卡片謝謝你。不追新，只求順手。",
       tag:"Apple loves you — you never ask for much."},
@@ -388,11 +391,12 @@
     // personality (rule-based) -> key into PERSONAS
     var pkey;
     if(devs.length===0) pkey="visitor";
-    else if(catCount>=4) pkey="collector";
-    else if(iphones.length>=1 && proObsession>=60) pkey="promax";
-    else if(catCount<=2 && devs.length<=3) pkey="minimalist";
-    else if(upgradeFreq>=70) pkey="adopter";
+    else if(devs.length<=2 && catCount<=2) pkey="minimalist";       // genuinely few devices
+    else if(catCount>=4) pkey="collector";                           // owns most categories
+    else if(iphones.length>=2 && proObsession>=60) pkey="promax";    // pro-heavy iPhone buyer
+    else if(catCount===1 && iphones.length>=2) pkey="iphoneonly";    // only iPhones, several of them
     else if(catCount===3) pkey="convert";
+    else if(upgradeFreq>=70) pkey="adopter";
     else pkey="loyalist";
     return {devs:devs,total:total,catCount:catCount,appleYears:appleYears,first:first,firstDev:firstDev,cycle:cycle,
       ecosystem:ecosystem,proObsession:proObsession,upgradeFreq:upgradeFreq,loyalty:loyalty,
