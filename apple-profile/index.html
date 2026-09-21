@@ -308,7 +308,7 @@
 
   var DATA=SEED, NOW=2026;
   // try to upgrade to the researched full dataset if present
-  fetch("data/products.json").then(function(r){return r.ok?r.json():null;}).then(function(j){
+  fetch("data/products.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(j){
     if(j&&j.products){ var d={}; j.products.forEach(function(p){ (d[p.category]=d[p.category]||[]).push([p.model,p.year,p.launchPrice]); });
       Object.keys(d).forEach(function(k){ d[k].sort(function(a,b){return a[1]-b[1];}); }); DATA=d; }
   }).catch(function(){});
