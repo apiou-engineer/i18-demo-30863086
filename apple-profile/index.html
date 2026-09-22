@@ -158,7 +158,7 @@
       <h1 class="big">You might be an<br><em>Apple shareholder.</em></h1>
       <p class="sub">回顧你擁有過的每一台 Apple 裝置，看看這些年你到底「投資」了多少。</p>
       <button class="cta" id="startBtn">Start</button>
-      <div class="fineprint">2 分鐘 · 不需登入 · Not affiliated with Apple Inc.</div>
+      <div class="fineprint">2 分鐘 · 不需登入 · 價格以 Apple 官網為準，Apple 等為 Apple Inc. 商標，僅供型號對照參考</div>
     </div>
   </section>
 
@@ -224,7 +224,7 @@
             </div>
             <div class="cbars" id="cBars"></div>
             <div class="ctag" id="cTag">You don't use Apple. You financially support it.</div>
-            <div class="cdis">Not affiliated with Apple Inc.</div>
+            <div class="cdis">Apple 等為 Apple Inc. 商標 · 價格僅供型號對照參考</div>
           </div>
         </div>
       </div>
@@ -286,40 +286,40 @@
   ];
 
   // personality profiles — the psych-test-style payoff
-  // 11 archetypes · trendy young Taiwanese voice · desc is a template ({slots} filled from real data)
+  // 11 archetypes · "Apple as religion / stan-culture" voice · desc is a template ({slots} filled from real data)
   var PERSONAS={
-    legend:{en:["The","Apple","Whale"], zh:"傳說級 · 課金鯨", floor:"傳說",
-      desc:"資歷 {years} 年、五大類全收、帳面持股 {spend}——你早就不是果粉了，你是果鏈認證的課金鯨。Apple 財報有你一份，這個等級全台不到 1%。",
+    legend:{en:["The","High","Priest"], zh:"果教教主", floor:"傳說",
+      desc:"資歷 {years} 年、五大類全收、帳面持股 {spend}——你不是信徒，你是開宗立派的那個人。Apple 的香火有一半是你捐的，這種等級全台不到 1%。",
       tag:"Certified Apple whale."},
-    architect:{en:["The","Ecosystem","Architect"], zh:"生態系建築師", floor:"傳說",
-      desc:"iPhone、iPad、Mac、Watch、AirPods 五條線你全收好收滿——這已經不是在用 Apple，是在蓋一座生態系。裝置之間互相認得的默契，可能比你跟朋友還熟。主打一個全都要。",
+    architect:{en:["The","Ecosystem","Evangelist"], zh:"生態系傳教士", floor:"傳說",
+      desc:"iPhone、iPad、Mac、Watch、AirPods 五件法器全到齊——你早就不只是用 Apple，是在傳教。裝置串在一起那種順，你有義務讓全世界都知道。",
       tag:"I don't buy Apple. I collect it."},
-    builder:{en:["The","Ecosystem","Builder"], zh:"生態系拓荒者", floor:"罕見",
-      desc:"五大類你已經集了 {cats} 類，就差臨門一腳。{years} 年來一台一台補齊，你很懂「全部串在一起」有多香——剩那一類，遲早的事吧。",
-      tag:"One box left to tick."},
-    promax:{en:["The","Pro Max","Person"], zh:"極致 Pro 主義者", floor:"稀有",
-      desc:"你的 iPhone 有 {pro}% 是 Pro 系列——這不是預算問題，是原則問題。反正之後會嫌容量不夠，不如首抽就 all in。你買的不是規格，是「不將就」。",
+    builder:{en:["The","Devout","Believer"], zh:"虔誠信徒", floor:"罕見",
+      desc:"五大類你已經請回 {cats} 類，就差一件就圓滿。{years} 年來一件一件收齊，你比誰都懂「全套」的執念——剩那一類，遲早入手。",
+      tag:"One relic short of complete."},
+    promax:{en:["The","Spec","Zealot"], zh:"Pro 原教旨信徒", floor:"稀有",
+      desc:"你的 iPhone 有 {pro}% 是 Pro 系列——這不是預算問題，是信仰問題。要信就信到頂，容量、鏡頭、鈦金屬一個都不能少。你拜的不是手機，是「不將就」。",
       tag:"Why settle? Max, always."},
-    adopter:{en:["The","Restless","Adopter"], zh:"追新玩家", floor:"稀有",
-      desc:"平均 {cad} 年就換一輪，發表會根本是你的還款日。別人還在看開箱，你預購早就手滑下去了。錢包哭歸哭，開箱那一下真的會謝。",
+    adopter:{en:["The","Launch-Day","Pilgrim"], zh:"首賣朝聖者", floor:"稀有",
+      desc:"平均 {cad} 年就換一輪，每場發表會都是你的朝聖日。別人還在看開箱，你的預購早就手滑下去了。錢包哭歸哭，開箱那一刻真的會謝主隆恩。",
       tag:"New drop? Already in my cart."},
-    loyalist:{en:["The","Founding","Loyalist"], zh:"元老級信徒", floor:"稀有",
-      desc:"從 {firstY} 的 {first} 一路陪到現在，{years} 年資歷——你早該進董事會了。不被行銷推著走，你就是那種「反正每年都會看發表會」的精神股東。",
-      tag:"{years} years in. Basically a founder."},
-    steady:{en:["The","Slow","& Steady"], zh:"細水長流派", floor:"稀有",
-      desc:"{cad} 年才換一次機，不是買不起，是懶得換。一台用到天荒地老，東西對你是工具不是電子榨菜。這種情緒穩定，在果粉裡意外稀有。",
+    loyalist:{en:["The","Old","Believer"], zh:"初代老信徒", floor:"稀有",
+      desc:"從 {firstY} 的 {first} 一路信到現在，{years} 年香火不斷——你是那種發表會一場都沒缺席的精神股東。不被行銷推著走，你的忠誠用時間證明。",
+      tag:"{years} years of faith."},
+    steady:{en:["The","Apple","Ascetic"], zh:"Apple 苦行僧", floor:"稀有",
+      desc:"{cad} 年才換一次機，不是課不起，是清心寡慾。一台用到天荒地老，對你來說裝置是修行不是電子榨菜。這種定力，在果教裡意外稀有。",
       tag:"Less churn. Zero regrets."},
-    purist:{en:["The","iPhone","Purist"], zh:"iPhone 純粹主義者", floor:"少見",
-      desc:"你的 Apple 世界很純——iPhone 就是主場，其他免。{years} 年把一件事做到極致：手機夠好用就好。不用一整套生態系證明什麼，這種篤定其實很帥。",
-      tag:"One iPhone. That's the whole story."},
-    specialist:{en:["The","Focused","One"], zh:"專一使用者", floor:"少見",
-      desc:"你只鎖定 {onlyCat} 這條線，其他不碰。少歸少，但你把它用好用滿——淺嚐 Apple，卻已經回不去了。",
+    purist:{en:["The","iPhone","Stan"], zh:"iPhone 本命唯粉", floor:"少見",
+      desc:"你的信仰很純——iPhone 就是本命，其他一律脫飯。{years} 年只認這一款，把一件事做到極致。不用一整套生態系證明什麼，這種唯粉的專情其實很帥。",
+      tag:"One iPhone. Ride or die."},
+    specialist:{en:["The","Niche","Devotee"], zh:"專情小眾教徒", floor:"少見",
+      desc:"你只認 {onlyCat} 這一味，其他不碰。小眾歸小眾，但你把它拜好拜滿——淺嚐 Apple，卻已經回不去了。",
       tag:"One lane, all in."},
-    explorer:{en:["The","Ecosystem","Explorer"], zh:"生態系探索者", floor:"少見",
-      desc:"你手上有 {cats} 條產品線，不極端、但很剛好。你不是衝動派，是看準了才慢慢補——決定慢，但每筆都算得清。這種人一旦認定就很難被搶走。",
+    explorer:{en:["The","Curious","Seeker"], zh:"入坑中的探索者", floor:"少見",
+      desc:"你手上有 {cats} 條產品線，不狂熱、但持續在入坑。你不是衝動派，是看準了才慢慢請——決定慢，但每一筆都算得清。這種人一旦入教就很難脫飯。",
       tag:"Took my time. No takebacks."},
-    visitor:{en:["The","Curious","Visitor"], zh:"初訪者", floor:"常見",
-      desc:"從 {first} 起步，你的 Apple 故事還很新——剛好夠你開始懂「為什麼大家會上癮」。最好玩的階段，前面一整個生態系等你逛。歡迎入股，新股東。",
+    visitor:{en:["The","New","Convert"], zh:"剛入教的新香客", floor:"常見",
+      desc:"從 {first} 起步，你的果教香火還很新——剛好夠你開始懂「為什麼大家會上癮」。最好玩的階段，前面一整座生態系等你逛。歡迎入教，新股東。",
       tag:"New here. Already hooked."}
   };
   var CATZH={iPhone:"iPhone",iPad:"iPad",Mac:"Mac","Apple Watch":"Apple Watch",AirPods:"AirPods"};
