@@ -100,6 +100,9 @@
   .pname{font-family:var(--serif);font-weight:400;font-size:clamp(2.4rem,10vw,3.2rem);line-height:1;letter-spacing:-.02em;margin-top:16px}
   .pname em{font-style:italic}
   .pzh{font-family:var(--serif);font-size:1.1rem;color:var(--soft);margin-top:12px;letter-spacing:.1em}
+  .prank{display:inline-flex;align-self:flex-start;gap:0;font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;color:var(--soft);
+    margin-top:16px;border:1px solid var(--line);border-radius:100px;padding:8px 14px;background:#fbf8f1}
+  .prank b{color:var(--ink);font-weight:600}
   .pdesc{font-size:1rem;line-height:1.75;color:#3f3c34;margin-top:22px;max-width:32ch}
   .ptraits{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
   .ptraits .chip{font-family:var(--mono);font-size:.64rem;letter-spacing:.05em;color:var(--ink);
@@ -188,6 +191,7 @@
       <div class="pk">你的 Apple 人格 · Apple Personality</div>
       <h2 class="pname" id="pName">The <em>Ecosystem</em><br>Collector</h2>
       <div class="pzh" id="pZh">生態系收藏家</div>
+      <div class="prank" id="pRank"></div>
       <p class="pdesc" id="pDesc"></p>
       <div class="ptraits" id="pTraits"></div>
       <div class="pbars" id="pBars"></div>
@@ -282,34 +286,45 @@
   ];
 
   // personality profiles — the psych-test-style payoff
+  // 11 archetypes · trendy young Taiwanese voice · desc is a template ({slots} filled from real data)
   var PERSONAS={
-    collector:{en:["The","Ecosystem","Collector"], zh:"生態系收藏家",
-      desc:"你不是在買 Apple，你是在養一個生態系。iPhone、Mac、iPad、Watch、AirPods 一個都不少，它們彼此連線的默契，可能比你和朋友還熟。",
-      tag:"You don't use Apple. You financially support it."},
-    promax:{en:["The","Pro Max","Person"], zh:"Pro Max 主義者",
-      desc:"你的購物邏輯只有一條：有 Pro 就買 Pro，有 Pro Max 就不用問了。規格表你倒背如流，你的錢包則保持沉默。",
-      tag:"If there's a Pro, you buy the Pro."},
-    minimalist:{en:["The","Quiet","Minimalist"], zh:"極簡主義者",
-      desc:"你的 Apple 很精簡——只留真正天天在用的，沒有多餘。少，但每一台都用好用滿。你不需要生態系，因為你本人就是生態系。",
-      tag:"You don't need the ecosystem. You are the ecosystem."},
-    iphoneonly:{en:["The","iPhone","Purist"], zh:"iPhone 一途派",
-      desc:"對你來說 Apple 幾乎等於 iPhone。你不碰其他裝置，但這條 iPhone 路你走得非常徹底、一代接一代。",
-      tag:"For you, Apple is just… iPhone. And that's plenty."},
-    loyalist:{en:["The","Devoted","Loyalist"], zh:"死忠長情派",
-      desc:"你超級穩定，一台可以用到天荒地老，換機週期長到 Apple 都想寄張卡片謝謝你。不追新，只求順手。",
-      tag:"Apple loves you — you never ask for much."},
-    adopter:{en:["The","Restless","Adopter"], zh:"第一時間嘗鮮者",
-      desc:"新品一發表，別人還在看開箱評測，你的宅配通知已經響了。你買的不只是裝置，是那份「我先擁有了」的快感。",
-      tag:"Others read reviews. You already ordered."},
-    convert:{en:["The","Slow","Convert"], zh:"逐步淪陷者",
-      desc:"一開始只有 iPhone，後來多了 AirPods，再來是 Mac，最後 Watch 和 iPad 也進來了。一場緩慢、但完全不可逆的淪陷。",
-      tag:"A slow but irreversible conversion."},
-    visitor:{en:["The","Curious","Visitor"], zh:"路過的旁觀者",
-      desc:"你目前還在 Apple 世界的門口探頭探腦。也許還沒開始，也許只是不承認——這份側寫先幫你存著。",
-      tag:"You're just browsing… for now."}
+    legend:{en:["The","Apple","Whale"], zh:"傳說級 · 課金鯨", floor:"傳說",
+      desc:"資歷 {years} 年、五大類全收、帳面持股 {spend}——你早就不是果粉了，你是果鏈認證的課金鯨。Apple 財報有你一份，這個等級全台不到 1%。",
+      tag:"Certified Apple whale."},
+    architect:{en:["The","Ecosystem","Architect"], zh:"生態系建築師", floor:"傳說",
+      desc:"iPhone、iPad、Mac、Watch、AirPods 五條線你全收好收滿——這已經不是在用 Apple，是在蓋一座生態系。裝置之間互相認得的默契，可能比你跟朋友還熟。主打一個全都要。",
+      tag:"I don't buy Apple. I collect it."},
+    builder:{en:["The","Ecosystem","Builder"], zh:"生態系拓荒者", floor:"罕見",
+      desc:"五大類你已經集了 {cats} 類，就差臨門一腳。{years} 年來一台一台補齊，你很懂「全部串在一起」有多香——剩那一類，遲早的事吧。",
+      tag:"One box left to tick."},
+    promax:{en:["The","Pro Max","Person"], zh:"極致 Pro 主義者", floor:"稀有",
+      desc:"你的 iPhone 有 {pro}% 是 Pro 系列——這不是預算問題，是原則問題。反正之後會嫌容量不夠，不如首抽就 all in。你買的不是規格，是「不將就」。",
+      tag:"Why settle? Max, always."},
+    adopter:{en:["The","Restless","Adopter"], zh:"追新玩家", floor:"稀有",
+      desc:"平均 {cad} 年就換一輪，發表會根本是你的還款日。別人還在看開箱，你預購早就手滑下去了。錢包哭歸哭，開箱那一下真的會謝。",
+      tag:"New drop? Already in my cart."},
+    loyalist:{en:["The","Founding","Loyalist"], zh:"元老級信徒", floor:"稀有",
+      desc:"從 {firstY} 的 {first} 一路陪到現在，{years} 年資歷——你早該進董事會了。不被行銷推著走，你就是那種「反正每年都會看發表會」的精神股東。",
+      tag:"{years} years in. Basically a founder."},
+    steady:{en:["The","Slow","& Steady"], zh:"細水長流派", floor:"稀有",
+      desc:"{cad} 年才換一次機，不是買不起，是懶得換。一台用到天荒地老，東西對你是工具不是電子榨菜。這種情緒穩定，在果粉裡意外稀有。",
+      tag:"Less churn. Zero regrets."},
+    purist:{en:["The","iPhone","Purist"], zh:"iPhone 純粹主義者", floor:"少見",
+      desc:"你的 Apple 世界很純——iPhone 就是主場，其他免。{years} 年把一件事做到極致：手機夠好用就好。不用一整套生態系證明什麼，這種篤定其實很帥。",
+      tag:"One iPhone. That's the whole story."},
+    specialist:{en:["The","Focused","One"], zh:"專一使用者", floor:"少見",
+      desc:"你只鎖定 {onlyCat} 這條線，其他不碰。少歸少，但你把它用好用滿——淺嚐 Apple，卻已經回不去了。",
+      tag:"One lane, all in."},
+    explorer:{en:["The","Ecosystem","Explorer"], zh:"生態系探索者", floor:"少見",
+      desc:"你手上有 {cats} 條產品線，不極端、但很剛好。你不是衝動派，是看準了才慢慢補——決定慢，但每筆都算得清。這種人一旦認定就很難被搶走。",
+      tag:"Took my time. No takebacks."},
+    visitor:{en:["The","Curious","Visitor"], zh:"初訪者", floor:"常見",
+      desc:"從 {first} 起步，你的 Apple 故事還很新——剛好夠你開始懂「為什麼大家會上癮」。最好玩的階段，前面一整個生態系等你逛。歡迎入股，新股東。",
+      tag:"New here. Already hooked."}
   };
+  var CATZH={iPhone:"iPhone",iPad:"iPad",Mac:"Mac","Apple Watch":"Apple Watch",AirPods:"AirPods"};
 
-  var DATA=SEED, NOW=2026;
+  var DATA=SEED, NOW=(new Date().getFullYear());
   // try to upgrade to the researched full dataset if present
   fetch("data/products.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(j){
     if(j&&j.products){ var d={}; j.products.forEach(function(p){ (d[p.category]=d[p.category]||[]).push([p.model,p.year,p.launchPrice]); });
@@ -366,41 +381,73 @@
   $("catSkip").addEventListener("click",nextCat);
   $("catBack").addEventListener("click",function(){ if(ci>0){ci--;renderCat();show("s-cat");} });
 
-  // ---------- compute ----------
+  // ---------- compute (deterministic archetype + 7 metrics + rarity + percentile) ----------
+  function clamp(x,lo,hi){return Math.max(lo,Math.min(hi,x));}
+  function norm(x,cap){return Math.round(clamp(x,0,cap)/cap*100);}
   function compute(){
     var devs=Object.keys(owned).map(function(k){return owned[k];});
     var total=devs.reduce(function(s,d){return s+d[2];},0);
     var cats={}; devs.forEach(function(d){cats[d[3]]=1;});
-    var catCount=Object.keys(cats).length;
-    var years=devs.map(function(d){return d[1];});
-    var first=years.length?Math.min.apply(null,years):NOW;
-    var appleYears=years.length?(NOW-first+1):0;
-    var iphones=devs.filter(function(d){return d[3]==="iPhone";});
-    var proCount=iphones.filter(function(d){return /Pro/.test(d[0]);}).length;
-    var upgrades=Math.max(0,iphones.length-1);
-    // first device (earliest year)
+    var catList=Object.keys(cats), C=catList.length, D=devs.length;
+    var yrs=devs.map(function(d){return d[1];});
+    var firstYear=yrs.length?Math.min.apply(null,yrs):NOW;
+    var newestYear=yrs.length?Math.max.apply(null,yrs):NOW;
+    var Y=yrs.length?(NOW-firstYear+1):0;
+    var iph=devs.filter(function(d){return d[3]==="iPhone";});
+    var N=iph.length, P=iph.filter(function(d){return /Pro/.test(d[0]);}).length;
+    var proRatio=N?P/N:0;
     var firstDev=devs.slice().sort(function(a,b){return a[1]-b[1];})[0];
-    // avg iPhone upgrade cycle (years)
-    var cycle=null;
-    if(iphones.length>=2){ var iy=iphones.map(function(d){return d[1];}); cycle=Math.round((Math.max.apply(null,iy)-Math.min.apply(null,iy))/(iphones.length-1)*10)/10; }
-    // metrics 0..100
-    var ecosystem=Math.round(catCount/CATS.length*100);
-    var proObsession=iphones.length?Math.round(proCount/iphones.length*100):0;
-    var upgradeFreq=Math.min(100,Math.round(iphones.length/Math.max(1,appleYears)*100*2.2));
-    var loyalty=Math.min(100,Math.round(appleYears*7 + (100-upgradeFreq)*0.3));
-    // personality (rule-based) -> key into PERSONAS
+    var cadence=null;
+    if(N>=2){ var iy=iph.map(function(d){return d[1];}); cadence=Math.round((Math.max.apply(null,iy)-Math.min.apply(null,iy))/(N-1)*10)/10; }
+    var spendPerYear=Y?total/Y:total;
+    // --- classification: strict->loose cascade, first match wins ---
     var pkey;
-    if(devs.length===0) pkey="visitor";
-    else if(devs.length<=2 && catCount<=2) pkey="minimalist";       // genuinely few devices
-    else if(catCount>=4) pkey="collector";                           // owns most categories
-    else if(iphones.length>=2 && proObsession>=60) pkey="promax";    // pro-heavy iPhone buyer
-    else if(catCount===1 && iphones.length>=2) pkey="iphoneonly";    // only iPhones, several of them
-    else if(catCount===3) pkey="convert";
-    else if(upgradeFreq>=70) pkey="adopter";
-    else pkey="loyalist";
-    return {devs:devs,total:total,catCount:catCount,appleYears:appleYears,first:first,firstDev:firstDev,cycle:cycle,
-      ecosystem:ecosystem,proObsession:proObsession,upgradeFreq:upgradeFreq,loyalty:loyalty,
-      pkey:pkey,persona:PERSONAS[pkey],upgrades:upgrades,iphoneCount:iphones.length};
+    if(C===5 && Y>=12 && total>=400000) pkey="legend";
+    else if(C===5) pkey="architect";
+    else if(C===4) pkey="builder";
+    else if(N>=2 && P>=2 && proRatio>=0.5) pkey="promax";
+    else if(N>=3 && cadence!=null && cadence<=1.5) pkey="adopter";
+    else if(Y>=10 && D>=2) pkey="loyalist";
+    else if(N>=2 && cadence!=null && cadence>=4) pkey="steady";
+    else if(C===1 && cats["iPhone"]) pkey="purist";
+    else if(C===1) pkey="specialist";
+    else if(Y<=2 && D<=2) pkey="visitor";
+    else pkey="explorer";
+    if(D===0) pkey="visitor";
+    // --- 7 metrics 0..100 (null where undefined) ---
+    var m={
+      completeness:norm(C,5),
+      vintage:norm(NOW-firstYear,20),
+      pro:Math.round(proRatio*100),
+      tempo:(N<2||cadence==null)?null:Math.round(clamp((5-clamp(cadence,1,5))/4,0,1)*100),
+      depth:norm(D,10),
+      intensity:norm(spendPerYear,40000),
+      loyalty:Math.round((0.6*Math.min(Y,12)/12 + 0.4*clamp(1-(NOW-newestYear)/5,0,1))*100)
+    };
+    // --- rarity: distinguishing-trait count + archetype floor ---
+    var t=0;
+    if(C===5)t++; if(C>=4)t++;
+    if(m.vintage>=75)t++;
+    if(m.pro>=80&&N>=3)t++;
+    if(m.depth>=70)t++;
+    if(m.tempo!=null&&(m.tempo>=80||m.tempo<=10))t++;
+    if(m.loyalty>=80)t++;
+    if(m.intensity>=80)t++;
+    var TIERS=["常見","少見","稀有","罕見","傳說"], TORD={"常見":0,"少見":1,"稀有":2,"罕見":3,"傳說":4};
+    var byTraits=t<=1?0:(t===2?1:(t===3?2:(t<=5?3:4)));
+    var tier=TIERS[Math.max(byTraits,TORD[PERSONAS[pkey].floor]||0)];
+    // --- percentile: "beats X% of shareholders" (modeled from spend; estimate) ---
+    var pct=total<=0?0:Math.round(100/(1+Math.exp(-(Math.log(total)-Math.log(90000))/0.55)));
+    pct=clamp(pct,1,99);
+    // --- fill description template from real data only ---
+    var onlyCat=(C===1&&catList[0])?CATZH[catList[0]]:"";
+    var repl={first:firstDev?firstDev[0]:"第一台 Apple", firstY:firstDev?firstDev[1]:"", years:Y,
+      cad:(cadence!=null?cadence:"—"), pro:Math.round(proRatio*100), cats:C, dev:D, spend:money(total), onlyCat:onlyCat};
+    var desc=PERSONAS[pkey].desc.replace(/\{(\w+)\}/g,function(_,k){return repl[k]!==undefined?repl[k]:"";});
+    return {devs:devs,total:total,catCount:C,deviceCount:D,appleYears:Y,firstDev:firstDev,cycle:cadence,
+      iphoneCount:N,proRatio:Math.round(proRatio*100),metrics:m,pkey:pkey,persona:PERSONAS[pkey],desc:desc,
+      tier:tier,traits:t,pct:pct,
+      ecosystem:m.completeness,loyalty:m.loyalty,proObsession:m.pro};   // back-compat for result card
   }
 
   // ---------- reveal (count-up) ----------
@@ -421,21 +468,34 @@
 
   // ---------- personality analysis ----------
   function renderPersona(){
-    var p=R.persona;
-    $("prog").style.width="86%";
+    var p=R.persona, m=R.metrics;
+    $("prog").style.width="90%";
     $("pName").innerHTML=p.en[0]+" <em>"+p.en[1]+"</em>"+(p.en[2]?"<br>"+p.en[2]:"");
     $("pZh").textContent=p.zh;
-    $("pDesc").textContent=p.desc;
+    $("pRank").innerHTML='稀有度 <b>'+R.tier+'</b>&nbsp;·&nbsp;贏過 <b>'+R.pct+'%</b> 的股東';
+    $("pDesc").textContent=R.desc;
     var chips=[];
     if(R.firstDev) chips.push(["首台",R.firstDev[0]+" · "+R.firstDev[1]]);
     chips.push(["資歷",R.appleYears+" 年"]);
-    if(R.cycle) chips.push(["換機週期",R.cycle+" 年"]);
-    if(R.iphoneCount) chips.push(["Pro 比例",R.proObsession+"%"]);
-    chips.push(["生態系",R.catCount+" 類 · "+R.devs.length+" 台"]);
+    if(R.cycle!=null) chips.push(["換機",R.cycle+" 年/次"]);
+    if(R.iphoneCount) chips.push(["Pro 比例",R.proRatio+"%"]);
+    chips.push(["生態系",R.catCount+" 類 · "+R.deviceCount+" 台"]);
     $("pTraits").innerHTML=chips.map(function(c){return '<span class="chip"><b>'+c[0]+'</b> '+c[1]+'</span>';}).join("");
-    var bars=[["Ecosystem depth",R.ecosystem],["Apple loyalty",R.loyalty],["Pro obsession",R.proObsession]];
-    $("pBars").innerHTML=bars.map(function(b){return '<div class="pbar"><div class="pbl"><span>'+b[0]+'</span><span>'+b[1]+'%</span></div><div class="ptr"><span class="pfl" data-w="'+b[1]+'"></span></div></div>';}).join("");
-    setTimeout(function(){document.querySelectorAll("#pBars .pfl").forEach(function(f){f.style.width=f.dataset.w+"%";});},250);
+    var M=[["生態系完整度",m.completeness],["骨灰指數",m.vintage],["Pro 濃度",m.pro],["換機節奏",m.tempo],["收藏厚度",m.depth],["投入強度",m.intensity],["忠誠續航",m.loyalty]];
+    $("pBars").innerHTML=M.map(function(b){
+      if(b[1]==null) return '<div class="pbar"><div class="pbl"><span>'+b[0]+'</span><span>—</span></div><div class="ptr"><span class="pfl" style="width:0"></span></div></div>';
+      return '<div class="pbar" data-v="'+b[1]+'"><div class="pbl"><span>'+b[0]+'</span><span class="pv">0%</span></div><div class="ptr"><span class="pfl" data-w="'+b[1]+'"></span></div></div>';
+    }).join("");
+    // staggered reveal: bar grows + number counts up
+    [].slice.call(document.querySelectorAll("#pBars .pbar[data-v]")).forEach(function(bar,idx){
+      var v=+bar.dataset.v, fl=bar.querySelector(".pfl"), pv=bar.querySelector(".pv");
+      setTimeout(function(){
+        fl.style.width=v+"%";
+        var s=null;
+        (function step(ts){ if(s==null)s=ts; var k=Math.min(1,(ts-s)/850);
+          pv.textContent=Math.round(v*(1-Math.pow(1-k,3)))+"%"; if(k<1)requestAnimationFrame(step); else pv.textContent=v+"%"; })(performance.now());
+      }, 200+idx*140);
+    });
   }
   $("pBtn").addEventListener("click",function(){ renderResult(); show("s-result"); });
 
