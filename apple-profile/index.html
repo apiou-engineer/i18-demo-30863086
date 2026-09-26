@@ -91,6 +91,9 @@
   #s-reveal .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.26em;color:var(--soft)}
   #s-reveal .amt{font-family:var(--serif);font-weight:500;font-size:clamp(3.2rem,16vw,4.6rem);line-height:1;letter-spacing:-.02em;
     font-variant-numeric:tabular-nums}
+  #s-reveal .revpr{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--soft);opacity:0;transition:opacity .5s .1s}
+  #s-reveal .revpr.on{opacity:1}
+  #s-reveal .revpr b{color:var(--ink);font-weight:600;font-size:.92rem}
   #s-reveal .rsub{color:var(--soft);font-size:.95rem;max-width:22ch;line-height:1.5}
 
   /* ---------- personality analysis ---------- */
@@ -148,6 +151,8 @@
   .card .chero .amt{font-family:var(--serif);font-weight:500;font-size:16cqw;line-height:.9;letter-spacing:-.015em}
   .card .chero .u{border:none;border-top:1px solid #cfc7b6;width:26cqw}
   .card .chero .note{font-family:var(--mono);font-size:1.7cqw;letter-spacing:.1em;color:#a49c88}
+  .card .chero .cpr{font-family:var(--mono);font-size:2cqw;letter-spacing:.1em;color:#8a7f5e}
+  .card .chero .cpr b{color:var(--ink);font-weight:700;font-size:2.7cqw}
   .card .cgrid{display:grid;grid-template-columns:repeat(3,1fr)}
   .card .cgrid .k{font-family:var(--mono);font-size:1.85cqw;letter-spacing:.12em;color:var(--soft);text-transform:uppercase}
   .card .cgrid .v{font-family:var(--serif);font-size:8cqw;font-weight:400;line-height:1;margin-top:.6cqh}
@@ -156,7 +161,8 @@
   .card .cbar .bl{font-family:var(--mono);font-size:1.75cqw;letter-spacing:.08em;color:var(--soft);width:34cqw;text-transform:uppercase;text-align:left}
   .card .cbar .tr{flex:1;height:1.1cqw;background:#e2dccd;border-radius:2px;overflow:hidden}
   .card .cbar .fl{height:100%;background:var(--ink);border-radius:2px;width:0;transition:width 1s var(--ease)}
-  .card .ctag{font-family:var(--serif);font-style:italic;font-size:2.9cqw;color:#4d493f;margin-top:3.6cqh;text-align:left}
+  .card .ctag{font-family:var(--serif);font-style:italic;font-size:2.9cqw;color:#4d493f;margin-top:3.4cqh;text-align:left}
+  .card .cfoot{font-family:var(--mono);font-size:1.9cqw;letter-spacing:.18em;color:var(--soft);margin-top:2.2cqh;text-align:left;text-transform:uppercase}
   .card .cdis{font-family:var(--mono);font-size:1.6cqw;letter-spacing:.1em;color:#a49c88;margin-top:1.8cqh;text-align:left}
   #s-result .ractions{display:flex;flex-direction:column;gap:10px;width:min(360px,92%)}
   #s-result .ractions .cta{width:100%}
@@ -197,6 +203,7 @@
     <div class="pad">
       <div class="rk" id="revK">你在 Apple 的總投資</div>
       <div class="amt" id="revAmt">NT$0</div>
+      <div class="revpr" id="revPR"></div>
       <div class="rsub" id="revSub">加總你選的所有裝置（以台灣上市價估算）。</div>
       <button class="cta" id="revBtn" style="opacity:0;transition:opacity .6s .2s">看看我是什麼股東 →</button>
     </div>
@@ -233,26 +240,27 @@
       <div class="card" id="card">
         <div class="in">
           <div>
-            <div class="cbrand"><b>APIOU</b><span>Apple Profile · 2026</span></div>
+            <div class="cbrand"><b>APIOU</b><span>蘋果股東側寫</span></div>
             <hr class="crule">
             <div class="cpersona" id="cPersona">The<br><em>Ecosystem</em><br>Collector</div>
-            <div class="cwho" id="cWho">Eva · 11 years in the Apple ecosystem</div>
+            <div class="cwho" id="cWho"></div>
           </div>
           <div class="chero">
-            <div class="k">Total invested</div>
+            <div class="k">你的總投資</div>
             <div class="amt" id="cAmt">NT$0</div>
             <hr class="u">
-            <div class="note">estimated at launch prices</div>
+            <div class="cpr" id="cPR"></div>
           </div>
           <div>
             <div class="cgrid">
-              <div><div class="k">Apple Years</div><div class="v" id="cYears">0</div></div>
-              <div><div class="k">Devices</div><div class="v" id="cDev">0</div></div>
-              <div><div class="k">Categories</div><div class="v" id="cCat">0</div></div>
+              <div><div class="k">果齡</div><div class="v" id="cYears">0</div></div>
+              <div><div class="k">裝置</div><div class="v" id="cDev">0</div></div>
+              <div><div class="k">類別</div><div class="v" id="cCat">0</div></div>
             </div>
             <div class="cbars" id="cBars"></div>
-            <div class="ctag" id="cTag">You don't use Apple. You financially support it.</div>
-            <div class="cdis">Apple 等為 Apple Inc. 商標 · 價格僅供型號對照參考</div>
+            <div class="ctag" id="cTag"></div>
+            <div class="cfoot">APIOU · apeelcase.com</div>
+            <div class="cdis">以上市價估算 · Apple 等為 Apple Inc. 商標，僅供型號對照</div>
           </div>
         </div>
       </div>
@@ -373,7 +381,7 @@
     $("catHead").innerHTML='<h2>'+c.q+'</h2><p>'+c.zh+' · 可複選，選你擁有過的</p>';
     // group by year
     var byYear={}; list.forEach(function(p){ (byYear[p[1]]=byYear[p[1]]||[]).push(p); });
-    var years=Object.keys(byYear).sort();
+    var years=Object.keys(byYear).sort(function(a,b){return b-a;});   // newest → oldest
     var html="";
     years.forEach(function(y){
       html+='<div class="yr"><b>'+y+'</b><span class="rl"></span></div>';
@@ -484,12 +492,13 @@
     R=compute();
     $("prog").style.width=((CATS.length)/(CATS.length+1)*100)+"%";
     show("s-reveal");
-    var el=$("revAmt"), btn=$("revBtn"); btn.style.opacity=0;
+    var el=$("revAmt"), btn=$("revBtn"), pr=$("revPR"); btn.style.opacity=0; pr.classList.remove("on");
+    pr.innerHTML='PR <b>'+R.pct+'</b> · 贏過 '+R.pct+'% 的股東';
     var start=null, DUR=1600, target=R.total;
     if(target<=0){ el.textContent="NT$0"; btn.style.opacity=1; return; }
     function step(ts){ if(start==null)start=ts; var k=Math.min(1,(ts-start)/DUR);
       var e=1-Math.pow(1-k,3); el.textContent=money(target*e);
-      if(k<1)requestAnimationFrame(step); else{ el.textContent=money(target); btn.style.opacity=1; } }
+      if(k<1)requestAnimationFrame(step); else{ el.textContent=money(target); pr.classList.add("on"); btn.style.opacity=1; } }
     requestAnimationFrame(step);
   }
   $("revBtn").addEventListener("click",function(){ renderPersona(); show("s-persona"); });
@@ -540,7 +549,7 @@
   }
   function renderCabinet(){
     $("prog").style.width="95%";
-    var devs=R.devs.slice().sort(function(a,b){return a[1]-b[1];});
+    var devs=R.devs.slice().sort(function(a,b){return b[1]-a[1];});   // newest → oldest
     $("cabSub").textContent=devs.length+" 件收藏 · "+R.appleYears+" 年 · "+R.catCount+" 大類別";
     $("cabGrid").innerHTML=devs.map(function(d,i){
       return '<div class="cell" style="animation-delay:'+(i*55)+'ms"><div class="ic">'+devSVG(d[3])+'</div><div class="cnm">'+d[0]+'</div><div class="cyr">'+d[1]+'</div></div>';
@@ -553,13 +562,14 @@
     var p=R.persona;
     $("prog").style.width="100%";
     $("cPersona").innerHTML=p.en[0]+"<br><em>"+p.en[1]+"</em>"+(p.en[2]?"<br>"+p.en[2]:"");
-    $("cWho").textContent="You · "+R.appleYears+" years in the Apple ecosystem";
+    $("cWho").textContent="在 Apple 生態系 "+R.appleYears+" 年 · "+R.tier;
     $("cAmt").textContent=money(R.total);
+    $("cPR").innerHTML="PR <b>"+R.pct+"</b> · 贏過 "+R.pct+"% 的股東";
     $("cYears").textContent=R.appleYears;
     $("cDev").textContent=R.devs.length;
     $("cCat").textContent=R.catCount;
     $("cTag").textContent=p.tag;
-    var bars=[["Ecosystem depth",R.ecosystem],["Apple loyalty",R.loyalty],["Pro obsession",R.proObsession]];
+    var bars=[["生態系完整度",R.metrics.completeness],["忠誠續航",R.metrics.loyalty],["Pro 濃度",R.metrics.pro]];
     $("cBars").innerHTML=bars.map(function(b){return '<div class="cbar"><span class="bl">'+b[0]+'</span><span class="tr"><span class="fl" data-w="'+b[1]+'"></span></span></div>';}).join("");
     setTimeout(function(){ document.querySelectorAll("#cBars .fl").forEach(function(f){ f.style.width=f.dataset.w+"%"; }); },250);
   }
