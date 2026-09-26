@@ -2,144 +2,1048 @@
   "currency": "TWD",
   "note": "Taiwan launch prices, base config, for estimation only",
   "products": [
-    { "category": "AirPods", "model": "AirPods (1st gen)", "year": 2016, "launchPrice": 5290, "confidence": "high" },
-    { "category": "AirPods", "model": "AirPods (2nd gen)", "year": 2019, "launchPrice": 5290, "confidence": "high" },
-    { "category": "AirPods", "model": "AirPods Pro (1st gen)", "year": 2019, "launchPrice": 7990, "confidence": "high" },
-    { "category": "AirPods", "model": "AirPods Max", "year": 2020, "launchPrice": 18490, "confidence": "high" },
-    { "category": "AirPods", "model": "AirPods (3rd gen)", "year": 2021, "launchPrice": 5990, "confidence": "high" },
-    { "category": "AirPods", "model": "AirPods Pro (2nd gen)", "year": 2022, "launchPrice": 7490, "confidence": "high" },
-    { "category": "AirPods", "model": "AirPods (4th gen)", "year": 2024, "launchPrice": 3990, "confidence": "high" },
-
-    { "category": "Apple Watch", "model": "Apple Watch Series 1", "year": 2016, "launchPrice": 8900, "confidence": "med" },
-    { "category": "Apple Watch", "model": "Apple Watch Series 2", "year": 2016, "launchPrice": 11900, "confidence": "med" },
-    { "category": "Apple Watch", "model": "Apple Watch Series 3", "year": 2017, "launchPrice": 9900, "confidence": "high" },
-    { "category": "Apple Watch", "model": "Apple Watch Series 4", "year": 2018, "launchPrice": 12900, "confidence": "high" },
-    { "category": "Apple Watch", "model": "Apple Watch Series 5", "year": 2019, "launchPrice": 12900, "confidence": "high" },
-    { "category": "Apple Watch", "model": "Apple Watch SE (1st gen)", "year": 2020, "launchPrice": 8900, "confidence": "high" },
-    { "category": "Apple Watch", "model": "Apple Watch Series 6", "year": 2020, "launchPrice": 12900, "confidence": "high" },
-    { "category": "Apple Watch", "model": "Apple Watch Series 7", "year": 2021, "launchPrice": 12900, "confidence": "high" },
-    { "category": "Apple Watch", "model": "Apple Watch SE (2nd gen)", "year": 2022, "launchPrice": 7900, "confidence": "high" },
-    { "category": "Apple Watch", "model": "Apple Watch Series 8", "year": 2022, "launchPrice": 12900, "confidence": "high" },
-    { "category": "Apple Watch", "model": "Apple Watch Ultra", "year": 2022, "launchPrice": 25900, "confidence": "high" },
-    { "category": "Apple Watch", "model": "Apple Watch Series 9", "year": 2023, "launchPrice": 12900, "confidence": "high" },
-    { "category": "Apple Watch", "model": "Apple Watch Ultra 2", "year": 2023, "launchPrice": 25900, "confidence": "high" },
-    { "category": "Apple Watch", "model": "Apple Watch Series 10", "year": 2024, "launchPrice": 12900, "confidence": "high" },
-
-    { "category": "Mac", "model": "MacBook Air (11-inch, 2011)", "year": 2011, "launchPrice": 29900, "confidence": "low" },
-    { "category": "Mac", "model": "MacBook Air (13-inch, 2011)", "year": 2011, "launchPrice": 34900, "confidence": "low" },
-    { "category": "Mac", "model": "MacBook Pro (13-inch, 2011)", "year": 2011, "launchPrice": 36900, "confidence": "low" },
-    { "category": "Mac", "model": "MacBook Pro (15-inch, 2011)", "year": 2011, "launchPrice": 56900, "confidence": "low" },
-    { "category": "Mac", "model": "MacBook Pro (13-inch, Retina, 2012)", "year": 2012, "launchPrice": 46900, "confidence": "low" },
-    { "category": "Mac", "model": "MacBook Pro (15-inch, Retina, 2012)", "year": 2012, "launchPrice": 68900, "confidence": "low" },
-    { "category": "Mac", "model": "iMac (21.5-inch, 2012)", "year": 2012, "launchPrice": 37900, "confidence": "low" },
-    { "category": "Mac", "model": "Mac mini (2012)", "year": 2012, "launchPrice": 18900, "confidence": "low" },
-    { "category": "Mac", "model": "MacBook Air (13-inch, 2013)", "year": 2013, "launchPrice": 34900, "confidence": "low" },
-    { "category": "Mac", "model": "MacBook Air (13-inch, 2014)", "year": 2014, "launchPrice": 31900, "confidence": "low" },
-    { "category": "Mac", "model": "MacBook Pro (13-inch, Retina, 2014)", "year": 2014, "launchPrice": 39900, "confidence": "low" },
-    { "category": "Mac", "model": "MacBook Pro (15-inch, Retina, 2014)", "year": 2014, "launchPrice": 62900, "confidence": "low" },
-    { "category": "Mac", "model": "Mac mini (2014)", "year": 2014, "launchPrice": 15900, "confidence": "low" },
-    { "category": "Mac", "model": "MacBook Air (13-inch, early 2015)", "year": 2015, "launchPrice": 30900, "confidence": "low" },
-    { "category": "Mac", "model": "iMac (21.5-inch, 2015)", "year": 2015, "launchPrice": 36900, "confidence": "low" },
-    { "category": "Mac", "model": "MacBook Pro (13-inch, Touch Bar, 2016)", "year": 2016, "launchPrice": 54900, "confidence": "low" },
-    { "category": "Mac", "model": "MacBook Air (Retina, 13-inch, 2018)", "year": 2018, "launchPrice": 37900, "confidence": "med" },
-    { "category": "Mac", "model": "MacBook Pro (16-inch, 2019)", "year": 2019, "launchPrice": 74900, "confidence": "med" },
-    { "category": "Mac", "model": "MacBook Air (M1)", "year": 2020, "launchPrice": 32900, "confidence": "high" },
-    { "category": "Mac", "model": "MacBook Pro (13-inch, M1)", "year": 2020, "launchPrice": 39900, "confidence": "high" },
-    { "category": "Mac", "model": "Mac mini (M1)", "year": 2020, "launchPrice": 21900, "confidence": "high" },
-    { "category": "Mac", "model": "iMac (24-inch, M1)", "year": 2021, "launchPrice": 42900, "confidence": "high" },
-    { "category": "Mac", "model": "MacBook Pro (14-inch, M1 Pro)", "year": 2021, "launchPrice": 59900, "confidence": "high" },
-    { "category": "Mac", "model": "MacBook Pro (16-inch, M1 Pro)", "year": 2021, "launchPrice": 74900, "confidence": "high" },
-    { "category": "Mac", "model": "MacBook Air (M2)", "year": 2022, "launchPrice": 37900, "confidence": "high" },
-    { "category": "Mac", "model": "Mac mini (M2)", "year": 2023, "launchPrice": 18900, "confidence": "high" },
-    { "category": "Mac", "model": "MacBook Pro (14-inch, M3)", "year": 2023, "launchPrice": 54900, "confidence": "med" },
-    { "category": "Mac", "model": "MacBook Air (M3, 13-inch)", "year": 2024, "launchPrice": 36900, "confidence": "high" },
-    { "category": "Mac", "model": "Mac mini (M4)", "year": 2024, "launchPrice": 18900, "confidence": "high" },
-    { "category": "Mac", "model": "MacBook Pro (14-inch, M4)", "year": 2024, "launchPrice": 54900, "confidence": "med" },
-    { "category": "Mac", "model": "iMac (24-inch, M4)", "year": 2024, "launchPrice": 42900, "confidence": "med" },
-    { "category": "Mac", "model": "MacBook Air (M4, 13-inch)", "year": 2025, "launchPrice": 32900, "confidence": "med" },
-
-    { "category": "iPad", "model": "iPad (1st gen)", "year": 2010, "launchPrice": 15800, "confidence": "low" },
-    { "category": "iPad", "model": "iPad 2", "year": 2011, "launchPrice": 14900, "confidence": "low" },
-    { "category": "iPad", "model": "iPad (3rd gen)", "year": 2012, "launchPrice": 15900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad (4th gen)", "year": 2012, "launchPrice": 15900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad mini (1st gen)", "year": 2012, "launchPrice": 10900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad Air (1st gen)", "year": 2013, "launchPrice": 15900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad mini 2", "year": 2013, "launchPrice": 11900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad mini 3", "year": 2014, "launchPrice": 12900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad Air 2", "year": 2014, "launchPrice": 14900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad mini 4", "year": 2015, "launchPrice": 11900, "confidence": "low" },
-    { "category": "iPad", "model": "iPad Pro (12.9-inch, 1st gen)", "year": 2015, "launchPrice": 27900, "confidence": "low" },
-    { "category": "iPad", "model": "iPad Pro (9.7-inch)", "year": 2016, "launchPrice": 18900, "confidence": "low" },
-    { "category": "iPad", "model": "iPad (5th gen)", "year": 2017, "launchPrice": 10900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad Pro (11-inch, 1st gen)", "year": 2018, "launchPrice": 25900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad Air (3rd gen)", "year": 2019, "launchPrice": 15900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad mini (5th gen)", "year": 2019, "launchPrice": 12900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad (7th gen)", "year": 2019, "launchPrice": 10900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad Air (4th gen)", "year": 2020, "launchPrice": 18900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad (9th gen)", "year": 2021, "launchPrice": 10900, "confidence": "high" },
-    { "category": "iPad", "model": "iPad mini (6th gen)", "year": 2021, "launchPrice": 14900, "confidence": "high" },
-    { "category": "iPad", "model": "iPad Pro (11-inch, M1)", "year": 2021, "launchPrice": 25900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad (10th gen)", "year": 2022, "launchPrice": 14900, "confidence": "high" },
-    { "category": "iPad", "model": "iPad Air (M1, 5th gen)", "year": 2022, "launchPrice": 18900, "confidence": "high" },
-    { "category": "iPad", "model": "iPad Pro (11-inch, M2)", "year": 2022, "launchPrice": 26900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad Air (11-inch, M2)", "year": 2024, "launchPrice": 18900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad Pro (11-inch, M4)", "year": 2024, "launchPrice": 34900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad (A16, 11th gen)", "year": 2025, "launchPrice": 10900, "confidence": "med" },
-    { "category": "iPad", "model": "iPad Air (11-inch, M3)", "year": 2025, "launchPrice": 18900, "confidence": "med" },
-
-    { "category": "iPhone", "model": "iPhone (1st gen)", "year": 2007, "launchPrice": 18900, "confidence": "low" },
-    { "category": "iPhone", "model": "iPhone 3G", "year": 2008, "launchPrice": 21900, "confidence": "low" },
-    { "category": "iPhone", "model": "iPhone 3GS", "year": 2009, "launchPrice": 26900, "confidence": "low" },
-    { "category": "iPhone", "model": "iPhone 4", "year": 2010, "launchPrice": 21900, "confidence": "low" },
-    { "category": "iPhone", "model": "iPhone 4S", "year": 2011, "launchPrice": 24500, "confidence": "low" },
-    { "category": "iPhone", "model": "iPhone 5", "year": 2012, "launchPrice": 22900, "confidence": "low" },
-    { "category": "iPhone", "model": "iPhone 5c", "year": 2013, "launchPrice": 20900, "confidence": "low" },
-    { "category": "iPhone", "model": "iPhone 5s", "year": 2013, "launchPrice": 22900, "confidence": "low" },
-    { "category": "iPhone", "model": "iPhone 6", "year": 2014, "launchPrice": 22500, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 6 Plus", "year": 2014, "launchPrice": 25900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 6s", "year": 2015, "launchPrice": 22900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 6s Plus", "year": 2015, "launchPrice": 26500, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone SE (1st gen)", "year": 2016, "launchPrice": 13900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 7", "year": 2016, "launchPrice": 24900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 7 Plus", "year": 2016, "launchPrice": 28900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 8", "year": 2017, "launchPrice": 25500, "confidence": "med" },
-    { "category": "iPhone", "model": "iPhone 8 Plus", "year": 2017, "launchPrice": 29500, "confidence": "med" },
-    { "category": "iPhone", "model": "iPhone X", "year": 2017, "launchPrice": 35900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone XR", "year": 2018, "launchPrice": 26900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone XS", "year": 2018, "launchPrice": 35900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone XS Max", "year": 2018, "launchPrice": 39900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 11", "year": 2019, "launchPrice": 24900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 11 Pro", "year": 2019, "launchPrice": 33900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 11 Pro Max", "year": 2019, "launchPrice": 36900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone SE (2nd gen)", "year": 2020, "launchPrice": 13900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 12 mini", "year": 2020, "launchPrice": 23900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 12", "year": 2020, "launchPrice": 26900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 12 Pro", "year": 2020, "launchPrice": 33900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 12 Pro Max", "year": 2020, "launchPrice": 37900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 13 mini", "year": 2021, "launchPrice": 23900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 13", "year": 2021, "launchPrice": 25900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 13 Pro", "year": 2021, "launchPrice": 32900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 13 Pro Max", "year": 2021, "launchPrice": 36900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone SE (3rd gen)", "year": 2022, "launchPrice": 13900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 14", "year": 2022, "launchPrice": 27900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 14 Plus", "year": 2022, "launchPrice": 30900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 14 Pro", "year": 2022, "launchPrice": 34900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 14 Pro Max", "year": 2022, "launchPrice": 38900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 15", "year": 2023, "launchPrice": 29900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 15 Plus", "year": 2023, "launchPrice": 32900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 15 Pro", "year": 2023, "launchPrice": 36900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 15 Pro Max", "year": 2023, "launchPrice": 44900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 16", "year": 2024, "launchPrice": 29900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 16 Plus", "year": 2024, "launchPrice": 32900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 16 Pro", "year": 2024, "launchPrice": 36900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 16 Pro Max", "year": 2024, "launchPrice": 44900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 16e", "year": 2025, "launchPrice": 21900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 17", "year": 2025, "launchPrice": 29900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone Air", "year": 2025, "launchPrice": 36900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 17 Pro", "year": 2025, "launchPrice": 39900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 17 Pro Max", "year": 2025, "launchPrice": 44900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 18 Pro", "year": 2026, "launchPrice": 44900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 18 Pro Max", "year": 2026, "launchPrice": 49900, "confidence": "high" },
-    { "category": "iPhone", "model": "iPhone 18", "year": 2027, "launchPrice": 31900, "confidence": "low" }
+    {
+      "category": "iPhone",
+      "model": "iPhone (1st gen)",
+      "year": 2007,
+      "launchPrice": 18900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 3G",
+      "year": 2008,
+      "launchPrice": 21900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 3GS",
+      "year": 2009,
+      "launchPrice": 26900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 4",
+      "year": 2010,
+      "launchPrice": 21900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 4S",
+      "year": 2011,
+      "launchPrice": 24500,
+      "confidence": "low"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 5",
+      "year": 2012,
+      "launchPrice": 22900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 5c",
+      "year": 2013,
+      "launchPrice": 20900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 5s",
+      "year": 2013,
+      "launchPrice": 22900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 6",
+      "year": 2014,
+      "launchPrice": 22500,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 6 Plus",
+      "year": 2014,
+      "launchPrice": 25900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 6s",
+      "year": 2015,
+      "launchPrice": 22900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 6s Plus",
+      "year": 2015,
+      "launchPrice": 26500,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 7",
+      "year": 2016,
+      "launchPrice": 24900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 7 Plus",
+      "year": 2016,
+      "launchPrice": 28900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone SE (1st gen)",
+      "year": 2016,
+      "launchPrice": 13900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 8",
+      "year": 2017,
+      "launchPrice": 25500,
+      "confidence": "med"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 8 Plus",
+      "year": 2017,
+      "launchPrice": 29500,
+      "confidence": "med"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone X",
+      "year": 2017,
+      "launchPrice": 35900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone XR",
+      "year": 2018,
+      "launchPrice": 26900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone XS",
+      "year": 2018,
+      "launchPrice": 35900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone XS Max",
+      "year": 2018,
+      "launchPrice": 39900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 11",
+      "year": 2019,
+      "launchPrice": 24900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 11 Pro",
+      "year": 2019,
+      "launchPrice": 33900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 11 Pro Max",
+      "year": 2019,
+      "launchPrice": 36900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 12",
+      "year": 2020,
+      "launchPrice": 26900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 12 Pro",
+      "year": 2020,
+      "launchPrice": 33900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 12 Pro Max",
+      "year": 2020,
+      "launchPrice": 37900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 12 mini",
+      "year": 2020,
+      "launchPrice": 23900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone SE (2nd gen)",
+      "year": 2020,
+      "launchPrice": 13900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 13",
+      "year": 2021,
+      "launchPrice": 25900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 13 Pro",
+      "year": 2021,
+      "launchPrice": 32900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 13 Pro Max",
+      "year": 2021,
+      "launchPrice": 36900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 13 mini",
+      "year": 2021,
+      "launchPrice": 23900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 14",
+      "year": 2022,
+      "launchPrice": 27900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 14 Plus",
+      "year": 2022,
+      "launchPrice": 30900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 14 Pro",
+      "year": 2022,
+      "launchPrice": 34900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 14 Pro Max",
+      "year": 2022,
+      "launchPrice": 38900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone SE (3rd gen)",
+      "year": 2022,
+      "launchPrice": 13900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 15",
+      "year": 2023,
+      "launchPrice": 29900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 15 Plus",
+      "year": 2023,
+      "launchPrice": 32900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 15 Pro",
+      "year": 2023,
+      "launchPrice": 36900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 15 Pro Max",
+      "year": 2023,
+      "launchPrice": 44900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 16",
+      "year": 2024,
+      "launchPrice": 29900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 16 Plus",
+      "year": 2024,
+      "launchPrice": 32900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 16 Pro",
+      "year": 2024,
+      "launchPrice": 36900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 16 Pro Max",
+      "year": 2024,
+      "launchPrice": 44900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 16e",
+      "year": 2025,
+      "launchPrice": 21900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 17",
+      "year": 2025,
+      "launchPrice": 29900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 17 Pro",
+      "year": 2025,
+      "launchPrice": 39900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 17 Pro Max",
+      "year": 2025,
+      "launchPrice": 44900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone Air",
+      "year": 2025,
+      "launchPrice": 36900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 18 Pro",
+      "year": 2026,
+      "launchPrice": 44900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 18 Pro Max",
+      "year": 2026,
+      "launchPrice": 49900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPhone",
+      "model": "iPhone 18",
+      "year": 2027,
+      "launchPrice": 31900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad (1st gen)",
+      "year": 2010,
+      "launchPrice": 15800,
+      "confidence": "low"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad 2",
+      "year": 2011,
+      "launchPrice": 14900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad (3rd gen)",
+      "year": 2012,
+      "launchPrice": 15900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad (4th gen)",
+      "year": 2012,
+      "launchPrice": 15900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad mini (1st gen)",
+      "year": 2012,
+      "launchPrice": 10900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Air (1st gen)",
+      "year": 2013,
+      "launchPrice": 15900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad mini 2",
+      "year": 2013,
+      "launchPrice": 11900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Air 2",
+      "year": 2014,
+      "launchPrice": 14900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad mini 3",
+      "year": 2014,
+      "launchPrice": 12900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Pro (12.9-inch, 1st gen)",
+      "year": 2015,
+      "launchPrice": 27900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad mini 4",
+      "year": 2015,
+      "launchPrice": 11900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Pro (9.7-inch)",
+      "year": 2016,
+      "launchPrice": 18900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad (5th gen)",
+      "year": 2017,
+      "launchPrice": 10900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Pro (11-inch, 1st gen)",
+      "year": 2018,
+      "launchPrice": 25900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad (7th gen)",
+      "year": 2019,
+      "launchPrice": 10900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Air (3rd gen)",
+      "year": 2019,
+      "launchPrice": 15900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad mini (5th gen)",
+      "year": 2019,
+      "launchPrice": 12900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Air (4th gen)",
+      "year": 2020,
+      "launchPrice": 18900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad (9th gen)",
+      "year": 2021,
+      "launchPrice": 10900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Pro (11-inch, M1)",
+      "year": 2021,
+      "launchPrice": 25900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad mini (6th gen)",
+      "year": 2021,
+      "launchPrice": 14900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad (10th gen)",
+      "year": 2022,
+      "launchPrice": 14900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Air (M1, 5th gen)",
+      "year": 2022,
+      "launchPrice": 18900,
+      "confidence": "high"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Pro (11-inch, M2)",
+      "year": 2022,
+      "launchPrice": 26900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Air (11-inch, M2)",
+      "year": 2024,
+      "launchPrice": 18900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Pro (11-inch, M4)",
+      "year": 2024,
+      "launchPrice": 34900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad (A16, 11th gen)",
+      "year": 2025,
+      "launchPrice": 10900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Air (11-inch, M3)",
+      "year": 2025,
+      "launchPrice": 18900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (11-inch, 2011)",
+      "year": 2011,
+      "launchPrice": 29900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (13-inch, 2011)",
+      "year": 2011,
+      "launchPrice": 34900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (13-inch, 2011)",
+      "year": 2011,
+      "launchPrice": 36900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (15-inch, 2011)",
+      "year": 2011,
+      "launchPrice": 56900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "Mac mini (2012)",
+      "year": 2012,
+      "launchPrice": 18900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (13-inch, Retina, 2012)",
+      "year": 2012,
+      "launchPrice": 46900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (15-inch, Retina, 2012)",
+      "year": 2012,
+      "launchPrice": 68900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "iMac (21.5-inch, 2012)",
+      "year": 2012,
+      "launchPrice": 37900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (13-inch, 2013)",
+      "year": 2013,
+      "launchPrice": 34900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "Mac mini (2014)",
+      "year": 2014,
+      "launchPrice": 15900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (13-inch, 2014)",
+      "year": 2014,
+      "launchPrice": 31900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (13-inch, Retina, 2014)",
+      "year": 2014,
+      "launchPrice": 39900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (15-inch, Retina, 2014)",
+      "year": 2014,
+      "launchPrice": 62900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook (12-inch)",
+      "year": 2015,
+      "launchPrice": 41900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (13-inch, early 2015)",
+      "year": 2015,
+      "launchPrice": 30900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "iMac (21.5-inch, 2015)",
+      "year": 2015,
+      "launchPrice": 36900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (13-inch, Touch Bar, 2016)",
+      "year": 2016,
+      "launchPrice": 54900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook (12-inch, 2017)",
+      "year": 2017,
+      "launchPrice": 41900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (13-inch, 2017)",
+      "year": 2017,
+      "launchPrice": 30900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (Retina, 13-inch, 2018)",
+      "year": 2018,
+      "launchPrice": 37900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (16-inch, 2019)",
+      "year": 2019,
+      "launchPrice": 74900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "Mac mini (M1)",
+      "year": 2020,
+      "launchPrice": 21900,
+      "confidence": "high"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (M1)",
+      "year": 2020,
+      "launchPrice": 32900,
+      "confidence": "high"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (13-inch, M1)",
+      "year": 2020,
+      "launchPrice": 39900,
+      "confidence": "high"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (14-inch, M1 Pro)",
+      "year": 2021,
+      "launchPrice": 59900,
+      "confidence": "high"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (16-inch, M1 Pro)",
+      "year": 2021,
+      "launchPrice": 74900,
+      "confidence": "high"
+    },
+    {
+      "category": "Mac",
+      "model": "iMac (24-inch, M1)",
+      "year": 2021,
+      "launchPrice": 42900,
+      "confidence": "high"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (M2)",
+      "year": 2022,
+      "launchPrice": 37900,
+      "confidence": "high"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (13-inch, M2)",
+      "year": 2022,
+      "launchPrice": 42900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "Mac mini (M2)",
+      "year": 2023,
+      "launchPrice": 18900,
+      "confidence": "high"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (15-inch, M2)",
+      "year": 2023,
+      "launchPrice": 43900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (14-inch, M2 Pro)",
+      "year": 2023,
+      "launchPrice": 59900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (14-inch, M3)",
+      "year": 2023,
+      "launchPrice": 54900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (16-inch, M2 Pro)",
+      "year": 2023,
+      "launchPrice": 74900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (16-inch, M3 Pro)",
+      "year": 2023,
+      "launchPrice": 69900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "Mac mini (M4)",
+      "year": 2024,
+      "launchPrice": 18900,
+      "confidence": "high"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (15-inch, M3)",
+      "year": 2024,
+      "launchPrice": 43900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (M3, 13-inch)",
+      "year": 2024,
+      "launchPrice": 36900,
+      "confidence": "high"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (14-inch, M4)",
+      "year": 2024,
+      "launchPrice": 54900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (16-inch, M4 Pro)",
+      "year": 2024,
+      "launchPrice": 69900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "iMac (24-inch, M4)",
+      "year": 2024,
+      "launchPrice": 42900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (15-inch, M4)",
+      "year": 2025,
+      "launchPrice": 39900,
+      "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (M4, 13-inch)",
+      "year": 2025,
+      "launchPrice": 32900,
+      "confidence": "med"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Series 1",
+      "year": 2016,
+      "launchPrice": 8900,
+      "confidence": "med"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Series 2",
+      "year": 2016,
+      "launchPrice": 11900,
+      "confidence": "med"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Series 3",
+      "year": 2017,
+      "launchPrice": 9900,
+      "confidence": "high"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Series 4",
+      "year": 2018,
+      "launchPrice": 12900,
+      "confidence": "high"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Series 5",
+      "year": 2019,
+      "launchPrice": 12900,
+      "confidence": "high"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch SE (1st gen)",
+      "year": 2020,
+      "launchPrice": 8900,
+      "confidence": "high"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Series 6",
+      "year": 2020,
+      "launchPrice": 12900,
+      "confidence": "high"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Series 7",
+      "year": 2021,
+      "launchPrice": 12900,
+      "confidence": "high"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch SE (2nd gen)",
+      "year": 2022,
+      "launchPrice": 7900,
+      "confidence": "high"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Series 8",
+      "year": 2022,
+      "launchPrice": 12900,
+      "confidence": "high"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Ultra",
+      "year": 2022,
+      "launchPrice": 25900,
+      "confidence": "high"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Series 9",
+      "year": 2023,
+      "launchPrice": 12900,
+      "confidence": "high"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Ultra 2",
+      "year": 2023,
+      "launchPrice": 25900,
+      "confidence": "high"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Series 10",
+      "year": 2024,
+      "launchPrice": 12900,
+      "confidence": "high"
+    },
+    {
+      "category": "AirPods",
+      "model": "AirPods (1st gen)",
+      "year": 2016,
+      "launchPrice": 5290,
+      "confidence": "high"
+    },
+    {
+      "category": "AirPods",
+      "model": "AirPods (2nd gen)",
+      "year": 2019,
+      "launchPrice": 5290,
+      "confidence": "high"
+    },
+    {
+      "category": "AirPods",
+      "model": "AirPods Pro (1st gen)",
+      "year": 2019,
+      "launchPrice": 7990,
+      "confidence": "high"
+    },
+    {
+      "category": "AirPods",
+      "model": "AirPods Max",
+      "year": 2020,
+      "launchPrice": 18490,
+      "confidence": "high"
+    },
+    {
+      "category": "AirPods",
+      "model": "AirPods (3rd gen)",
+      "year": 2021,
+      "launchPrice": 5990,
+      "confidence": "high"
+    },
+    {
+      "category": "AirPods",
+      "model": "AirPods Pro (2nd gen)",
+      "year": 2022,
+      "launchPrice": 7490,
+      "confidence": "high"
+    },
+    {
+      "category": "AirPods",
+      "model": "AirPods Pro (2nd gen, USB-C)",
+      "year": 2023,
+      "launchPrice": 7490,
+      "confidence": "med"
+    },
+    {
+      "category": "AirPods",
+      "model": "AirPods (4th gen)",
+      "year": 2024,
+      "launchPrice": 3990,
+      "confidence": "high"
+    },
+    {
+      "category": "AirPods",
+      "model": "AirPods 4 with ANC",
+      "year": 2024,
+      "launchPrice": 5490,
+      "confidence": "med"
+    },
+    {
+      "category": "AirPods",
+      "model": "AirPods Max (USB-C)",
+      "year": 2024,
+      "launchPrice": 18490,
+      "confidence": "med"
+    }
   ]
 }
