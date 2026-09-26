@@ -479,10 +479,11 @@
     var onlyCat=(C===1&&catList[0])?CATZH[catList[0]]:"";
     var repl={first:firstDev?firstDev[0]:"第一台 Apple", firstY:firstDev?firstDev[1]:"", years:Y,
       cad:(cadence!=null?cadence:"—"), pro:Math.round(proRatio*100), cats:C, dev:D, spend:money(total), onlyCat:onlyCat};
-    var desc=PERSONAS[pkey].desc.replace(/\{(\w+)\}/g,function(_,k){return repl[k]!==undefined?repl[k]:"";});
+    function fill(s){return s.replace(/\{(\w+)\}/g,function(_,k){return repl[k]!==undefined?repl[k]:"";});}
+    var desc=fill(PERSONAS[pkey].desc), tagf=fill(PERSONAS[pkey].tag);
     return {devs:devs,total:total,catCount:C,deviceCount:D,appleYears:Y,firstDev:firstDev,cycle:cadence,
       iphoneCount:N,proRatio:Math.round(proRatio*100),metrics:m,pkey:pkey,persona:PERSONAS[pkey],desc:desc,
-      tier:tier,traits:t,pct:pct,
+      tier:tier,traits:t,pct:pct,tag:tagf,
       ecosystem:m.completeness,loyalty:m.loyalty,proObsession:m.pro};   // back-compat for result card
   }
 
@@ -568,7 +569,7 @@
     $("cYears").textContent=R.appleYears;
     $("cDev").textContent=R.devs.length;
     $("cCat").textContent=R.catCount;
-    $("cTag").textContent=p.tag;
+    $("cTag").textContent=R.tag;
     var bars=[["生態系完整度",R.metrics.completeness],["忠誠續航",R.metrics.loyalty],["Pro 濃度",R.metrics.pro]];
     $("cBars").innerHTML=bars.map(function(b){return '<div class="cbar"><span class="bl">'+b[0]+'</span><span class="tr"><span class="fl" data-w="'+b[1]+'"></span></span></div>';}).join("");
     setTimeout(function(){ document.querySelectorAll("#cBars .fl").forEach(function(f){ f.style.width=f.dataset.w+"%"; }); },250);
