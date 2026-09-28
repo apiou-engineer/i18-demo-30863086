@@ -125,11 +125,11 @@
   .cabh em{font-style:italic}
   .cabsub{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;color:var(--soft);margin-top:12px;text-transform:uppercase}
   .shelf{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
-  .cell{position:relative;display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 8px 13px;background:#fbf8f1;border:1px solid var(--line);border-radius:14px;
+  .cell{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 0 12px;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;
     opacity:0;transform:translateY(12px);animation:cellIn .5s var(--ease) forwards}
   @keyframes cellIn{to{opacity:1;transform:none}}
-  .cell .ic{width:74px;height:74px;color:var(--ink);display:flex;align-items:center;justify-content:center}
-  .cell .ic.photo{width:100%;height:78px}
+  .cell .ic{width:74px;height:74px;color:var(--ink);display:flex;align-items:center;justify-content:center;margin-top:12px}
+  .cell .ic.photo{width:100%;height:108px;margin-top:0;background:#fff}
   .cell .ic svg{width:50px;height:50px;display:block}
   .cell .ic img{width:100%;height:100%;object-fit:contain;display:block}
   .cell .cx{position:absolute;top:7px;right:8px;font-family:var(--mono);font-size:.56rem;letter-spacing:.05em;color:var(--soft);
