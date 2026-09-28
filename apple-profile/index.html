@@ -322,41 +322,50 @@
   ];
 
   // personality profiles — the psych-test-style payoff
-  // 11 archetypes · "Apple as religion / stan-culture" voice · desc is a template ({slots} filled from real data)
+  // 14 archetypes · 追星（stan-culture）× 依產品分類/使用行為 · desc 是模板（{slots} 用真實資料填、只提使用者實際擁有的類別）
   var PERSONAS={
-    legend:{en:["The","High","Priest"], zh:"果教教主", floor:"傳說",
-      desc:"資歷 {years} 年、五大類全收、帳面持股 {spend}——你不是信徒，你是開宗立派的那個人。Apple 的香火有一半是你捐的，這種等級全台不到 1%。",
-      tag:"Certified Apple whale."},
-    architect:{en:["The","Ecosystem","Evangelist"], zh:"生態系傳教士", floor:"傳說",
-      desc:"iPhone、iPad、Mac、Watch、AirPods 五件法器全到齊——你早就不只是用 Apple，是在傳教。裝置串在一起那種順，你有義務讓全世界都知道。",
-      tag:"I don't buy Apple. I collect it."},
-    builder:{en:["The","Devout","Believer"], zh:"虔誠信徒", floor:"罕見",
-      desc:"五大類你已經請回 {cats} 類，就差一件就圓滿。{years} 年來一件一件收齊，你比誰都懂「全套」的執念——剩那一類，遲早入手。",
-      tag:"One relic short of complete."},
-    promax:{en:["The","Spec","Zealot"], zh:"Pro 原教旨信徒", floor:"稀有",
-      desc:"你的 iPhone 有 {pro}% 是 Pro 系列——這不是預算問題，是信仰問題。要信就信到頂，容量、鏡頭、鈦金屬一個都不能少。你拜的不是手機，是「不將就」。",
-      tag:"Why settle? Max, always."},
-    adopter:{en:["The","Launch-Day","Pilgrim"], zh:"首賣朝聖者", floor:"稀有",
-      desc:"平均 {cad} 年就換一輪，每場發表會都是你的朝聖日。別人還在看開箱，你的預購早就手滑下去了。錢包哭歸哭，開箱那一刻真的會謝主隆恩。",
-      tag:"New drop? Already in my cart."},
-    loyalist:{en:["The","Old","Believer"], zh:"初代老信徒", floor:"稀有",
-      desc:"從 {firstY} 的 {first} 一路信到現在，{years} 年香火不斷——你是那種發表會一場都沒缺席的精神股東。不被行銷推著走，你的忠誠用時間證明。",
-      tag:"{years} years of faith."},
-    steady:{en:["The","Apple","Ascetic"], zh:"Apple 苦行僧", floor:"稀有",
-      desc:"{cad} 年才換一次機，不是課不起，是清心寡慾。一台用到天荒地老，對你來說裝置是修行不是電子榨菜。這種定力，在果教裡意外稀有。",
-      tag:"Less churn. Zero regrets."},
+    legend:{en:["The","Ultimate","Stan"], zh:"課金鯨・大粉頭", floor:"傳說",
+      desc:"資歷 {years} 年、五大類全收、帳面持股 {spend}——你不是粉絲，你是站姐本尊。Apple 的應援榜上有你一份，這種大粉頭全台不到 1%。",
+      tag:"Ultimate stan. Certified."},
+    architect:{en:["The","All-In","Superfan"], zh:"全生態鐵粉", floor:"傳說",
+      desc:"iPhone、iPad、Mac、Watch、AirPods 五樣全入手——你早就不只是用 Apple，是全生態的鐵粉。裝置串起來那種順，你有義務讓全世界都知道。",
+      tag:"All five. All in."},
+    collector:{en:["The","Almost-Complete","Fan"], zh:"差一套的蒐集控", floor:"罕見",
+      desc:"五大類你已經收了 {cats} 類，就差一套就全制霸。{years} 年來一件一件補齊，你比誰都懂「蒐集控」的執念——缺的那套，遲早入手。",
+      tag:"One box from a full set."},
+    producer:{en:["The","Career","Fan"], zh:"生產力事業粉", floor:"稀有",
+      desc:"你的 Mac 一台換過一台——別人追偶像，你追生產力。筆電是你的本命裝備，工作、剪片、寫扣都靠它。這種事業粉，Apple 最愛。",
+      tag:"My Mac is my whole career."},
+    creator:{en:["The","Creator","Fan"], zh:"創作型應援者", floor:"稀有",
+      desc:"你有 iPad——它是你的畫布、你的手寫板、你的第二顆腦。你不是被動追新，是拿它來生產內容的創作型粉絲，靈感一來隨手就開畫。",
+      tag:"iPad is my canvas."},
+    trend:{en:["The","Statement","Stan"], zh:"戴頭上的潮流本命", floor:"稀有",
+      desc:"你有 AirPods Max——那不只是耳機，是戴在頭上的態度。音質是其次，潮流感才是重點。你課的是「一眼就被認出來」的存在感。",
+      tag:"Sound? Sure. Style first."},
+    pioneer:{en:["The","Front-Row","Fan"], zh:"首賣前排粉", floor:"稀有",
+      desc:"平均 {cad} 年就換一支 iPhone——每場發表會你都站前排。別人還在看開箱，你的預購早就手滑下去了。追的不是手機，是「我先擁有」的快感。",
+      tag:"Front row, every launch."},
+    promax:{en:["The","Pro","Zealot"], zh:"頂規原教旨粉", floor:"稀有",
+      desc:"你的 iPhone 有 {pro}% 是 Pro 系列——這不是預算問題，是信仰問題。要課就課到頂，容量、鏡頭、鈦金屬一個都不能少。你本命的是「不將就」。",
+      tag:"Pro or nothing."},
+    fitness:{en:["The","Everyday","Athlete"], zh:"揮汗運動粉", floor:"少見",
+      desc:"你有 Apple Watch——手腕上的私人教練。心率、步數、三個圓圈圈，你天天在跟自己較勁。Apple 對你來說不是放桌上的，是戴在身上、陪你一起流汗的。",
+      tag:"Close the rings."},
+    music:{en:["The","Music","Devotee"], zh:"耳機不離身的音樂粉", floor:"少見",
+      desc:"你的 Apple 幾乎都塞在耳朵裡——AirPods 不離身，通勤、走路、發呆都要有配樂。你追的是隨時把世界靜音、只留下自己歌單的那種自由。",
+      tag:"Life needs a soundtrack."},
+    loyalist:{en:["The","Day-One","Fan"], zh:"十年不脫飯的老粉", floor:"稀有",
+      desc:"從 {firstY} 的 {first} 一路追到現在，{years} 年沒脫過飯——你是那種發表會一場都沒缺席的老粉。不被行銷推著走，你的忠誠用時間證明。",
+      tag:"{years} years, never left."},
     purist:{en:["The","iPhone","Stan"], zh:"iPhone 本命唯粉", floor:"少見",
-      desc:"你的信仰很純——iPhone 就是本命，其他一律脫飯。{years} 年只認這一款，把一件事做到極致。不用一整套生態系證明什麼，這種唯粉的專情其實很帥。",
+      desc:"你的 Apple 很純——iPhone 就是本命，其他一律脫飯。{years} 年只認這一款，把一件事做到極致。不用一整套生態系證明什麼，這種唯粉的專情其實很帥。",
       tag:"One iPhone. Ride or die."},
-    specialist:{en:["The","Niche","Devotee"], zh:"專情小眾教徒", floor:"少見",
-      desc:"你只認 {onlyCat} 這一味，其他不碰。小眾歸小眾，但你把它拜好拜滿——淺嚐 Apple，卻已經回不去了。",
-      tag:"One lane, all in."},
-    explorer:{en:["The","Curious","Seeker"], zh:"入坑中的探索者", floor:"少見",
-      desc:"你手上有 {cats} 條產品線，不狂熱、但持續在入坑。你不是衝動派，是看準了才慢慢請——決定慢，但每一筆都算得清。這種人一旦入教就很難脫飯。",
-      tag:"Took my time. No takebacks."},
-    visitor:{en:["The","New","Convert"], zh:"剛入教的新香客", floor:"常見",
-      desc:"從 {first} 起步，你的果教香火還很新——剛好夠你開始懂「為什麼大家會上癮」。最好玩的階段，前面一整座生態系等你逛。歡迎入教，新股東。",
-      tag:"New here. Already hooked."}
+    newcomer:{en:["The","New","Fan"], zh:"剛入坑的萌新", floor:"常見",
+      desc:"從 {first} 起步，你的 Apple 坑才剛入——剛好夠你開始懂「為什麼大家會上癮」。最好玩的階段，前面一整個生態系等你逛。歡迎入坑，新粉。",
+      tag:"New here. Already hooked."},
+    explorer:{en:["The","Casual","Fan"], zh:"隨興散粉", floor:"少見",
+      desc:"你手上有 {cats} 條產品線，不狂熱、但持續在入坑。你不是衝動派，是看準了才慢慢收——決定慢，但每一筆都算得清。這種散粉一旦認了本命就很難脫飯。",
+      tag:"Casually devoted."}
   };
   var CATZH={iPhone:"iPhone",iPad:"iPad",Mac:"Mac","Apple Watch":"Apple Watch",AirPods:"AirPods"};
 
@@ -436,20 +445,27 @@
     var cadence=null;
     if(N>=2){ var iy=iph.map(function(d){return d[1];}); cadence=Math.round((Math.max.apply(null,iy)-Math.min.apply(null,iy))/(N-1)*10)/10; }
     var spendPerYear=Y?total/Y:total;
-    // --- classification: strict->loose cascade, first match wins ---
+    // per-category / model signals for classification
+    var macCount=devs.filter(function(d){return d[3]==="Mac";}).length;
+    var hasIpad=!!cats["iPad"], hasWatch=!!cats["Apple Watch"], hasAir=!!cats["AirPods"], hasMac=!!cats["Mac"];
+    var hasMax=devs.some(function(d){return /AirPods Max/.test(d[0]);});
+    // --- classification cascade (first match wins) · category/usage roles, stan-culture voice ---
     var pkey;
-    if(C===5 && Y>=12 && total>=400000) pkey="legend";
-    else if(C===5) pkey="architect";
-    else if(C===4) pkey="builder";
-    else if(N>=2 && P>=2 && proRatio>=0.5) pkey="promax";
-    else if(N>=3 && cadence!=null && cadence<=1.5) pkey="adopter";
-    else if(Y>=10 && D>=2) pkey="loyalist";
-    else if(N>=2 && cadence!=null && cadence>=4) pkey="steady";
-    else if(C===1 && cats["iPhone"]) pkey="purist";
-    else if(C===1) pkey="specialist";
-    else if(Y<=2 && D<=2) pkey="visitor";
-    else pkey="explorer";
-    if(D===0) pkey="visitor";
+    if(C===5 && Y>=12 && total>=400000) pkey="legend";      // whale veteran, full ecosystem
+    else if(C===5) pkey="architect";                         // owns all 5
+    else if(C===4) pkey="collector";                         // owns 4
+    else if(macCount>=2) pkey="producer";                    // frequently upgrades computer → works on it
+    else if(hasIpad) pkey="creator";                         // owns iPad → creates
+    else if(hasMax) pkey="trend";                            // AirPods Max → statement / trend
+    else if(N>=3 && cadence!=null && cadence<=1.5) pkey="pioneer";   // yearly iPhone upgrader
+    else if(N>=2 && P>=2 && proRatio>=0.5) pkey="promax";    // pro-line devotee
+    else if(hasWatch && !hasMac && !hasIpad) pkey="fitness"; // watch-led lifestyle → sports
+    else if(hasAir && !hasMac && !hasIpad && !hasWatch) pkey="music"; // audio-led → music lover
+    else if(Y>=10 && D>=2) pkey="loyalist";                  // long-tenure fan
+    else if(C===1 && cats["iPhone"]) pkey="purist";          // iPhone only
+    else if(Y<=2 && D<=2) pkey="newcomer";                   // just started
+    else pkey="explorer";                                    // guaranteed fallback
+    if(D===0) pkey="newcomer";
     // --- 7 metrics 0..100 (null where undefined) ---
     var m={
       completeness:norm(C,5),
