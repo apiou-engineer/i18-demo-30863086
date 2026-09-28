@@ -1025,6 +1025,20 @@
       "confidence": "med"
     },
     {
+      "category": "Apple Watch",
+      "model": "Apple Watch Series 12",
+      "year": 2026,
+      "launchPrice": 12900,
+      "confidence": "low"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Ultra 4",
+      "year": 2026,
+      "launchPrice": 27900,
+      "confidence": "low"
+    },
+    {
       "category": "AirPods",
       "model": "AirPods (1st gen)",
       "year": 2016,

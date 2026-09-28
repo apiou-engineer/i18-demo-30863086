@@ -663,8 +663,8 @@
     // one cell per device (different models shown separately, even if they share a photo)
     $("cabGrid").innerHTML=devs.map(function(d,i){
       var img=imgFor(d[3],d[0],d[1]);
-      var vis = img ? '<img src="img/'+img+'.png" alt="">' : devSVG(d[3]);
-      return '<div class="cell" style="animation-delay:'+(i*55)+'ms"><div class="ic '+(img?'photo':'')+'">'+vis+'</div><div class="cnm">'+d[0]+'</div><div class="cyr">'+d[1]+'</div></div>';
+      var vis = img ? '<img src="img/'+img+'.png" alt="" loading="eager" decoding="async">' : devSVG(d[3]);
+      return '<div class="cell" style="animation-delay:'+Math.min(i*28,260)+'ms"><div class="ic '+(img?'photo':'')+'">'+vis+'</div><div class="cnm">'+d[0]+'</div><div class="cyr">'+d[1]+'</div></div>';
     }).join("");
   }
   // preload all cabinet photos early (only ~25 unique) so the cabinet appears instantly
