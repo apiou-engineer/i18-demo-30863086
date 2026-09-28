@@ -637,12 +637,16 @@
       return "iphone-3"; // 1st / 3G / 3GS
     }
     if(cat==="iPad"){
-      if(/Pro/.test(m)) return "ipad-pro";
-      if(/Air.*(M2|4th|5th)|Air \(M/.test(m)) return "ipad-air45";
+      if(/mini/.test(m)) return "ipad-classic";                 // mini (incl. "A17 Pro" mini) → small classic
+      if(/iPad Pro/.test(m)) return "ipad-pro";                  // true Pro line
+      if(/Air/.test(m)) return /(M\d|4th|5th|1[13]-inch)/.test(m)?"ipad-air45":"ipad-classic"; // modern flat-edge Air vs old Air
       if(/10th|10\.9/.test(m)) return "ipad-109";
       return "ipad-classic";
     }
-    if(cat==="Apple Watch"){ return year>=2022?"watch-1":(year>=2019?"watch-3":"watch-2"); }
+    if(cat==="Apple Watch"){
+      if(/Ultra/.test(m)) return "watch-ultra";
+      return year>=2022?"watch-1":(year>=2019?"watch-3":"watch-2");
+    }
     if(cat==="Mac"){
       if(/iMac/.test(m)) return "imac";
       if(/Mac mini/.test(m)) return "macmini";
@@ -670,7 +674,7 @@
     }).join("");
   }
   // preload all cabinet photos early (only ~25 unique) so the cabinet appears instantly
-  var CAB_IMGS=["iphone-18pro","iphone-17pro","iphone-1617","iphone-16plus","iphone-pro","iphone-13to15","iphone-12","iphone-11","iphone-x","iphone-xr","iphone-78se","iphone-6","iphone-5","iphone-4","iphone-3","iphone-air","ipad-pro","ipad-air45","ipad-109","ipad-classic","macbook-air-13","macbook-air-15","macbook-pro-14","macbook-pro-16","macbook-classic","imac","macmini","watch-1","watch-2","watch-3","airpods-12","airpods-345","airpods-pro","airpods-max"];
+  var CAB_IMGS=["iphone-18pro","iphone-17pro","iphone-1617","iphone-16plus","iphone-pro","iphone-13to15","iphone-12","iphone-11","iphone-x","iphone-xr","iphone-78se","iphone-6","iphone-5","iphone-4","iphone-3","iphone-air","ipad-pro","ipad-air45","ipad-109","ipad-classic","macbook-air-13","macbook-air-15","macbook-pro-14","macbook-pro-16","macbook-classic","imac","macmini","watch-1","watch-2","watch-3","watch-ultra","airpods-12","airpods-345","airpods-pro","airpods-max"];
   function preloadCabinet(){ CAB_IMGS.forEach(function(s){ var im=new Image(); im.src="img/"+s+".png"; }); }
   $("cabBtn").addEventListener("click",function(){ renderResult(); show("s-result"); });
 

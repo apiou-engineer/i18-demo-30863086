@@ -598,6 +598,34 @@
       "confidence": "med"
     },
     {
+      "category": "iPad",
+      "model": "iPad Air (11-inch, M4)",
+      "year": 2026,
+      "launchPrice": 18900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Air (13-inch, M4)",
+      "year": 2026,
+      "launchPrice": 24900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Pro (11-inch, M6)",
+      "year": 2026,
+      "launchPrice": 34900,
+      "confidence": "low"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Pro (13-inch, M6)",
+      "year": 2026,
+      "launchPrice": 46900,
+      "confidence": "low"
+    },
+    {
       "category": "Mac",
       "model": "MacBook Air (11-inch, 2011)",
       "year": 2011,
@@ -904,6 +932,34 @@
       "year": 2025,
       "launchPrice": 54900,
       "confidence": "med"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (M5, 13-inch)",
+      "year": 2026,
+      "launchPrice": 32900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Air (15-inch, M5)",
+      "year": 2026,
+      "launchPrice": 39900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (14-inch, M5 Pro)",
+      "year": 2026,
+      "launchPrice": 64900,
+      "confidence": "low"
+    },
+    {
+      "category": "Mac",
+      "model": "MacBook Pro (16-inch, M5 Pro)",
+      "year": 2026,
+      "launchPrice": 69900,
+      "confidence": "low"
     },
     {
       "category": "Apple Watch",
