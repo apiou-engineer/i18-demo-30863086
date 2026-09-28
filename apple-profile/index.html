@@ -593,14 +593,14 @@
       return "ipad-classic";
     }
     if(cat==="Apple Watch"){ return year>=2022?"watch-1":(year>=2019?"watch-3":"watch-2"); }
-    if(cat==="Mac"){ if(!/MacBook/.test(m)) return null; return year>=2021?"macbook-3":(year>=2017?"macbook-2":"macbook-1"); }
+    if(cat==="Mac"){ return year>=2021?"macbook-3":(year>=2017?"macbook-2":"macbook-1"); }  // mini/iMac temporarily use MacBook photo (pending assets)
     if(cat==="AirPods"){
-      if(/Max/.test(m)) return null;            // no photo supplied → line-art
       if(/Pro/.test(m)) return "airpods-pro";
+      if(/Max/.test(m)) return "airpods-pro";   // no Max photo yet → temp use Pro (pending asset)
       if(/3rd|4th|5th/.test(m)) return "airpods-345";
       return "airpods-12";
     }
-    return null;
+    return "iphone-78se";
   }
   function renderCabinet(){
     $("prog").style.width="95%";
