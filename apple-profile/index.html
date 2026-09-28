@@ -646,7 +646,9 @@
     if(cat==="Mac"){
       if(/iMac/.test(m)) return "imac";
       if(/Mac mini/.test(m)) return "macmini";
-      return year>=2021?"macbook-3":(year>=2017?"macbook-2":"macbook-1");
+      if(/MacBook Pro/.test(m)) return /1[56]-inch/.test(m)?"macbook-pro-16":"macbook-pro-14"; // 16"/15" big · 14"/13" small
+      if(/MacBook Air/.test(m)) return /15-inch/.test(m)?"macbook-air-15":"macbook-air-13";    // 15" · else 13"/11"/M-chip
+      return "macbook-classic"; // MacBook (12-inch) / generic
     }
     if(cat==="AirPods"){
       if(/Max/.test(m)) return "airpods-max";
@@ -668,7 +670,7 @@
     }).join("");
   }
   // preload all cabinet photos early (only ~25 unique) so the cabinet appears instantly
-  var CAB_IMGS=["iphone-18pro","iphone-17pro","iphone-1617","iphone-16plus","iphone-pro","iphone-13to15","iphone-12","iphone-11","iphone-x","iphone-xr","iphone-78se","iphone-6","iphone-5","iphone-4","iphone-3","iphone-air","ipad-pro","ipad-air45","ipad-109","ipad-classic","macbook-1","macbook-2","macbook-3","imac","macmini","watch-1","watch-2","watch-3","airpods-12","airpods-345","airpods-pro","airpods-max"];
+  var CAB_IMGS=["iphone-18pro","iphone-17pro","iphone-1617","iphone-16plus","iphone-pro","iphone-13to15","iphone-12","iphone-11","iphone-x","iphone-xr","iphone-78se","iphone-6","iphone-5","iphone-4","iphone-3","iphone-air","ipad-pro","ipad-air45","ipad-109","ipad-classic","macbook-air-13","macbook-air-15","macbook-pro-14","macbook-pro-16","macbook-classic","imac","macmini","watch-1","watch-2","watch-3","airpods-12","airpods-345","airpods-pro","airpods-max"];
   function preloadCabinet(){ CAB_IMGS.forEach(function(s){ var im=new Image(); im.src="img/"+s+".png"; }); }
   $("cabBtn").addEventListener("click",function(){ renderResult(); show("s-result"); });
 
