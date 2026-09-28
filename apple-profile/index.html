@@ -125,7 +125,7 @@
   .pbars{margin-top:30px;display:flex;flex-direction:column;gap:15px}
   .pbar .pbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-bottom:6px}
   .pbar .ptr{height:10px;background:#e3dcca;border-radius:5px;overflow:hidden}
-  .pbar .pfl{height:100%;background:var(--ink);border-radius:5px;transform-origin:left;animation:barGrow .75s var(--ease)}
+  .pbar .pfl{display:block;height:100%;background:var(--ink);border-radius:5px;transform-origin:left;animation:barGrow .75s var(--ease)}
   @keyframes barGrow{from{transform:scaleX(0)}}   /* grows in; if it doesn't run, bar still shows at its inline width */
   #s-persona .cta{margin-top:38px;align-self:flex-start}
 
@@ -175,7 +175,7 @@
   .card .cbar{display:flex;align-items:center;gap:3cqw}
   .card .cbar .bl{font-family:var(--mono);font-size:1.75cqw;letter-spacing:.08em;color:var(--soft);width:34cqw;text-transform:uppercase;text-align:left}
   .card .cbar .tr{flex:1;height:1.1cqw;background:#e2dccd;border-radius:2px;overflow:hidden}
-  .card .cbar .fl{height:100%;background:var(--ink);border-radius:2px;width:0;transition:width 1s var(--ease)}
+  .card .cbar .fl{display:block;height:100%;background:var(--ink);border-radius:2px;width:0;transition:width 1s var(--ease)}
   .card .ctag{font-family:var(--serif);font-style:italic;font-size:2.9cqw;color:#4d493f;margin-top:3.4cqh;text-align:left}
   .card .cfoot{font-family:var(--mono);font-size:1.9cqw;letter-spacing:.18em;color:var(--soft);margin-top:2.2cqh;text-align:left;text-transform:uppercase}
   .card .cdis{font-family:var(--mono);font-size:1.6cqw;letter-spacing:.1em;color:#a49c88;margin-top:1.8cqh;text-align:left}
