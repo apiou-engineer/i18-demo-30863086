@@ -125,13 +125,12 @@
   .cabh em{font-style:italic}
   .cabsub{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;color:var(--soft);margin-top:12px;text-transform:uppercase}
   .shelf{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
-  .cell{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 0 12px;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  .cell{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px 13px;background:#faf7f0;border:1px solid var(--line);border-radius:14px;
     opacity:0;transform:translateY(12px);animation:cellIn .5s var(--ease) forwards}
   @keyframes cellIn{to{opacity:1;transform:none}}
-  .cell .ic{width:74px;height:74px;color:var(--ink);display:flex;align-items:center;justify-content:center;margin-top:12px}
-  .cell .ic.photo{width:100%;height:108px;margin-top:0;background:#fff}
+  .cell .ic{width:100%;height:98px;color:var(--ink);display:flex;align-items:center;justify-content:center}
   .cell .ic svg{width:50px;height:50px;display:block}
-  .cell .ic img{width:100%;height:100%;object-fit:contain;display:block}
+  .cell .ic img{max-width:86%;max-height:100%;object-fit:contain;display:block;filter:drop-shadow(0 5px 9px rgba(60,50,30,.18))}
   .cell .cx{position:absolute;top:7px;right:8px;font-family:var(--mono);font-size:.56rem;letter-spacing:.05em;color:var(--soft);
     background:var(--paper);border:1px solid var(--line);border-radius:100px;padding:2px 6px}
   .cell .cnm{font-size:.68rem;font-weight:500;text-align:center;line-height:1.25;letter-spacing:-.01em}
@@ -583,8 +582,11 @@
       if(/^iPhone 11\b|11 Pro/.test(m)) return "iphone-11";
       if(/XR/.test(m)) return "iphone-xr";
       if(/^iPhone X\b|XS/.test(m)) return "iphone-x";
-      if(/^iPhone [4-8]\b|SE|^iPhone 5|^iPhone 6/.test(m)) return "iphone-78se";
-      return "iphone-78se"; // ancient (1st/3G/3GS) → home-button stand-in
+      if(/^iPhone [78]\b|SE/.test(m)) return "iphone-78se";
+      if(/^iPhone 6/.test(m)) return "iphone-6";
+      if(/^iPhone 5/.test(m)) return "iphone-5";
+      if(/^iPhone 4/.test(m)) return "iphone-4";
+      return "iphone-3"; // 1st / 3G / 3GS
     }
     if(cat==="iPad"){
       if(/Pro/.test(m)) return "ipad-pro";
@@ -593,10 +595,14 @@
       return "ipad-classic";
     }
     if(cat==="Apple Watch"){ return year>=2022?"watch-1":(year>=2019?"watch-3":"watch-2"); }
-    if(cat==="Mac"){ return year>=2021?"macbook-3":(year>=2017?"macbook-2":"macbook-1"); }  // mini/iMac temporarily use MacBook photo (pending assets)
+    if(cat==="Mac"){
+      if(/iMac/.test(m)) return "imac";
+      if(/Mac mini/.test(m)) return "macmini";
+      return year>=2021?"macbook-3":(year>=2017?"macbook-2":"macbook-1");
+    }
     if(cat==="AirPods"){
+      if(/Max/.test(m)) return "airpods-max";
       if(/Pro/.test(m)) return "airpods-pro";
-      if(/Max/.test(m)) return "airpods-pro";   // no Max photo yet → temp use Pro (pending asset)
       if(/3rd|4th|5th/.test(m)) return "airpods-345";
       return "airpods-12";
     }
@@ -615,7 +621,7 @@
       byKey[key].models.push(d); if(d[1]>byKey[key].newest)byKey[key].newest=d[1];
     });
     $("cabGrid").innerHTML=groups.map(function(g,i){
-      var vis = g.img ? '<img src="img/'+g.img+'.webp" alt="" loading="lazy">' : devSVG(g.cat);
+      var vis = g.img ? '<img src="img/'+g.img+'.png" alt="" loading="lazy">' : devSVG(g.cat);
       var badge = g.models.length>1 ? '<span class="cx">×'+g.models.length+'</span>' : '';
       var names = g.models.map(function(d){return d[0];});
       var label = names.length===1 ? names[0] : names.slice(0,2).join('、')+(names.length>2?' 等':'');
