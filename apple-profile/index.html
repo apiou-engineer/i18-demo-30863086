@@ -125,7 +125,9 @@
   .pbars{margin-top:30px;display:flex;flex-direction:column;gap:15px}
   .pbar .pbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-bottom:6px}
   .pbar .ptr{height:10px;background:#e3dcca;border-radius:5px;overflow:hidden}
-  .pbar .pfl{height:100%;background:var(--ink);border-radius:5px;width:0}
+  .pbar .pfl{height:100%;background:var(--ink);border-radius:5px;transform-origin:left;animation:barGrow .8s var(--ease) both}
+  @keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  @media (prefers-reduced-motion:reduce){ .pbar .pfl{animation:none} }
   #s-persona .cta{margin-top:38px;align-self:flex-start}
 
   /* ---------- collection cabinet ---------- */
@@ -559,20 +561,11 @@
     chips.push(["生態系",R.catCount+" 類 · "+R.deviceCount+" 台"]);
     $("pTraits").innerHTML=chips.map(function(c){return '<span class="chip"><b>'+c[0]+'</b> '+c[1]+'</span>';}).join("");
     var M=[["生態系完整度",m.completeness],["骨灰指數",m.vintage],["Pro 濃度",m.pro],["換機節奏",m.tempo],["收藏厚度",m.depth],["投入強度",m.intensity],["忠誠續航",m.loyalty]];
-    $("pBars").innerHTML=M.map(function(b){
+    // fill widths are set inline (always correct even if JS/rAF throttles); a pure-CSS scaleX grows each bar in, staggered
+    $("pBars").innerHTML=M.map(function(b,i){
       if(b[1]==null) return '<div class="pbar"><div class="pbl"><span>'+b[0]+'</span><span>—</span></div><div class="ptr"><span class="pfl" style="width:0"></span></div></div>';
-      return '<div class="pbar" data-v="'+b[1]+'"><div class="pbl"><span>'+b[0]+'</span><span class="pv">0%</span></div><div class="ptr"><span class="pfl" data-w="'+b[1]+'"></span></div></div>';
+      return '<div class="pbar"><div class="pbl"><span>'+b[0]+'</span><span>'+b[1]+'%</span></div><div class="ptr"><span class="pfl" style="width:'+b[1]+'%;animation-delay:'+(120+i*100)+'ms"></span></div></div>';
     }).join("");
-    // staggered reveal: drive BOTH bar width and number via rAF (robust — no reliance on CSS transition)
-    [].slice.call(document.querySelectorAll("#pBars .pbar[data-v]")).forEach(function(bar,idx){
-      var v=+bar.dataset.v, fl=bar.querySelector(".pfl"), pv=bar.querySelector(".pv");
-      setTimeout(function(){
-        var s=null;
-        (function step(ts){ if(s==null)s=ts; var k=Math.min(1,(ts-s)/900); var e=1-Math.pow(1-k,3);
-          fl.style.width=(v*e)+"%"; pv.textContent=Math.round(v*e)+"%";
-          if(k<1)requestAnimationFrame(step); else{ fl.style.width=v+"%"; pv.textContent=v+"%"; } })(performance.now());
-      }, 180+idx*130);
-    });
   }
   $("pBtn").addEventListener("click",function(){ renderCabinet(); show("s-cabinet"); });
 
