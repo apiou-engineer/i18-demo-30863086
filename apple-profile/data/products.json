@@ -564,6 +564,13 @@
     },
     {
       "category": "iPad",
+      "model": "iPad mini (A17 Pro, 7th gen)",
+      "year": 2024,
+      "launchPrice": 15900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
       "model": "iPad (A16, 11th gen)",
       "year": 2025,
       "launchPrice": 10900,
@@ -574,6 +581,20 @@
       "model": "iPad Air (11-inch, M3)",
       "year": 2025,
       "launchPrice": 18900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Pro (11-inch, M5)",
+      "year": 2025,
+      "launchPrice": 34900,
+      "confidence": "med"
+    },
+    {
+      "category": "iPad",
+      "model": "iPad Pro (13-inch, M5)",
+      "year": 2025,
+      "launchPrice": 46900,
       "confidence": "med"
     },
     {
@@ -878,6 +899,13 @@
       "confidence": "med"
     },
     {
+      "category": "Mac",
+      "model": "MacBook Pro (14-inch, M5)",
+      "year": 2025,
+      "launchPrice": 54900,
+      "confidence": "med"
+    },
+    {
       "category": "Apple Watch",
       "model": "Apple Watch Series 1",
       "year": 2016,
@@ -976,6 +1004,27 @@
       "confidence": "high"
     },
     {
+      "category": "Apple Watch",
+      "model": "Apple Watch SE 3",
+      "year": 2025,
+      "launchPrice": 8900,
+      "confidence": "med"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Series 11",
+      "year": 2025,
+      "launchPrice": 12900,
+      "confidence": "med"
+    },
+    {
+      "category": "Apple Watch",
+      "model": "Apple Watch Ultra 3",
+      "year": 2025,
+      "launchPrice": 27900,
+      "confidence": "med"
+    },
+    {
       "category": "AirPods",
       "model": "AirPods (1st gen)",
       "year": 2016,
@@ -1043,6 +1092,13 @@
       "model": "AirPods Max (USB-C)",
       "year": 2024,
       "launchPrice": 18490,
+      "confidence": "med"
+    },
+    {
+      "category": "AirPods",
+      "model": "AirPods Pro 3",
+      "year": 2025,
+      "launchPrice": 8490,
       "confidence": "med"
     }
   ]
