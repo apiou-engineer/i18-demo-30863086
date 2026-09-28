@@ -125,9 +125,8 @@
   .pbars{margin-top:30px;display:flex;flex-direction:column;gap:15px}
   .pbar .pbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-bottom:6px}
   .pbar .ptr{height:10px;background:#e3dcca;border-radius:5px;overflow:hidden}
-  .pbar .pfl{height:100%;background:var(--ink);border-radius:5px;transform-origin:left;animation:barGrow .8s var(--ease) both}
-  @keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-  @media (prefers-reduced-motion:reduce){ .pbar .pfl{animation:none} }
+  .pbar .pfl{height:100%;background:var(--ink);border-radius:5px;transform-origin:left;animation:barGrow .75s var(--ease)}
+  @keyframes barGrow{from{transform:scaleX(0)}}   /* grows in; if it doesn't run, bar still shows at its inline width */
   #s-persona .cta{margin-top:38px;align-self:flex-start}
 
   /* ---------- collection cabinet ---------- */
@@ -564,7 +563,7 @@
     // fill widths are set inline (always correct even if JS/rAF throttles); a pure-CSS scaleX grows each bar in, staggered
     $("pBars").innerHTML=M.map(function(b,i){
       if(b[1]==null) return '<div class="pbar"><div class="pbl"><span>'+b[0]+'</span><span>—</span></div><div class="ptr"><span class="pfl" style="width:0"></span></div></div>';
-      return '<div class="pbar"><div class="pbl"><span>'+b[0]+'</span><span>'+b[1]+'%</span></div><div class="ptr"><span class="pfl" style="width:'+b[1]+'%;animation-delay:'+(120+i*100)+'ms"></span></div></div>';
+      return '<div class="pbar"><div class="pbl"><span>'+b[0]+'</span><span>'+b[1]+'%</span></div><div class="ptr"><span class="pfl" style="width:'+b[1]+'%"></span></div></div>';
     }).join("");
   }
   $("pBtn").addEventListener("click",function(){ renderCabinet(); show("s-cabinet"); });
