@@ -90,10 +90,21 @@
   #s-reveal .pad{margin:auto 0;display:flex;flex-direction:column;align-items:center;gap:20px}
   #s-reveal .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.26em;color:var(--soft)}
   #s-reveal .amt{font-family:var(--serif);font-weight:500;font-size:clamp(3.2rem,16vw,4.6rem);line-height:1;letter-spacing:-.02em;
-    font-variant-numeric:tabular-nums}
-  #s-reveal .revpr{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--soft);opacity:0;transition:opacity .5s .1s}
+    font-variant-numeric:tabular-nums;
+    background:linear-gradient(96deg,#9a7b28 0%,#d8bd63 22%,#fff4cf 42%,#e7cd78 55%,#9a7b28 100%);
+    background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+    animation:goldshine 2.8s linear infinite}
+  @keyframes goldshine{to{background-position:-220% 0}}
+  @media (prefers-reduced-motion:reduce){ #s-reveal .amt{animation:none} }
+  #s-reveal .revpr{width:min(340px,82vw);opacity:0;transition:opacity .5s .1s;margin-top:6px}
   #s-reveal .revpr.on{opacity:1}
-  #s-reveal .revpr b{color:var(--ink);font-weight:600;font-size:.92rem}
+  #s-reveal .prline{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;color:var(--soft);text-transform:uppercase;text-align:center}
+  #s-reveal .prline b{color:var(--ink);font-weight:700;font-size:1.5rem;letter-spacing:.02em}
+  #s-reveal .prgauge{position:relative;height:8px;background:linear-gradient(90deg,#e3dcca,#cbb474 60%,#b3902f);border-radius:5px;margin:14px 0 9px}
+  #s-reveal .prfill{display:none}
+  #s-reveal .prdot{position:absolute;top:50%;left:0;width:15px;height:15px;border-radius:50%;background:var(--ink);border:2px solid var(--paper);transform:translate(-50%,-50%);box-shadow:0 1px 5px rgba(0,0,0,.35)}
+  #s-reveal .prfoot{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.55rem;letter-spacing:.06em;color:var(--soft)}
+  #s-reveal .prfoot #prBeat{color:var(--ink);font-weight:600}
   #s-reveal .rsub{color:var(--soft);font-size:.95rem;max-width:22ch;line-height:1.5}
 
   /* ---------- personality analysis ---------- */
@@ -113,8 +124,8 @@
   .ptraits .chip b{color:var(--soft);font-weight:400;text-transform:uppercase;letter-spacing:.1em}
   .pbars{margin-top:30px;display:flex;flex-direction:column;gap:15px}
   .pbar .pbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-bottom:6px}
-  .pbar .ptr{height:9px;background:#e8e1d1;border-radius:5px;overflow:hidden}
-  .pbar .pfl{height:100%;background:var(--ink);border-radius:5px;width:0;transition:width 1.1s var(--ease)}
+  .pbar .ptr{height:10px;background:#e3dcca;border-radius:5px;overflow:hidden}
+  .pbar .pfl{height:100%;background:var(--ink);border-radius:5px;width:0}
   #s-persona .cta{margin-top:38px;align-self:flex-start}
 
   /* ---------- collection cabinet ---------- */
@@ -387,7 +398,7 @@
 
   // ---------- category screen ----------
   function renderCat(){
-    var c=CATS[ci], list=(DATA[c.key]||[]);
+    var c=CATS[ci], list=(DATA[c.key]||[]).filter(function(p){return p[1]<=NOW;});   // hide not-yet-released (future year)
     $("catStep").textContent=String(ci+1).padStart(2,"0")+" / "+String(CATS.length).padStart(2,"0");
     $("prog").style.width=((ci)/(CATS.length+1)*100)+"%";
     $("catHead").innerHTML='<h2>'+c.q+'</h2><p>'+c.zh+' · 可複選，選你擁有過的</p>';
@@ -513,13 +524,22 @@
     $("prog").style.width=((CATS.length)/(CATS.length+1)*100)+"%";
     show("s-reveal");
     var el=$("revAmt"), btn=$("revBtn"), pr=$("revPR"); btn.style.opacity=0; pr.classList.remove("on");
-    pr.innerHTML='PR <b>'+R.pct+'</b> · 贏過 '+R.pct+'% 的股東';
-    var start=null, DUR=1600, target=R.total;
+    pr.innerHTML='<div class="prline">你的股東排名 PR <b id="prNum">0</b></div>'+
+      '<div class="prgauge"><span class="prfill" id="prFill"></span><span class="prdot" id="prDot"></span></div>'+
+      '<div class="prfoot"><span>後段班</span><span id="prBeat">贏過 0% 的股東</span><span>頂尖股東</span></div>';
+    var start=null, DUR=1700, target=R.total;
     if(target<=0){ el.textContent="NT$0"; btn.style.opacity=1; return; }
     function step(ts){ if(start==null)start=ts; var k=Math.min(1,(ts-start)/DUR);
       var e=1-Math.pow(1-k,3); el.textContent=money(target*e);
-      if(k<1)requestAnimationFrame(step); else{ el.textContent=money(target); pr.classList.add("on"); btn.style.opacity=1; } }
+      if(k<1)requestAnimationFrame(step); else{ el.textContent=money(target); pr.classList.add("on"); animatePR(); btn.style.opacity=1; } }
     requestAnimationFrame(step);
+  }
+  function animatePR(){
+    var num=$("prNum"), fill=$("prFill"), dot=$("prDot"), beat=$("prBeat"), t=R.pct, s=null;
+    (function step(ts){ if(s==null)s=ts; var k=Math.min(1,(ts-s)/1100); var e=1-Math.pow(1-k,3); var v=t*e;
+      num.textContent=Math.round(v); fill.style.width=v+"%"; dot.style.left=v+"%"; beat.textContent="贏過 "+Math.round(v)+"% 的股東";
+      if(k<1)requestAnimationFrame(step); else{ num.textContent=t; fill.style.width=t+"%"; dot.style.left=t+"%"; beat.textContent="贏過 "+t+"% 的股東"; }
+    })(performance.now());
   }
   $("revBtn").addEventListener("click",function(){ renderPersona(); show("s-persona"); });
 
@@ -543,15 +563,15 @@
       if(b[1]==null) return '<div class="pbar"><div class="pbl"><span>'+b[0]+'</span><span>—</span></div><div class="ptr"><span class="pfl" style="width:0"></span></div></div>';
       return '<div class="pbar" data-v="'+b[1]+'"><div class="pbl"><span>'+b[0]+'</span><span class="pv">0%</span></div><div class="ptr"><span class="pfl" data-w="'+b[1]+'"></span></div></div>';
     }).join("");
-    // staggered reveal: bar grows + number counts up
+    // staggered reveal: drive BOTH bar width and number via rAF (robust — no reliance on CSS transition)
     [].slice.call(document.querySelectorAll("#pBars .pbar[data-v]")).forEach(function(bar,idx){
       var v=+bar.dataset.v, fl=bar.querySelector(".pfl"), pv=bar.querySelector(".pv");
       setTimeout(function(){
-        fl.style.width=v+"%";
         var s=null;
-        (function step(ts){ if(s==null)s=ts; var k=Math.min(1,(ts-s)/850);
-          pv.textContent=Math.round(v*(1-Math.pow(1-k,3)))+"%"; if(k<1)requestAnimationFrame(step); else pv.textContent=v+"%"; })(performance.now());
-      }, 200+idx*140);
+        (function step(ts){ if(s==null)s=ts; var k=Math.min(1,(ts-s)/900); var e=1-Math.pow(1-k,3);
+          fl.style.width=(v*e)+"%"; pv.textContent=Math.round(v*e)+"%";
+          if(k<1)requestAnimationFrame(step); else{ fl.style.width=v+"%"; pv.textContent=v+"%"; } })(performance.now());
+      }, 180+idx*130);
     });
   }
   $("pBtn").addEventListener("click",function(){ renderCabinet(); show("s-cabinet"); });
@@ -612,23 +632,16 @@
     $("prog").style.width="95%";
     var devs=R.devs.slice().sort(function(a,b){return b[1]-a[1];});   // newest → oldest
     $("cabSub").textContent=devs.length+" 件收藏 · "+R.appleYears+" 年 · "+R.catCount+" 大類別";
-    // group devices that resolve to the same image → one cell (avoids duplicate photos)
-    var groups=[], byKey={};
-    devs.forEach(function(d){
+    // one cell per device (different models shown separately, even if they share a photo)
+    $("cabGrid").innerHTML=devs.map(function(d,i){
       var img=imgFor(d[3],d[0],d[1]);
-      var key=img||("svg:"+d[3]);
-      if(!byKey[key]){ byKey[key]={img:img,cat:d[3],models:[],newest:d[1]}; groups.push(byKey[key]); }
-      byKey[key].models.push(d); if(d[1]>byKey[key].newest)byKey[key].newest=d[1];
-    });
-    $("cabGrid").innerHTML=groups.map(function(g,i){
-      var vis = g.img ? '<img src="img/'+g.img+'.png" alt="" loading="lazy">' : devSVG(g.cat);
-      var badge = g.models.length>1 ? '<span class="cx">×'+g.models.length+'</span>' : '';
-      var names = g.models.map(function(d){return d[0];});
-      var label = names.length===1 ? names[0] : names.slice(0,2).join('、')+(names.length>2?' 等':'');
-      var yr = g.models.length===1 ? g.models[0][1] : (Math.min.apply(null,g.models.map(function(d){return d[1];}))+'–'+g.newest);
-      return '<div class="cell" style="animation-delay:'+(i*55)+'ms">'+badge+'<div class="ic '+(g.img?'photo':'')+'">'+vis+'</div><div class="cnm">'+label+'</div><div class="cyr">'+yr+'</div></div>';
+      var vis = img ? '<img src="img/'+img+'.png" alt="">' : devSVG(d[3]);
+      return '<div class="cell" style="animation-delay:'+(i*55)+'ms"><div class="ic '+(img?'photo':'')+'">'+vis+'</div><div class="cnm">'+d[0]+'</div><div class="cyr">'+d[1]+'</div></div>';
     }).join("");
   }
+  // preload all cabinet photos early (only ~25 unique) so the cabinet appears instantly
+  var CAB_IMGS=["iphone-18pro","iphone-17pro","iphone-1617","iphone-16plus","iphone-pro","iphone-13to15","iphone-12","iphone-11","iphone-x","iphone-xr","iphone-78se","iphone-6","iphone-5","iphone-4","iphone-3","iphone-air","ipad-pro","ipad-air45","ipad-109","ipad-classic","macbook-1","macbook-2","macbook-3","imac","macmini","watch-1","watch-2","watch-3","airpods-12","airpods-345","airpods-pro","airpods-max"];
+  function preloadCabinet(){ CAB_IMGS.forEach(function(s){ var im=new Image(); im.src="img/"+s+".png"; }); }
   $("cabBtn").addEventListener("click",function(){ renderResult(); show("s-result"); });
 
   // ---------- result card ----------
@@ -648,7 +661,7 @@
     setTimeout(function(){ document.querySelectorAll("#cBars .fl").forEach(function(f){ f.style.width=f.dataset.w+"%"; }); },250);
   }
 
-  $("startBtn").addEventListener("click",function(){ ci=0; owned={}; renderCat(); show("s-cat"); });
+  $("startBtn").addEventListener("click",function(){ ci=0; owned={}; preloadCabinet(); renderCat(); show("s-cat"); });
   $("againBtn").addEventListener("click",function(){ ci=0; owned={}; $("prog").style.width="0"; show("s-landing"); });
   $("shareBtn").addEventListener("click",function(){ alert("原型階段：這裡之後會生成 9:16 分享圖並開啟系統分享面板。"); });
   $("claimBtn").addEventListener("click",function(){ alert("原型階段：這裡之後會顯示 APIOU 股東股利折扣碼。"); });
