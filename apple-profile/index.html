@@ -125,12 +125,16 @@
   .cabh em{font-style:italic}
   .cabsub{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;color:var(--soft);margin-top:12px;text-transform:uppercase}
   .shelf{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
-  .cell{display:flex;flex-direction:column;align-items:center;gap:7px;padding:18px 8px 13px;background:#fbf8f1;border:1px solid var(--line);border-radius:14px;
+  .cell{position:relative;display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 8px 13px;background:#fbf8f1;border:1px solid var(--line);border-radius:14px;
     opacity:0;transform:translateY(12px);animation:cellIn .5s var(--ease) forwards}
   @keyframes cellIn{to{opacity:1;transform:none}}
-  .cell .ic{width:50px;height:50px;color:var(--ink);display:flex;align-items:center;justify-content:center}
-  .cell .ic svg{width:100%;height:100%;display:block}
-  .cell .cnm{font-size:.7rem;font-weight:500;text-align:center;line-height:1.25;letter-spacing:-.01em}
+  .cell .ic{width:74px;height:74px;color:var(--ink);display:flex;align-items:center;justify-content:center}
+  .cell .ic.photo{width:100%;height:78px}
+  .cell .ic svg{width:50px;height:50px;display:block}
+  .cell .ic img{width:100%;height:100%;object-fit:contain;display:block}
+  .cell .cx{position:absolute;top:7px;right:8px;font-family:var(--mono);font-size:.56rem;letter-spacing:.05em;color:var(--soft);
+    background:var(--paper);border:1px solid var(--line);border-radius:100px;padding:2px 6px}
+  .cell .cnm{font-size:.68rem;font-weight:500;text-align:center;line-height:1.25;letter-spacing:-.01em}
   .cell .cyr{font-family:var(--mono);font-size:.58rem;color:var(--soft);letter-spacing:.1em}
   #s-cabinet .cta{margin-top:34px;align-self:flex-start}
 
@@ -564,12 +568,59 @@
     if(cat==="AirPods") return '<svg viewBox="0 0 100 100"><rect x="37" y="40" width="26" height="22" rx="7" '+s+'/><line x1="50" y1="40" x2="50" y2="33" '+s+'/><circle cx="50" cy="30.5" r="2.4" fill="currentColor" stroke="none"/></svg>';
     return '';
   }
+  // map a device → an APIOU product cutout photo (ranges provided by Eva); null → line-art fallback
+  function imgFor(cat, model, year){
+    var m=model;
+    if(cat==="iPhone"){
+      if(/18 Pro/.test(m)) return "iphone-18pro";
+      if(/^iPhone 18\b/.test(m)) return "iphone-1617";
+      if(/17 Pro/.test(m)) return "iphone-17pro";
+      if(/1[3-6] Pro/.test(m)) return "iphone-pro";
+      if(/16 Plus/.test(m)) return "iphone-16plus";
+      if(/^iPhone 1[67]\b/.test(m)) return "iphone-1617";
+      if(/^iPhone 1[345]\b|14 Plus|15 Plus/.test(m)) return "iphone-13to15";
+      if(/^iPhone 12\b|12 Pro|12 mini|13 mini/.test(m)) return "iphone-12";
+      if(/^iPhone 11\b|11 Pro/.test(m)) return "iphone-11";
+      if(/XR/.test(m)) return "iphone-xr";
+      if(/^iPhone X\b|XS/.test(m)) return "iphone-x";
+      if(/^iPhone [4-8]\b|SE|^iPhone 5|^iPhone 6/.test(m)) return "iphone-78se";
+      return "iphone-78se"; // ancient (1st/3G/3GS) → home-button stand-in
+    }
+    if(cat==="iPad"){
+      if(/Pro/.test(m)) return "ipad-pro";
+      if(/Air.*(M2|4th|5th)|Air \(M/.test(m)) return "ipad-air45";
+      if(/10th|10\.9/.test(m)) return "ipad-109";
+      return "ipad-classic";
+    }
+    if(cat==="Apple Watch"){ return year>=2022?"watch-1":(year>=2019?"watch-3":"watch-2"); }
+    if(cat==="Mac"){ if(!/MacBook/.test(m)) return null; return year>=2021?"macbook-3":(year>=2017?"macbook-2":"macbook-1"); }
+    if(cat==="AirPods"){
+      if(/Max/.test(m)) return null;            // no photo supplied → line-art
+      if(/Pro/.test(m)) return "airpods-pro";
+      if(/3rd|4th|5th/.test(m)) return "airpods-345";
+      return "airpods-12";
+    }
+    return null;
+  }
   function renderCabinet(){
     $("prog").style.width="95%";
     var devs=R.devs.slice().sort(function(a,b){return b[1]-a[1];});   // newest → oldest
     $("cabSub").textContent=devs.length+" 件收藏 · "+R.appleYears+" 年 · "+R.catCount+" 大類別";
-    $("cabGrid").innerHTML=devs.map(function(d,i){
-      return '<div class="cell" style="animation-delay:'+(i*55)+'ms"><div class="ic">'+devSVG(d[3])+'</div><div class="cnm">'+d[0]+'</div><div class="cyr">'+d[1]+'</div></div>';
+    // group devices that resolve to the same image → one cell (avoids duplicate photos)
+    var groups=[], byKey={};
+    devs.forEach(function(d){
+      var img=imgFor(d[3],d[0],d[1]);
+      var key=img||("svg:"+d[3]);
+      if(!byKey[key]){ byKey[key]={img:img,cat:d[3],models:[],newest:d[1]}; groups.push(byKey[key]); }
+      byKey[key].models.push(d); if(d[1]>byKey[key].newest)byKey[key].newest=d[1];
+    });
+    $("cabGrid").innerHTML=groups.map(function(g,i){
+      var vis = g.img ? '<img src="img/'+g.img+'.webp" alt="" loading="lazy">' : devSVG(g.cat);
+      var badge = g.models.length>1 ? '<span class="cx">×'+g.models.length+'</span>' : '';
+      var names = g.models.map(function(d){return d[0];});
+      var label = names.length===1 ? names[0] : names.slice(0,2).join('、')+(names.length>2?' 等':'');
+      var yr = g.models.length===1 ? g.models[0][1] : (Math.min.apply(null,g.models.map(function(d){return d[1];}))+'–'+g.newest);
+      return '<div class="cell" style="animation-delay:'+(i*55)+'ms">'+badge+'<div class="ic '+(g.img?'photo':'')+'">'+vis+'</div><div class="cnm">'+label+'</div><div class="cyr">'+yr+'</div></div>';
     }).join("");
   }
   $("cabBtn").addEventListener("click",function(){ renderResult(); show("s-result"); });
