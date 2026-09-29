@@ -1170,6 +1170,13 @@
       "year": 2025,
       "launchPrice": 8490,
       "confidence": "med"
+    },
+    {
+      "category": "AirPods",
+      "model": "AirPods (5th gen)",
+      "year": 2026,
+      "launchPrice": 5990,
+      "confidence": "low"
     }
   ]
 }
