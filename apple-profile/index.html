@@ -599,7 +599,9 @@
     var byTraits=t<=1?0:(t===2?1:(t===3?2:(t<=5?3:4)));
     var tier=TIERS[Math.max(byTraits,TORD[PERSONAS[pkey].floor]||0)];
     // --- percentile: "beats X% of shareholders" (modeled from spend; estimate) ---
-    var pct=total<=0?0:Math.round(100/(1+Math.exp(-(Math.log(total)-Math.log(90000))/0.55)));
+    // logistic on log(spend): PR_MID = spend at PR 50 (the "middle line"); PR_SPREAD widens/narrows the curve
+    var PR_MID=250000, PR_SPREAD=0.7;
+    var pct=total<=0?0:Math.round(100/(1+Math.exp(-(Math.log(total)-Math.log(PR_MID))/PR_SPREAD)));
     pct=clamp(pct,1,99);
     // --- fill description template from real data only ---
     var onlyCat=(C===1&&catList[0])?CATZH[catList[0]]:"";
