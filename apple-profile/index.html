@@ -212,6 +212,13 @@
   .smInner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
     padding:clamp(16px,4vh,30px) 16px;overflow-y:auto}
   .smHint{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:#cbc6ba;text-align:center}
+  .cardwrap{position:relative;width:min(340px,86vw);aspect-ratio:9/16}
+  .cardimg{width:100%;height:100%;object-fit:contain;border-radius:24px;background:var(--paper);
+    box-shadow:0 24px 60px -18px rgba(0,0,0,.6);display:block}
+  .cardspin{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;color:var(--soft);
+    background:var(--paper);border-radius:24px}
+  .cardspin.hide{display:none}
   .smActions{display:flex;flex-direction:column;gap:9px;width:min(360px,92%)}
   .smActions .cta{width:100%;box-sizing:border-box;text-align:center;text-decoration:none;display:block}
   .smActions .cta.ghost{background:none;border:1px solid rgba(255,255,255,.28);color:#e8e4d9}
@@ -335,33 +342,7 @@
   <div class="smBack" id="smBack"></div>
   <div class="smInner">
     <div class="smHint">長按圖片存到相簿，或用下方按鈕分享</div>
-    <div class="card" id="card">
-      <div class="in">
-        <div>
-          <div class="cbrand"><b>APIOU</b><span>APPLE 認證股東</span></div>
-          <hr class="crule">
-          <div class="cpersona" id="cPersona">The<br><em>Ecosystem</em><br>Collector</div>
-          <div class="cwho" id="cWho"></div>
-        </div>
-        <div class="chero">
-          <div class="k">Apple 總持股</div>
-          <div class="amt" id="cAmt">NT$0</div>
-          <hr class="u">
-          <div class="cpr" id="cPR"></div>
-        </div>
-        <div>
-          <div class="cgrid">
-            <div><div class="k">果齡</div><div class="v" id="cYears">0</div></div>
-            <div><div class="k">裝置</div><div class="v" id="cDev">0</div></div>
-            <div><div class="k">類別</div><div class="v" id="cCat">0</div></div>
-          </div>
-          <div class="ccabk">我的收藏 · The Collection</div>
-          <div class="ccab" id="cCab"></div>
-          <div class="cfoot">APIOU · apeelcase.com</div>
-          <div class="cdis">以上市價估算 · Apple 等為 Apple Inc. 商標，僅供型號對照</div>
-        </div>
-      </div>
-    </div>
+    <div class="cardwrap"><img class="cardimg" id="cardImg" alt="你的 Apple 股東卡"><div class="cardspin" id="cardSpin">生成中…</div></div>
     <div class="smActions">
       <button class="cta" id="smShare">分享到限動 / Threads</button>
       <button class="cta ghost" id="smDownload">下載圖片</button>
@@ -762,20 +743,7 @@
       '<div class="rs"><div class="k">類別</div><div class="v">'+R.catCount+'</div></div>';
     $("rTag").textContent=R.tag;
     animateMoney(); animatePR();
-    // --- the 9:16 card (shown as a thumbnail inside the share modal) ---
-    $("cPersona").innerHTML=p.en[0]+"<br><em>"+p.en[1]+"</em>"+(p.en[2]?"<br>"+p.en[2]:"");
-    $("cWho").textContent="在 Apple 生態系 "+R.appleYears+" 年 · "+R.tier;
-    $("cAmt").textContent=money(R.total);
-    $("cPR").innerHTML="PR <b>"+R.pct+"</b> · 贏過 "+R.pct+"% 的股東";
-    $("cYears").textContent=R.appleYears;
-    $("cDev").textContent=R.devs.length;
-    $("cCat").textContent=R.catCount;
-    // collection thumbnails (newest→oldest), cap to a tidy grid with a +N overflow tile
-    var cdevs=R.devs.slice().sort(function(a,b){return b[1]-a[1];}), CAP=15;
-    function cell(d){ return '<div class="cc"><img src="img/'+imgFor(d[3],d[0],d[1])+'.png" alt=""></div>'; }
-    $("cCab").innerHTML = cdevs.length<=CAP
-      ? cdevs.map(cell).join("")
-      : cdevs.slice(0,CAP-1).map(cell).join("")+'<div class="more">+'+(cdevs.length-(CAP-1))+'</div>';
+    // the 9:16 share card itself is drawn on demand (renderShareCanvas) when the modal opens
   }
 
   $("startBtn").addEventListener("click",function(){ ci=0; owned={}; preloadCabinet(); renderCat(); show("s-cat"); });
@@ -860,14 +828,20 @@
       .then(function(b){ cardBlobCache=b; return b; });
   }
 
-  // share: open modal with the card preview
+  // share: open modal, render the card, show it as the preview (preview === shared image)
+  var previewURL=null;
   function openShare(){
     cardBlobCache=null;
     $("smThreads").href="https://www.threads.net/intent/post?text="+encodeURIComponent(shareText());
     msg("");
+    $("cardSpin").classList.remove("hide"); $("cardImg").removeAttribute("src");
     $("shareModal").classList.add("open");
     $("shareModal").setAttribute("aria-hidden","false");
-    buildCard().catch(function(){});   // warm the image so the share tap is instant
+    buildCard().then(function(b){
+      if(previewURL) URL.revokeObjectURL(previewURL);
+      previewURL=URL.createObjectURL(b);
+      $("cardImg").src=previewURL; $("cardSpin").classList.add("hide");
+    }).catch(function(){ $("cardSpin").textContent="預覽生成失敗，仍可用下方按鈕分享"; });
   }
   function closeShare(){ $("shareModal").classList.remove("open"); $("shareModal").setAttribute("aria-hidden","true"); }
 
