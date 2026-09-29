@@ -47,6 +47,10 @@
     background:var(--ink);color:var(--paper);border:none;border-radius:100px;padding:17px 40px;cursor:pointer;
     transition:transform .3s var(--ease)}
   .cta:active{transform:scale(.96)}
+  .stepback{align-self:flex-start;background:none;border:none;cursor:pointer;
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);
+    padding:6px 2px;margin-bottom:14px}
+  .stepback:active{opacity:.6}
   .cta.ghost{background:none;color:var(--soft);padding:14px}
   .fineprint{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:#b3ab99;margin-top:8px}
 
@@ -232,12 +236,11 @@
   .card .cgrid{display:grid;grid-template-columns:repeat(3,1fr)}
   .card .cgrid .k{font-family:var(--mono);font-size:1.85cqw;letter-spacing:.12em;color:var(--soft);text-transform:uppercase}
   .card .cgrid .v{font-family:var(--serif);font-size:8cqw;font-weight:400;line-height:1;margin-top:.6cqh}
-  .card .cbars{margin-top:4cqh;display:flex;flex-direction:column;gap:1.6cqh}
-  .card .cbar{display:flex;align-items:center;gap:3cqw}
-  .card .cbar .bl{font-family:var(--mono);font-size:1.75cqw;letter-spacing:.08em;color:var(--soft);width:34cqw;text-transform:uppercase;text-align:left}
-  .card .cbar .tr{flex:1;height:1.1cqw;background:#e2dccd;border-radius:2px;overflow:hidden}
-  .card .cbar .fl{display:block;height:100%;background:var(--ink);border-radius:2px;width:0;transition:width 1s var(--ease)}
-  .card .ctag{font-family:var(--serif);font-style:italic;font-size:2.9cqw;color:#4d493f;margin-top:3.4cqh;text-align:left}
+  .card .ccabk{font-family:var(--mono);font-size:1.85cqw;letter-spacing:.16em;color:var(--soft);text-transform:uppercase;margin-top:4cqh;text-align:left}
+  .card .ccab{display:grid;grid-template-columns:repeat(5,1fr);gap:1.5cqw;margin-top:2cqh}
+  .card .ccab .cc{aspect-ratio:1;background:#faf7f0;border:1px solid #e8e1d2;border-radius:2.4cqw;display:flex;align-items:center;justify-content:center;padding:1.1cqw}
+  .card .ccab .cc img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+  .card .ccab .more{aspect-ratio:1;border:1px dashed #cfc7b6;border-radius:2.4cqw;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:2cqw;color:var(--soft)}
   .card .cfoot{font-family:var(--mono);font-size:1.9cqw;letter-spacing:.18em;color:var(--soft);margin-top:2.2cqh;text-align:left;text-transform:uppercase}
   .card .cdis{font-family:var(--mono);font-size:1.6cqw;letter-spacing:.1em;color:#a49c88;margin-top:1.8cqh;text-align:left}
 </style>
@@ -275,6 +278,7 @@
   <!-- PERSONALITY -->
   <section class="screen" id="s-persona">
     <div class="ppad">
+      <button class="stepback" id="pBack">← 上一步</button>
       <div class="pk">你的 Apple 人格 · Apple Personality</div>
       <h2 class="pname" id="pName">The <em>Ecosystem</em><br>Collector</h2>
       <div class="pzh" id="pZh">生態系收藏家</div>
@@ -289,6 +293,7 @@
   <!-- CABINET -->
   <section class="screen" id="s-cabinet">
     <div class="cabpad">
+      <button class="stepback" id="cabBack">← 上一步</button>
       <div class="cabk">你的 Apple 收藏櫃 · The Collection</div>
       <h2 class="cabh" id="cabH">你這些年<br>收藏了<em>這些</em></h2>
       <div class="cabsub" id="cabSub"></div>
@@ -300,6 +305,7 @@
   <!-- RESULT — full-screen shareable Apple-shareholder page -->
   <section class="screen" id="s-result">
     <div class="rpad">
+      <button class="stepback" id="rBack">← 上一步</button>
       <div class="rtop"><span class="rbrand">APIOU</span><span class="rstamp">APPLE 認證股東</span></div>
       <div class="rpk">你的蘋果股東側寫 · Apple Shareholder</div>
       <h1 class="rpersona" id="rPersona">The <em>All-In</em><br>Superfan</h1>
@@ -349,8 +355,8 @@
             <div><div class="k">裝置</div><div class="v" id="cDev">0</div></div>
             <div><div class="k">類別</div><div class="v" id="cCat">0</div></div>
           </div>
-          <div class="cbars" id="cBars"></div>
-          <div class="ctag" id="cTag"></div>
+          <div class="ccabk">我的收藏 · The Collection</div>
+          <div class="ccab" id="cCab"></div>
           <div class="cfoot">APIOU · apeelcase.com</div>
           <div class="cdis">以上市價估算 · Apple 等為 Apple Inc. 商標，僅供型號對照</div>
         </div>
@@ -495,7 +501,7 @@
       });
     });
     $("catList").innerHTML=html;
-    $("catBack").style.visibility = ci===0 ? "hidden":"visible";
+    $("catBack").textContent = ci===0 ? "← 返回首頁" : "← 上一步";
     var sc=document.querySelector(".catScroll"); if(sc)sc.scrollTop=0;
     updNext(); updRun(true);
   }
@@ -539,7 +545,7 @@
   }
   $("catNext").addEventListener("click",nextCat);
   $("catSkip").addEventListener("click",nextCat);
-  $("catBack").addEventListener("click",function(){ if(ci>0){ci--;renderCat();show("s-cat");} });
+  $("catBack").addEventListener("click",function(){ if(ci>0){ci--;renderCat();show("s-cat");} else{ $("prog").style.width="0"; show("s-landing"); } });
 
   // ---------- compute (deterministic archetype + 7 metrics + rarity + percentile) ----------
   function clamp(x,lo,hi){return Math.max(lo,Math.min(hi,x));}
@@ -662,6 +668,7 @@
     }).join("");
   }
   $("pBtn").addEventListener("click",function(){ renderCabinet(); show("s-cabinet"); });
+  $("pBack").addEventListener("click",function(){ renderCat(); show("s-cat"); });   // back to last category
 
   // ---------- collection cabinet ----------
   // clean line-art placeholders per category — real de-backgrounded photos will drop into these slots
@@ -736,6 +743,8 @@
   var CAB_IMGS=["iphone-18pro","iphone-17pro","iphone-1617","iphone-16plus","iphone-pro","iphone-13to15","iphone-12","iphone-11","iphone-x","iphone-xr","iphone-78se","iphone-6","iphone-5","iphone-4","iphone-3","iphone-air","ipad-pro","ipad-air45","ipad-109","ipad-classic","macbook-air-13","macbook-air-15","macbook-pro-14","macbook-pro-16","macbook-classic","imac","macmini","watch-1","watch-2","watch-3","watch-ultra","airpods-12","airpods-345","airpods-pro","airpods-max"];
   function preloadCabinet(){ CAB_IMGS.forEach(function(s){ var im=new Image(); im.src="img/"+s+".png"; }); }
   $("cabBtn").addEventListener("click",function(){ renderResult(); show("s-result"); });
+  $("cabBack").addEventListener("click",function(){ renderPersona(); show("s-persona"); });
+  $("rBack").addEventListener("click",function(){ renderCabinet(); show("s-cabinet"); });
 
   // ---------- result: full-screen shareable page + the share-card in the modal ----------
   function renderResult(){
@@ -761,9 +770,12 @@
     $("cYears").textContent=R.appleYears;
     $("cDev").textContent=R.devs.length;
     $("cCat").textContent=R.catCount;
-    $("cTag").textContent=R.tag;
-    var bars=[["生態系完整度",R.metrics.completeness],["忠誠續航",R.metrics.loyalty],["Pro 濃度",R.metrics.pro]];
-    $("cBars").innerHTML=bars.map(function(b){return '<div class="cbar"><span class="bl">'+b[0]+'</span><span class="tr"><span class="fl" data-w="'+b[1]+'"></span></span></div>';}).join("");
+    // collection thumbnails (newest→oldest), cap to a tidy grid with a +N overflow tile
+    var cdevs=R.devs.slice().sort(function(a,b){return b[1]-a[1];}), CAP=15;
+    function cell(d){ return '<div class="cc"><img src="img/'+imgFor(d[3],d[0],d[1])+'.png" alt=""></div>'; }
+    $("cCab").innerHTML = cdevs.length<=CAP
+      ? cdevs.map(cell).join("")
+      : cdevs.slice(0,CAP-1).map(cell).join("")+'<div class="more">+'+(cdevs.length-(CAP-1))+'</div>';
   }
 
   $("startBtn").addEventListener("click",function(){ ci=0; owned={}; preloadCabinet(); renderCat(); show("s-cat"); });
@@ -775,8 +787,9 @@
   }
   function msg(t){ $("smMsg").textContent=t||""; }
 
+  function loadImg(src){ return new Promise(function(res){ var im=new Image(); im.onload=function(){res(im);}; im.onerror=function(){res(null);}; im.src=src; }); }
   // draw the 9:16 card onto a 1080x1920 canvas (self-contained, no libraries)
-  function renderShareCanvas(){
+  async function renderShareCanvas(){
     var W=1080,H=1920,P=94,cx=W/2,x2=W-P,cw=W-2*P;
     var INK="#26241f",SOFT="#7a776e",LINE="#d8d1c2",GOLD="#8a6d2f",TAG="#4d493f",PAPER="#f4efe4";
     var SERIF='"Fraunces",Georgia,serif',MONO='ui-monospace,Menlo,monospace';
@@ -802,33 +815,36 @@
     var afterP=py+en.length*104;
     T("在 APPLE 生態系 "+R.appleYears+" 年 · "+R.tier,P,afterP+2,26,{family:MONO,color:SOFT,spacing:2});
     // hero — total + PR
-    var hy=880;
+    var hy=740;
     T("APPLE 總持股（累積投入）",cx,hy,27,{family:MONO,color:GOLD,align:"center",spacing:5});
     T(money(R.total),cx,hy+168,172,{weight:500,align:"center",spacing:-2});
     c.fillStyle=LINE; c.fillRect(cx-140,hy+212,280,2);
     T("PR "+R.pct+" · 贏過 "+R.pct+"% 的股東",cx,hy+282,30,{family:MONO,color:GOLD,align:"center",spacing:2});
     // stats grid
-    var gy=1360, cols=[["果齡",R.appleYears],["裝置",R.devs.length],["類別",R.catCount]];
+    var gy=1120, cols=[["果齡",R.appleYears],["裝置",R.devs.length],["類別",R.catCount]];
     c.fillStyle=LINE; c.fillRect(P,gy-52,cw,2); c.fillRect(P,gy+88,cw,2);
     cols.forEach(function(col,i){ var gx=P+cw*(i+0.5)/3;
       T(col[0],gx,gy-16,24,{family:MONO,color:SOFT,align:"center",spacing:3});
       T(String(col[1]),gx,gy+62,74,{weight:400,align:"center"});
       if(i<2){ c.fillStyle=LINE; c.fillRect(P+cw*(i+1)/3,gy-40,1.5,116); }
     });
-    // metric bars
-    var bars=[["生態系完整度",R.metrics.completeness],["忠誠續航",R.metrics.loyalty],["Pro 濃度",R.metrics.pro]];
-    var by=1560, bx=P+330, bw=x2-bx;
-    bars.forEach(function(b,i){ var yy=by+i*64;
-      T(b[0],P,yy+6,24,{family:MONO,color:SOFT,spacing:1});
-      c.fillStyle="#e2dccd"; rr(bx,yy-8,bw,12,6); c.fill();
-      c.fillStyle=INK; rr(bx,yy-8,Math.max(12,bw*b[1]/100),12,6); c.fill();
+    // collection cabinet — the device thumbnails (newest→oldest)
+    T("我的收藏 · THE COLLECTION",P,1272,24,{family:MONO,color:SOFT,spacing:3});
+    var cdevs=R.devs.slice().sort(function(a,b){return b[1]-a[1];});
+    var COLS=5, GAP=16, TILE=(cw-(COLS-1)*GAP)/COLS, GX0=P, GY0=1316, RAD=TILE*0.14, CAP=15;
+    var showN=cdevs.length<=CAP?cdevs.length:CAP-1, overflow=cdevs.length-showN;
+    var slots=cdevs.slice(0,showN).map(function(d){return imgFor(d[3],d[0],d[1]);});
+    var imgs=await Promise.all(slots.map(function(s){return loadImg("img/"+s+".png");}));
+    imgs.forEach(function(im,i){ var col=i%COLS, row=(i/COLS)|0, tx=GX0+col*(TILE+GAP), ty=GY0+row*(TILE+GAP);
+      c.fillStyle="#faf7f0"; rr(tx,ty,TILE,TILE,RAD); c.fill();
+      c.strokeStyle="#e8e1d2"; c.lineWidth=1.5; rr(tx,ty,TILE,TILE,RAD); c.stroke();
+      if(im){ var pad=TILE*0.13, aw=TILE-2*pad, ah=TILE-2*pad, s=Math.min(aw/im.width,ah/im.height),
+        dw=im.width*s, dh=im.height*s;
+        c.drawImage(im, tx+(TILE-dw)/2, ty+(TILE-dh)/2, dw, dh); }
     });
-    // tag (wrap to card width)
-    var ty=1800; c.font="italic 400 36px "+SERIF; c.fillStyle=TAG; c.textAlign="left";
-    var words=R.tag.split(" "), line="", ly=ty;
-    words.forEach(function(w){ var test=line?line+" "+w:w;
-      if(c.measureText(test).width>cw && line){ c.fillText(line,P,ly); ly+=46; line=w; } else line=test; });
-    if(line) c.fillText(line,P,ly);
+    if(overflow>0){ var oi=showN, col=oi%COLS, row=(oi/COLS)|0, tx=GX0+col*(TILE+GAP), ty=GY0+row*(TILE+GAP);
+      c.strokeStyle="#cfc7b6"; c.lineWidth=1.5; c.setLineDash([6,6]); rr(tx,ty,TILE,TILE,RAD); c.stroke(); c.setLineDash([]);
+      T("+"+overflow,tx+TILE/2,ty+TILE/2+12,30,{family:MONO,color:SOFT,align:"center"}); }
     // footer
     T("APIOU · APEELCASE.COM",P,1878,22,{family:MONO,color:SOFT,spacing:3});
     T("以上市價估算 · Apple 等為 Apple Inc. 商標，僅供型號對照",P,1908,18,{family:MONO,color:"#a49c88",spacing:1});
@@ -839,7 +855,8 @@
   function buildCard(){
     return document.fonts.load('500 172px "Fraunces"')
       .then(function(){ return document.fonts.load('italic 400 100px "Fraunces"'); })
-      .then(function(){ return canvasBlob(renderShareCanvas()); })
+      .then(function(){ return renderShareCanvas(); })
+      .then(function(cv){ return canvasBlob(cv); })
       .then(function(b){ cardBlobCache=b; return b; });
   }
 
@@ -850,8 +867,6 @@
     msg("");
     $("shareModal").classList.add("open");
     $("shareModal").setAttribute("aria-hidden","false");
-    document.querySelectorAll("#cBars .fl").forEach(function(f){ f.style.width="0"; });
-    setTimeout(function(){ document.querySelectorAll("#cBars .fl").forEach(function(f){ f.style.width=f.dataset.w+"%"; }); },260);
     buildCard().catch(function(){});   // warm the image so the share tap is instant
   }
   function closeShare(){ $("shareModal").classList.remove("open"); $("shareModal").setAttribute("aria-hidden","true"); }
