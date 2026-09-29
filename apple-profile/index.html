@@ -59,15 +59,15 @@
   .catScroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .tl{padding:6px clamp(22px,6vw,34px) 24px}
   .yr{display:flex;align-items:baseline;gap:14px;margin:22px 0 12px;
-    opacity:0;transform:translateY(8px);animation:optIn .5s var(--ease) forwards}
+    animation:optIn .5s var(--ease) backwards}
   .yr:first-child{margin-top:8px}
   .yr b{font-family:var(--serif);font-size:1.5rem;font-weight:500;min-width:3ch}
   .yr .rl{flex:1;border-top:1px solid var(--line)}
   .opt{position:relative;display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;color:var(--ink);
     background:#fbf8f1;border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:8px 0;
-    opacity:0;transform:translateY(10px);animation:optIn .5s var(--ease) forwards;
+    animation:optIn .5s var(--ease) backwards;
     transition:border-color .2s,background .2s,box-shadow .2s,color .2s}
-  @keyframes optIn{to{opacity:1;transform:none}}
+  @keyframes optIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   .opt:active{animation:none;transform:scale(.985)}
   .opt.sel{background:var(--ink);border-color:var(--ink);color:var(--paper);box-shadow:0 10px 22px -12px rgba(38,36,31,.6)}
   .opt.pop{animation:optPop .42s var(--ease)}
