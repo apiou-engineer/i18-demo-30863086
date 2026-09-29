@@ -58,27 +58,55 @@
   #s-cat{overflow:hidden}
   .catScroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .tl{padding:6px clamp(22px,6vw,34px) 24px}
-  .yr{display:flex;align-items:baseline;gap:14px;margin:22px 0 12px}
+  .yr{display:flex;align-items:baseline;gap:14px;margin:22px 0 12px;
+    opacity:0;transform:translateY(8px);animation:optIn .5s var(--ease) forwards}
   .yr:first-child{margin-top:8px}
   .yr b{font-family:var(--serif);font-size:1.5rem;font-weight:500;min-width:3ch}
   .yr .rl{flex:1;border-top:1px solid var(--line)}
-  .opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;color:var(--ink);
+  .opt{position:relative;display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;color:var(--ink);
     background:#fbf8f1;border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:8px 0;
-    transition:border-color .2s,background .2s,transform .15s var(--ease)}
-  .opt:active{transform:scale(.99)}
-  .opt.sel{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+    opacity:0;transform:translateY(10px);animation:optIn .5s var(--ease) forwards;
+    transition:border-color .2s,background .2s,box-shadow .2s,color .2s}
+  @keyframes optIn{to{opacity:1;transform:none}}
+  .opt:active{animation:none;transform:scale(.985)}
+  .opt.sel{background:var(--ink);border-color:var(--ink);color:var(--paper);box-shadow:0 10px 22px -12px rgba(38,36,31,.6)}
+  .opt.pop{animation:optPop .42s var(--ease)}
+  @keyframes optPop{0%{transform:scale(1)}32%{transform:scale(1.035)}100%{transform:scale(1)}}
   .opt .tick{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--soft);flex:0 0 auto;
-    display:grid;place-items:center;transition:all .2s}
-  .opt.sel .tick{background:var(--paper);border-color:var(--paper)}
-  .opt .tick svg{width:12px;height:12px;opacity:0;transition:opacity .2s;color:var(--ink)}
-  .opt.sel .tick svg{opacity:1}
+    display:grid;place-items:center;transition:background .25s,border-color .25s,transform .25s var(--ease)}
+  .opt.sel .tick{background:var(--paper);border-color:var(--paper);transform:scale(1)}
+  .opt.sel .tick{animation:tickPop .42s var(--ease)}
+  @keyframes tickPop{0%{transform:scale(0)}55%{transform:scale(1.25)}100%{transform:scale(1)}}
+  .opt .tick svg{width:12px;height:12px;color:var(--ink)}
+  .opt .tick svg path{stroke-dasharray:24;stroke-dashoffset:24;transition:stroke-dashoffset .4s var(--ease) .06s}
+  .opt.sel .tick svg path{stroke-dashoffset:0}
   .opt .nm{font-size:1.02rem;font-weight:500;letter-spacing:-.01em}
-  .opt .pr{margin-left:auto;font-family:var(--mono);font-size:.7rem;color:var(--soft);letter-spacing:.05em}
+  .opt .pr{margin-left:auto;font-family:var(--mono);font-size:.7rem;color:var(--soft);letter-spacing:.05em;transition:color .2s}
   .opt.sel .pr{color:rgba(244,239,228,.6)}
+  /* floating +NT$ feedback that rises off the tapped card */
+  .fly{position:absolute;right:18px;top:14px;font-family:var(--mono);font-size:.82rem;font-weight:600;letter-spacing:.02em;
+    pointer-events:none;color:var(--ink);animation:flyUp .85s var(--ease) forwards}
+  .opt.sel .fly{color:var(--paper)}
+  .fly.minus{color:#b23b3b}
+  @keyframes flyUp{0%{opacity:0;transform:translateY(6px) scale(.9)}18%{opacity:1}100%{opacity:0;transform:translateY(-34px) scale(1.05)}}
 
   /* sticky footer button */
   .foot{padding:14px clamp(22px,6vw,34px) calc(env(safe-area-inset-bottom,0) + 18px);
     background:var(--paper);border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+  .runbar{display:flex;align-items:baseline;justify-content:space-between;padding:2px 4px 6px;
+    max-height:34px;overflow:hidden;transition:max-height .35s var(--ease),opacity .35s var(--ease)}
+  .runbar.hide{max-height:0;opacity:0;padding-top:0;padding-bottom:0}
+  .runk{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;color:var(--soft);text-transform:uppercase}
+  .runv{font-family:var(--serif);font-size:1.5rem;font-weight:500;letter-spacing:-.01em;color:var(--ink);
+    font-variant-numeric:tabular-nums;transform-origin:right center}
+  .runv.bump{animation:runBump .4s var(--ease)}
+  @keyframes runBump{0%{transform:scale(1)}30%{transform:scale(1.14)}100%{transform:scale(1)}}
+  @media (prefers-reduced-motion:reduce){
+    .yr,.opt{animation:none;opacity:1;transform:none}
+    .opt.pop,.opt.sel .tick,.runv.bump{animation:none}
+    .opt .tick svg path{transition:none}
+    .fly{display:none}
+  }
   .foot .next{width:100%;font-family:var(--mono);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
     background:var(--ink);color:var(--paper);border:none;border-radius:100px;padding:17px;cursor:pointer;transition:transform .2s}
   .foot .next:active{transform:scale(.98)}
@@ -235,6 +263,7 @@
       <div class="tl" id="catList"></div>
     </div>
     <div class="foot">
+      <div class="runbar hide" id="runBar"><span class="runk">目前累積投入</span><span class="runv" id="runVal">NT$0</span></div>
       <button class="next" id="catNext">下一個 →</button>
       <button class="skip" id="catSkip">我沒有這個 · 略過</button>
     </div>
@@ -449,12 +478,13 @@
     // group by year
     var byYear={}; list.forEach(function(p){ (byYear[p[1]]=byYear[p[1]]||[]).push(p); });
     var years=Object.keys(byYear).sort(function(a,b){return b-a;});   // newest → oldest
-    var html="";
+    var html="", di=0;
+    function delay(){ return 'style="animation-delay:'+Math.min(di++*42,420)+'ms"'; }
     years.forEach(function(y){
-      html+='<div class="yr"><b>'+y+'</b><span class="rl"></span></div>';
+      html+='<div class="yr" '+delay()+'><b>'+y+'</b><span class="rl"></span></div>';
       byYear[y].forEach(function(p){
         var id=c.key+"|"+p[0], sel=owned[id]?" sel":"";
-        html+='<button class="opt'+sel+'" data-id="'+id+'" data-nm="'+p[0]+'" data-yr="'+p[1]+'" data-pr="'+p[2]+'">'+
+        html+='<button class="opt'+sel+'" '+delay()+' data-id="'+id+'" data-nm="'+p[0]+'" data-yr="'+p[1]+'" data-pr="'+p[2]+'">'+
           '<span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>'+
           '<span class="nm">'+p[0]+'</span><span class="pr">'+money(p[2])+'</span></button>';
       });
@@ -462,7 +492,21 @@
     $("catList").innerHTML=html;
     $("catBack").style.visibility = ci===0 ? "hidden":"visible";
     var sc=document.querySelector(".catScroll"); if(sc)sc.scrollTop=0;
-    updNext();
+    updNext(); updRun(true);
+  }
+  // live running total across all categories — the "how high will it go?" hook
+  var runShown=0;
+  function ownedTotal(){ var t=0; Object.keys(owned).forEach(function(k){ t+=owned[k][2]; }); return t; }
+  function updRun(instant){
+    var t=ownedTotal(), bar=$("runBar"), el=$("runVal");
+    bar.classList.toggle("hide", t<=0);
+    if(instant){ runShown=t; el.textContent=money(t); return; }
+    el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump");
+    var from=runShown, to=t, s=null;
+    (function step(ts){ if(s==null)s=ts; var k=Math.min(1,(ts-s)/520); var e=1-Math.pow(1-k,3);
+      el.textContent=money(from+(to-from)*e);
+      if(k<1)requestAnimationFrame(step); else{ el.textContent=money(to); runShown=to; }
+    })(performance.now());
   }
   function updNext(){
     var n=0; Object.keys(owned).forEach(function(k){ if(k.indexOf(CATS[ci].key+"|")===0)n++; });
@@ -471,10 +515,18 @@
   }
   $("catList").addEventListener("click",function(e){
     var b=e.target.closest(".opt"); if(!b)return;
-    var id=b.dataset.id;
-    if(owned[id]){ delete owned[id]; b.classList.remove("sel"); }
-    else{ owned[id]=[b.dataset.nm, +b.dataset.yr, +b.dataset.pr, CATS[ci].key]; b.classList.add("sel"); }
-    updNext();
+    var id=b.dataset.id, pr=+b.dataset.pr, added;
+    if(owned[id]){ delete owned[id]; b.classList.remove("sel"); added=false; }
+    else{ owned[id]=[b.dataset.nm, +b.dataset.yr, pr, CATS[ci].key]; b.classList.add("sel"); added=true; }
+    // springy pop on the card
+    b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop");
+    // floating +/− NT$ that rises off the card
+    var fly=document.createElement("span");
+    fly.className="fly"+(added?"":" minus");
+    fly.textContent=(added?"+":"−")+money(pr);
+    b.appendChild(fly);
+    setTimeout(function(){ if(fly.parentNode)fly.parentNode.removeChild(fly); },850);
+    updNext(); updRun(false);
   });
   function nextCat(){
     if(ci<CATS.length-1){ ci++; renderCat(); show("s-cat"); }
