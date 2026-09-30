@@ -319,7 +319,7 @@
       <div class="rzh" id="rZh">全生態鐵粉</div>
 
       <div class="rmoneywrap">
-        <div class="rmoneyk">你的 Apple 總持股（累積投入）</div>
+        <div class="rmoneyk">你的 Apple 總投入（累積花費）</div>
         <div class="rmoney" id="rMoney">NT$0</div>
         <div class="rpr" id="rPR"></div>
       </div>
@@ -404,7 +404,7 @@
   // 14 archetypes · 追星（stan-culture）× 依產品分類/使用行為 · desc 是模板（{slots} 用真實資料填、只提使用者實際擁有的類別）
   var PERSONAS={
     legend:{en:["The","Ultimate","Stan"], zh:"課金鯨・大粉頭", floor:"傳說",
-      desc:"資歷 {years} 年、五大類全收、帳面持股 {spend}——你不是粉絲，你是站姐本尊。Apple 的應援榜上有你一份，這種大粉頭全台不到 1%。",
+      desc:"資歷 {years} 年、五大類全收、累積投入 {spend}——你不是粉絲，你是站姐本尊。Apple 的應援榜上有你一份，這種大粉頭全台不到 1%。",
       tag:"Ultimate stan. Certified."},
     architect:{en:["The","All-In","Superfan"], zh:"全生態鐵粉", floor:"傳說",
       desc:"iPhone、iPad、Mac、Watch、AirPods 五樣全入手——你早就不只是用 Apple，是全生態的鐵粉。裝置串起來那種順，你有義務讓全世界都知道。",
@@ -779,7 +779,7 @@
     c.fillStyle=LINE; c.fillRect(P,158,cw,2);
     // hero — total (the main visual) + PR
     var hy=352;
-    T("APPLE 總持股（累積投入）",cx,hy,30,{family:MONO,color:GOLD,align:"center",spacing:5});
+    T("APPLE 總投入（累積花費）",cx,hy,30,{family:MONO,color:GOLD,align:"center",spacing:5});
     T(money(R.total),cx,hy+192,192,{weight:500,align:"center",spacing:-2});
     c.fillStyle=LINE; c.fillRect(cx-150,hy+242,300,2);
     T("PR "+R.pct+" · 贏過 "+R.pct+"% 的股東",cx,hy+318,32,{family:MONO,color:GOLD,align:"center",spacing:2});
