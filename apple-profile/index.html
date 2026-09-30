@@ -777,42 +777,48 @@
     T("APIOU",P,132,30,{family:MONO,weight:600,spacing:6});
     T("APPLE 認證股東",x2,132,26,{family:MONO,color:GOLD,align:"right",spacing:2});
     c.fillStyle=LINE; c.fillRect(P,158,cw,2);
-    // persona (en lines; middle italic)
-    var en=R.persona.en, py=300;
-    en.forEach(function(ln,i){ T(ln,P,py+i*104,100,{weight:400,italic:i===1}); });
-    var afterP=py+en.length*104;
-    T("在 APPLE 生態系 "+R.appleYears+" 年 · "+R.tier,P,afterP+2,26,{family:MONO,color:SOFT,spacing:2});
-    // hero — total + PR
-    var hy=740;
-    T("APPLE 總持股（累積投入）",cx,hy,27,{family:MONO,color:GOLD,align:"center",spacing:5});
-    T(money(R.total),cx,hy+168,172,{weight:500,align:"center",spacing:-2});
-    c.fillStyle=LINE; c.fillRect(cx-140,hy+212,280,2);
-    T("PR "+R.pct+" · 贏過 "+R.pct+"% 的股東",cx,hy+282,30,{family:MONO,color:GOLD,align:"center",spacing:2});
+    // hero — total (the main visual) + PR
+    var hy=352;
+    T("APPLE 總持股（累積投入）",cx,hy,30,{family:MONO,color:GOLD,align:"center",spacing:5});
+    T(money(R.total),cx,hy+192,192,{weight:500,align:"center",spacing:-2});
+    c.fillStyle=LINE; c.fillRect(cx-150,hy+242,300,2);
+    T("PR "+R.pct+" · 贏過 "+R.pct+"% 的股東",cx,hy+318,32,{family:MONO,color:GOLD,align:"center",spacing:2});
     // stats grid
-    var gy=1120, cols=[["果齡",R.appleYears],["裝置",R.devs.length],["類別",R.catCount]];
-    c.fillStyle=LINE; c.fillRect(P,gy-52,cw,2); c.fillRect(P,gy+88,cw,2);
+    var gy=890, cols=[["果齡",R.appleYears],["裝置",R.devs.length],["類別",R.catCount]];
+    c.fillStyle=LINE; c.fillRect(P,gy-54,cw,2); c.fillRect(P,gy+94,cw,2);
     cols.forEach(function(col,i){ var gx=P+cw*(i+0.5)/3;
-      T(col[0],gx,gy-16,24,{family:MONO,color:SOFT,align:"center",spacing:3});
-      T(String(col[1]),gx,gy+62,74,{weight:400,align:"center"});
-      if(i<2){ c.fillStyle=LINE; c.fillRect(P+cw*(i+1)/3,gy-40,1.5,116); }
+      T(col[0],gx,gy-14,26,{family:MONO,color:SOFT,align:"center",spacing:3});
+      T(String(col[1]),gx,gy+66,80,{weight:400,align:"center"});
+      if(i<2){ c.fillStyle=LINE; c.fillRect(P+cw*(i+1)/3,gy-42,1.5,128); }
     });
-    // collection cabinet — the device thumbnails (newest→oldest)
-    T("我的收藏 · THE COLLECTION",P,1272,24,{family:MONO,color:SOFT,spacing:3});
+    // collection — the co-main visual; thumbnails, or aggregate "類別 ×N" when too many
+    function drawTile(im,tx,ty,tile,rad){
+      c.fillStyle="#faf7f0"; rr(tx,ty,tile,tile,rad); c.fill();
+      c.strokeStyle="#e8e1d2"; c.lineWidth=1.5; rr(tx,ty,tile,tile,rad); c.stroke();
+      if(im){ var pad=tile*0.14, aw=tile-2*pad, ah=tile-2*pad, s=Math.min(aw/im.width,ah/im.height);
+        c.drawImage(im, tx+(tile-im.width*s)/2, ty+(tile-im.height*s)/2, im.width*s, im.height*s); }
+    }
     var cdevs=R.devs.slice().sort(function(a,b){return b[1]-a[1];});
-    var COLS=5, GAP=16, TILE=(cw-(COLS-1)*GAP)/COLS, GX0=P, GY0=1316, RAD=TILE*0.14, CAP=15;
-    var showN=cdevs.length<=CAP?cdevs.length:CAP-1, overflow=cdevs.length-showN;
-    var slots=cdevs.slice(0,showN).map(function(d){return imgFor(d[3],d[0],d[1]);});
-    var imgs=await Promise.all(slots.map(function(s){return loadImg("img/"+s+".png");}));
-    imgs.forEach(function(im,i){ var col=i%COLS, row=(i/COLS)|0, tx=GX0+col*(TILE+GAP), ty=GY0+row*(TILE+GAP);
-      c.fillStyle="#faf7f0"; rr(tx,ty,TILE,TILE,RAD); c.fill();
-      c.strokeStyle="#e8e1d2"; c.lineWidth=1.5; rr(tx,ty,TILE,TILE,RAD); c.stroke();
-      if(im){ var pad=TILE*0.13, aw=TILE-2*pad, ah=TILE-2*pad, s=Math.min(aw/im.width,ah/im.height),
-        dw=im.width*s, dh=im.height*s;
-        c.drawImage(im, tx+(TILE-dw)/2, ty+(TILE-dh)/2, dw, dh); }
-    });
-    if(overflow>0){ var oi=showN, col=oi%COLS, row=(oi/COLS)|0, tx=GX0+col*(TILE+GAP), ty=GY0+row*(TILE+GAP);
-      c.strokeStyle="#cfc7b6"; c.lineWidth=1.5; c.setLineDash([6,6]); rr(tx,ty,TILE,TILE,RAD); c.stroke(); c.setLineDash([]);
-      T("+"+overflow,tx+TILE/2,ty+TILE/2+12,30,{family:MONO,color:SOFT,align:"center"}); }
+    if(cdevs.length<=12){
+      T("我的收藏 · THE COLLECTION",P,1058,26,{family:MONO,color:SOFT,spacing:3});
+      var COLS=4, GAP=22, TILE=(cw-(COLS-1)*GAP)/COLS, GY0=1106, RAD=TILE*0.13;
+      var imgs=await Promise.all(cdevs.map(function(d){return loadImg("img/"+imgFor(d[3],d[0],d[1])+".png");}));
+      imgs.forEach(function(im,i){ drawTile(im, P+(i%COLS)*(TILE+GAP), GY0+((i/COLS)|0)*(TILE+GAP), TILE, RAD); });
+    } else {
+      // too many → group by category (newest device as the icon), show ×count
+      T("我的收藏 · THE COLLECTION（"+cdevs.length+" 件）",P,1058,26,{family:MONO,color:SOFT,spacing:3});
+      var order=["iPhone","iPad","Mac","Apple Watch","AirPods"], groups=[];
+      order.forEach(function(cat){ var inC=cdevs.filter(function(d){return d[3]===cat;});
+        if(inC.length) groups.push({cat:cat,n:inC.length,rep:imgFor(inC[0][3],inC[0][0],inC[0][1])}); });
+      var imgs=await Promise.all(groups.map(function(g){return loadImg("img/"+g.rep+".png");}));
+      var GY0=1110, rowH=Math.min(150,(1780-GY0)/groups.length), tile=rowH*0.80;
+      groups.forEach(function(g,i){ var ry=GY0+i*rowH;
+        drawTile(imgs[i], P, ry, tile, tile*0.15);
+        T(g.cat, P+tile+42, ry+tile*0.66, 50, {weight:400});
+        T("× "+g.n, x2, ry+tile*0.66, 60, {weight:500,align:"right"});
+        if(i<groups.length-1){ c.fillStyle=LINE; c.fillRect(P,ry+rowH-1,cw,1); }
+      });
+    }
     // footer
     T("APIOU · APEELCASE.COM",P,1878,22,{family:MONO,color:SOFT,spacing:3});
     T("以上市價估算 · Apple 等為 Apple Inc. 商標，僅供型號對照",P,1908,18,{family:MONO,color:"#a49c88",spacing:1});
