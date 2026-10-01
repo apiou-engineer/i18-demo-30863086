@@ -795,37 +795,43 @@
       T(String(col[1]),gx,gy+66,80,{weight:400,align:"center"});
       if(i<2){ c.fillStyle=LINE; c.fillRect(P+cw*(i+1)/3,gy-42,1.5,128); }
     });
-    // collection — co-main visual; bigger device images (adaptive cols), or aggregate "類別 ×N"
+    // collection — cabinet-style tiles (deduped by image), with a ×N count badge top-right
     function drawTile(im,tx,ty,tile,rad){
       c.fillStyle="#faf7f0"; rr(tx,ty,tile,tile,rad); c.fill();
       c.strokeStyle="#e8e1d2"; c.lineWidth=1.5; rr(tx,ty,tile,tile,rad); c.stroke();
       if(im){ var pad=tile*0.12, aw=tile-2*pad, ah=tile-2*pad, s=Math.min(aw/im.width,ah/im.height);
         c.drawImage(im, tx+(tile-im.width*s)/2, ty+(tile-im.height*s)/2, im.width*s, im.height*s); }
     }
-    var cdevs=R.devs.slice().sort(function(a,b){return b[1]-a[1];});
-    var CY=1040, AVH=1792-CY-30;   // collection label y and available height
-    if(cdevs.length<=12){
-      T("我的收藏 · THE COLLECTION",P,CY,26,{family:MONO,color:SOFT,spacing:3});
-      var n=cdevs.length, COLS=n<=4?2:(n<=9?3:4), GAP=24, rows=Math.ceil(n/COLS);
-      var TILE=Math.min((cw-(COLS-1)*GAP)/COLS, (AVH-(rows-1)*GAP)/rows, 300), RAD=TILE*0.13;
-      var gridW=COLS*TILE+(COLS-1)*GAP, gridH=rows*TILE+(rows-1)*GAP;
-      var GX0=P+(cw-gridW)/2, GY0=CY+36+Math.max(0,(AVH-gridH)/2);
-      var imgs=await Promise.all(cdevs.map(function(d){return loadImg("img/"+imgFor(d[3],d[0],d[1])+".png");}));
-      imgs.forEach(function(im,i){ drawTile(im, GX0+(i%COLS)*(TILE+GAP), GY0+((i/COLS)|0)*(TILE+GAP), TILE, RAD); });
-    } else {
-      T("我的收藏 · THE COLLECTION（"+cdevs.length+" 件）",P,CY,26,{family:MONO,color:SOFT,spacing:3});
-      var order=["iPhone","iPad","Mac","Apple Watch","AirPods"], groups=[];
-      order.forEach(function(cat){ var inC=cdevs.filter(function(d){return d[3]===cat;});
-        if(inC.length) groups.push({cat:cat,n:inC.length,rep:imgFor(inC[0][3],inC[0][0],inC[0][1])}); });
-      var imgs=await Promise.all(groups.map(function(g){return loadImg("img/"+g.rep+".png");}));
-      var GY0=CY+40, rowH=Math.min(168,AVH/groups.length), tile=rowH*0.82;
-      groups.forEach(function(g,i){ var ry=GY0+i*rowH;
-        drawTile(imgs[i], P, ry, tile, tile*0.15);
-        T(g.cat, P+tile+46, ry+tile*0.66, 54, {weight:400});
-        T("× "+g.n, x2, ry+tile*0.66, 66, {weight:500,align:"right"});
-        if(i<groups.length-1){ c.fillStyle=LINE; c.fillRect(P,ry+rowH-1,cw,1); }
-      });
+    function drawBadge(tx,ty,tile,n){
+      var bh=Math.max(36,tile*0.2), fs=Math.round(bh*0.56), txt="×"+n;
+      c.font="500 "+fs+'px '+SERIF; var bw=c.measureText(txt).width+bh*0.8;
+      var bx=tx+tile-bw-tile*0.05, by=ty+tile*0.05;
+      c.fillStyle=INK; rr(bx,by,bw,bh,bh/2); c.fill();
+      T(txt,bx+bw/2,by+bh*0.72,fs,{family:SERIF,weight:500,color:PAPER,align:"center"});
     }
+    // dedupe by device image (newest first), counting duplicates
+    var seen={}, uniq=[];
+    R.devs.slice().sort(function(a,b){return b[1]-a[1];}).forEach(function(d){
+      var slug=imgFor(d[3],d[0],d[1]);
+      if(seen[slug]==null){ seen[slug]=uniq.length; uniq.push({slug:slug,n:1}); } else uniq[seen[slug]].n++;
+    });
+    T("我的收藏 · THE COLLECTION",P,1040,26,{family:MONO,color:SOFT,spacing:3});
+    var CY=1040, AVH=1792-(CY+40);
+    var cap=16, more=uniq.length>cap?uniq.length-(cap-1):0, cells=more?uniq.slice(0,cap-1):uniq;
+    var total=cells.length+(more?1:0);
+    var COLS=total<=1?1:(total<=2?2:(total<=9?3:4)), GAP=24, rows=Math.ceil(total/COLS);
+    var TILE=Math.min((cw-(COLS-1)*GAP)/COLS, (AVH-(rows-1)*GAP)/rows, 300), RAD=TILE*0.13;
+    var gridW=COLS*TILE+(COLS-1)*GAP, gridH=rows*TILE+(rows-1)*GAP;
+    var GX0=P+(cw-gridW)/2, GY0=CY+40+Math.max(0,(AVH-gridH)/2);
+    var imgs=await Promise.all(cells.map(function(u){return loadImg("img/"+u.slug+".png");}));
+    cells.forEach(function(u,i){ var tx=GX0+(i%COLS)*(TILE+GAP), ty=GY0+((i/COLS)|0)*(TILE+GAP);
+      drawTile(imgs[i],tx,ty,TILE,RAD);
+      if(u.n>1) drawBadge(tx,ty,TILE,u.n);
+    });
+    if(more){ var i=cells.length, tx=GX0+(i%COLS)*(TILE+GAP), ty=GY0+((i/COLS)|0)*(TILE+GAP);
+      c.fillStyle="#faf7f0"; rr(tx,ty,TILE,TILE,RAD); c.fill();
+      c.strokeStyle="#cfc7b6"; c.lineWidth=1.5; c.setLineDash([7,7]); rr(tx,ty,TILE,TILE,RAD); c.stroke(); c.setLineDash([]);
+      T("+"+more,tx+TILE/2,ty+TILE/2+TILE*0.09,TILE*0.26,{weight:500,color:SOFT,align:"center"}); }
     // footer
     T("APIOU · APEELCASE.COM",P,1878,22,{family:MONO,color:SOFT,spacing:3});
     T("以上市價估算 · Apple 等為 Apple Inc. 商標，僅供型號對照",P,1908,18,{family:MONO,color:"#a49c88",spacing:1});
