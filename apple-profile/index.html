@@ -250,6 +250,25 @@
   .card .ccab .more{aspect-ratio:1;border:1px dashed #cfc7b6;border-radius:2.4cqw;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:2cqw;color:var(--soft)}
   .card .cfoot{font-family:var(--mono);font-size:1.9cqw;letter-spacing:.18em;color:var(--soft);margin-top:2.2cqh;text-align:left;text-transform:uppercase}
   .card .cdis{font-family:var(--mono);font-size:1.6cqw;letter-spacing:.1em;color:#a49c88;margin-top:1.8cqh;text-align:left}
+  /* ---------- coupon (股東股利) modal ---------- */
+  .couponModal{position:fixed;inset:0;z-index:70;display:none}
+  .couponModal.open{display:block}
+  .cmBack{position:absolute;inset:0;background:rgba(12,11,9,.82);backdrop-filter:blur(3px)}
+  .cmCard{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(360px,88vw);box-sizing:border-box;
+    background:var(--paper);color:var(--ink);border-radius:26px;padding:30px 26px 24px;text-align:center;
+    box-shadow:0 30px 70px -20px rgba(0,0,0,.7);display:flex;flex-direction:column;align-items:center;gap:0}
+  .cmEye{font-family:var(--mono);font-size:.56rem;letter-spacing:.22em;color:#8a6d2f;text-transform:uppercase}
+  .cmTitle{font-family:var(--serif);font-weight:500;font-size:2rem;letter-spacing:-.01em;margin-top:8px}
+  .cmOffer{font-family:var(--serif);font-weight:400;font-size:1.5rem;line-height:1.3;margin-top:14px}
+  .cmOffer b{font-weight:600}
+  .cmCodeRow{display:flex;flex-direction:column;gap:6px;margin-top:20px;width:100%;
+    border:1.5px dashed #c9b887;border-radius:14px;padding:14px 12px;background:#faf6ea}
+  .cmCodeRow span{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;color:var(--soft);text-transform:uppercase}
+  .cmCode{font-family:var(--serif);font-weight:600;font-size:2.4rem;letter-spacing:.14em;color:var(--ink)}
+  .cmCard .cta{width:100%;margin-top:14px}
+  .cmCard .cta.ghost{background:none;border:1px solid var(--line);color:var(--ink);text-decoration:none;display:block;box-sizing:border-box;text-align:center}
+  .cmWin{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;color:var(--soft);margin-top:14px}
+  .cmX{background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;color:var(--soft);text-transform:uppercase;margin-top:14px;padding:4px}
 </style>
 </head>
 <body>
@@ -351,6 +370,21 @@
       <button class="cta ghost" id="smClose">關閉</button>
     </div>
     <div class="smMsg" id="smMsg"></div>
+  </div>
+</div>
+
+<!-- COUPON MODAL: the 股東股利 reward -->
+<div class="couponModal" id="couponModal" aria-hidden="true">
+  <div class="cmBack" id="cmBack"></div>
+  <div class="cmCard">
+    <div class="cmEye">果粉股東股利 · SHAREHOLDER DIVIDEND</div>
+    <div class="cmTitle">雙 10 回饋</div>
+    <div class="cmOffer">全館滿 <b>$1,010</b><br>折 <b>$100</b></div>
+    <div class="cmCodeRow"><span>結帳折扣碼</span><b class="cmCode" id="cmCode">1010</b></div>
+    <button class="cta" id="cmCopy">點我複製折扣碼</button>
+    <div class="cmWin">活動期間　10/8 – 10/11</div>
+    <a class="cta ghost" id="cmGo" target="_blank" rel="noopener">前往優惠專區選購 →</a>
+    <button class="cmX" id="cmClose">關閉</button>
   </div>
 </div>
 
@@ -753,7 +787,8 @@
   $("againBtn").addEventListener("click",function(){ ci=0; owned={}; $("prog").style.width="0"; show("s-landing"); });
   // ---------- share to social ----------
   var SHARE_URL="https://apiou-engineer.github.io/i18-demo-30863086/apple-profile/";  // where friends go to play (swap to the SHOPLINE page once embedded)
-  var COUPON_URL="https://www.apeelcase.com/";  // 優惠專區 / 股東股利 landing (swap to the real coupon page)
+  var COUPON_URL="https://www.apeelcase.com/pages/double-10-sale";  // 優惠活動頁
+  var COUPON_CODE="1010";  // 結帳折扣碼
   function shareText(){
     return "我是 APIOU 認證的 Apple 股東。累積投入 "+money(R.total)+"，贏過 "+R.pct+"% 的股東，人格是「"+R.persona.zh+"」。\n測你的 Apple 股東側寫 → "+SHARE_URL;
   }
@@ -907,9 +942,22 @@
   $("smClose").addEventListener("click",closeShare);
   $("smShare").addEventListener("click",shareCard);
   $("smDownload").addEventListener("click",downloadCard);
-  function goCoupon(){ window.open(COUPON_URL,"_blank","noopener"); }
-  $("claimBtn").addEventListener("click",goCoupon);
-  $("smCoupon").addEventListener("click",goCoupon);
+  // coupon (股東股利) reveal
+  function openCoupon(){
+    $("cmCode").textContent=COUPON_CODE;
+    $("cmGo").href=COUPON_URL; $("cmCopy").textContent="點我複製折扣碼";
+    $("couponModal").classList.add("open"); $("couponModal").setAttribute("aria-hidden","false");
+  }
+  function closeCoupon(){ $("couponModal").classList.remove("open"); $("couponModal").setAttribute("aria-hidden","true"); }
+  $("claimBtn").addEventListener("click",openCoupon);
+  $("smCoupon").addEventListener("click",openCoupon);
+  $("cmBack").addEventListener("click",closeCoupon);
+  $("cmClose").addEventListener("click",closeCoupon);
+  $("cmCopy").addEventListener("click",function(){
+    var done=function(){ $("cmCopy").textContent="已複製 ✓　折扣碼 "+COUPON_CODE; };
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(COUPON_CODE).then(done).catch(done); }
+    else done();
+  });
 })();
 </script>
 </body>
