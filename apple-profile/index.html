@@ -667,6 +667,8 @@
   function imgFor(cat, model, year){
     var m=model;
     if(cat==="iPhone"){
+      if(/iPhone Air/.test(m)) return "iphone-air";
+      if(/16e/.test(m)) return "iphone-13to15";   // placeholder — 16e has no dedicated cutout yet
       if(/18 Pro/.test(m)) return "iphone-18pro";
       if(/^iPhone 18\b/.test(m)) return "iphone-1617";
       if(/17 Pro/.test(m)) return "iphone-17pro";
