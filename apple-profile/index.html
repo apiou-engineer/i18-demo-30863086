@@ -313,13 +313,13 @@
   <section class="screen" id="s-result">
     <div class="rpad">
       <button class="stepback" id="rBack">← 上一步</button>
-      <div class="rtop"><span class="rbrand">APIOU</span><span class="rstamp">APPLE 認證股東</span></div>
+      <div class="rtop"><span class="rbrand">APIOU</span><span class="rstamp">APIOU 認證股東</span></div>
       <div class="rpk">你的蘋果股東側寫 · Apple Shareholder</div>
       <h1 class="rpersona" id="rPersona">The <em>All-In</em><br>Superfan</h1>
       <div class="rzh" id="rZh">全生態鐵粉</div>
 
       <div class="rmoneywrap">
-        <div class="rmoneyk">你的 Apple 總投入（累積花費）</div>
+        <div class="rmoneyk">你在 Apple 的總花費（累積投入）</div>
         <div class="rmoney" id="rMoney">NT$0</div>
         <div class="rpr" id="rPR"></div>
       </div>
@@ -347,6 +347,7 @@
       <button class="cta" id="smShare">分享到限動 / Threads</button>
       <button class="cta ghost" id="smDownload">下載圖片</button>
       <a class="cta ghost" id="smThreads" target="_blank" rel="noopener">用 Threads 發文</a>
+      <button class="cta" id="smCoupon">前往股東股利 · 優惠專區</button>
       <button class="cta ghost" id="smClose">關閉</button>
     </div>
     <div class="smMsg" id="smMsg"></div>
@@ -404,7 +405,7 @@
   // 14 archetypes · 追星（stan-culture）× 依產品分類/使用行為 · desc 是模板（{slots} 用真實資料填、只提使用者實際擁有的類別）
   var PERSONAS={
     legend:{en:["The","Ultimate","Stan"], zh:"課金鯨・大粉頭", floor:"傳說",
-      desc:"資歷 {years} 年、五大類全收、累積投入 {spend}——你不是粉絲，你是站姐本尊。Apple 的應援榜上有你一份，這種大粉頭全台不到 1%。",
+      desc:"資歷 {years} 年、五大類全收、累積投入 {spend}——你不是粉絲，你是站姐本尊。Apple 的應援榜上絕對有你一份，這就是大粉頭等級的存在。",
       tag:"Ultimate stan. Certified."},
     architect:{en:["The","All-In","Superfan"], zh:"全生態鐵粉", floor:"傳說",
       desc:"iPhone、iPad、Mac、Watch、AirPods 五樣全入手——你早就不只是用 Apple，是全生態的鐵粉。裝置串起來那種順，你有義務讓全世界都知道。",
@@ -750,6 +751,7 @@
   $("againBtn").addEventListener("click",function(){ ci=0; owned={}; $("prog").style.width="0"; show("s-landing"); });
   // ---------- share to social ----------
   var SHARE_URL="https://apiou-engineer.github.io/i18-demo-30863086/apple-profile/";  // where friends go to play (swap to the SHOPLINE page once embedded)
+  var COUPON_URL="https://www.apeelcase.com/";  // 優惠專區 / 股東股利 landing (swap to the real coupon page)
   function shareText(){
     return "我是 APIOU 認證的 Apple 股東。累積投入 "+money(R.total)+"，贏過 "+R.pct+"% 的股東，人格是「"+R.persona.zh+"」。\n測你的 Apple 股東側寫 → "+SHARE_URL;
   }
@@ -775,47 +777,50 @@
     }
     // brand row
     T("APIOU",P,132,30,{family:MONO,weight:600,spacing:6});
-    T("APPLE 認證股東",x2,132,26,{family:MONO,color:GOLD,align:"right",spacing:2});
+    T("APIOU 認證股東",x2,132,26,{family:MONO,color:GOLD,align:"right",spacing:2});
     c.fillStyle=LINE; c.fillRect(P,158,cw,2);
-    // hero — total (the main visual) + PR
-    var hy=352;
-    T("APPLE 總投入（累積花費）",cx,hy,30,{family:MONO,color:GOLD,align:"center",spacing:5});
-    T(money(R.total),cx,hy+192,192,{weight:500,align:"center",spacing:-2});
-    c.fillStyle=LINE; c.fillRect(cx-150,hy+242,300,2);
-    T("PR "+R.pct+" · 贏過 "+R.pct+"% 的股東",cx,hy+318,32,{family:MONO,color:GOLD,align:"center",spacing:2});
+    // hero — total (the main visual) + PR; enlarged label per Eva
+    var hy=330;
+    T("你在 APPLE 的總花費（累積投入）",cx,hy,38,{family:MONO,color:GOLD,align:"center",spacing:3});
+    T(money(R.total),cx,hy+198,196,{weight:500,align:"center",spacing:-2});
+    c.fillStyle=LINE; c.fillRect(cx-150,hy+248,300,2);
+    T("PR "+R.pct+" · 贏過 "+R.pct+"% 的股東",cx,hy+322,32,{family:MONO,color:GOLD,align:"center",spacing:2});
     // stats grid
-    var gy=890, cols=[["果齡",R.appleYears],["裝置",R.devs.length],["類別",R.catCount]];
+    var gy=870, cols=[["果齡",R.appleYears],["裝置",R.devs.length],["類別",R.catCount]];
     c.fillStyle=LINE; c.fillRect(P,gy-54,cw,2); c.fillRect(P,gy+94,cw,2);
     cols.forEach(function(col,i){ var gx=P+cw*(i+0.5)/3;
       T(col[0],gx,gy-14,26,{family:MONO,color:SOFT,align:"center",spacing:3});
       T(String(col[1]),gx,gy+66,80,{weight:400,align:"center"});
       if(i<2){ c.fillStyle=LINE; c.fillRect(P+cw*(i+1)/3,gy-42,1.5,128); }
     });
-    // collection — the co-main visual; thumbnails, or aggregate "類別 ×N" when too many
+    // collection — co-main visual; bigger device images (adaptive cols), or aggregate "類別 ×N"
     function drawTile(im,tx,ty,tile,rad){
       c.fillStyle="#faf7f0"; rr(tx,ty,tile,tile,rad); c.fill();
       c.strokeStyle="#e8e1d2"; c.lineWidth=1.5; rr(tx,ty,tile,tile,rad); c.stroke();
-      if(im){ var pad=tile*0.14, aw=tile-2*pad, ah=tile-2*pad, s=Math.min(aw/im.width,ah/im.height);
+      if(im){ var pad=tile*0.12, aw=tile-2*pad, ah=tile-2*pad, s=Math.min(aw/im.width,ah/im.height);
         c.drawImage(im, tx+(tile-im.width*s)/2, ty+(tile-im.height*s)/2, im.width*s, im.height*s); }
     }
     var cdevs=R.devs.slice().sort(function(a,b){return b[1]-a[1];});
+    var CY=1040, AVH=1792-CY-30;   // collection label y and available height
     if(cdevs.length<=12){
-      T("我的收藏 · THE COLLECTION",P,1058,26,{family:MONO,color:SOFT,spacing:3});
-      var COLS=4, GAP=22, TILE=(cw-(COLS-1)*GAP)/COLS, GY0=1106, RAD=TILE*0.13;
+      T("我的收藏 · THE COLLECTION",P,CY,26,{family:MONO,color:SOFT,spacing:3});
+      var n=cdevs.length, COLS=n<=4?2:(n<=9?3:4), GAP=24, rows=Math.ceil(n/COLS);
+      var TILE=Math.min((cw-(COLS-1)*GAP)/COLS, (AVH-(rows-1)*GAP)/rows, 300), RAD=TILE*0.13;
+      var gridW=COLS*TILE+(COLS-1)*GAP, gridH=rows*TILE+(rows-1)*GAP;
+      var GX0=P+(cw-gridW)/2, GY0=CY+36+Math.max(0,(AVH-gridH)/2);
       var imgs=await Promise.all(cdevs.map(function(d){return loadImg("img/"+imgFor(d[3],d[0],d[1])+".png");}));
-      imgs.forEach(function(im,i){ drawTile(im, P+(i%COLS)*(TILE+GAP), GY0+((i/COLS)|0)*(TILE+GAP), TILE, RAD); });
+      imgs.forEach(function(im,i){ drawTile(im, GX0+(i%COLS)*(TILE+GAP), GY0+((i/COLS)|0)*(TILE+GAP), TILE, RAD); });
     } else {
-      // too many → group by category (newest device as the icon), show ×count
-      T("我的收藏 · THE COLLECTION（"+cdevs.length+" 件）",P,1058,26,{family:MONO,color:SOFT,spacing:3});
+      T("我的收藏 · THE COLLECTION（"+cdevs.length+" 件）",P,CY,26,{family:MONO,color:SOFT,spacing:3});
       var order=["iPhone","iPad","Mac","Apple Watch","AirPods"], groups=[];
       order.forEach(function(cat){ var inC=cdevs.filter(function(d){return d[3]===cat;});
         if(inC.length) groups.push({cat:cat,n:inC.length,rep:imgFor(inC[0][3],inC[0][0],inC[0][1])}); });
       var imgs=await Promise.all(groups.map(function(g){return loadImg("img/"+g.rep+".png");}));
-      var GY0=1110, rowH=Math.min(150,(1780-GY0)/groups.length), tile=rowH*0.80;
+      var GY0=CY+40, rowH=Math.min(168,AVH/groups.length), tile=rowH*0.82;
       groups.forEach(function(g,i){ var ry=GY0+i*rowH;
         drawTile(imgs[i], P, ry, tile, tile*0.15);
-        T(g.cat, P+tile+42, ry+tile*0.66, 50, {weight:400});
-        T("× "+g.n, x2, ry+tile*0.66, 60, {weight:500,align:"right"});
+        T(g.cat, P+tile+46, ry+tile*0.66, 54, {weight:400});
+        T("× "+g.n, x2, ry+tile*0.66, 66, {weight:500,align:"right"});
         if(i<groups.length-1){ c.fillStyle=LINE; c.fillRect(P,ry+rowH-1,cw,1); }
       });
     }
@@ -851,29 +856,39 @@
   }
   function closeShare(){ $("shareModal").classList.remove("open"); $("shareModal").setAttribute("aria-hidden","true"); }
 
+  function doDownload(b){
+    var url=URL.createObjectURL(b), a=document.createElement("a");
+    a.href=url; a.download="apiou-apple-shareholder.png"; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); },2000);
+    msg("已幫你下載圖片，可到 IG 限動上傳（或長按上方圖片存到相簿）");
+  }
   function downloadCard(){
+    if(cardBlobCache){ doDownload(cardBlobCache); return; }
     var btn=$("smDownload"); btn.disabled=true; msg("生成圖片中…");
-    (cardBlobCache?Promise.resolve(cardBlobCache):buildCard()).then(function(b){
-      var url=URL.createObjectURL(b), a=document.createElement("a");
-      a.href=url; a.download="apiou-apple-shareholder.png"; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function(){ URL.revokeObjectURL(url); },2000);
-      msg("已下載圖片，可到 IG 限動上傳分享"); btn.disabled=false;
-    }).catch(function(){ msg("圖片生成失敗，請改用「下載圖片」或截圖"); btn.disabled=false; });
+    buildCard().then(function(b){ doDownload(b); }).catch(function(){ msg("圖片生成失敗，請直接長按上方圖片存檔"); })
+      .then(function(){ btn.disabled=false; });
+  }
+  function tryShare(file,b){
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      navigator.share({files:[file],text:shareText()}).then(function(){ msg(""); })
+        .catch(function(e){ if(!e||e.name!=="AbortError") doDownload(b); });
+      return true;
+    }
+    return false;
   }
   function shareCard(){
+    msg("");
+    // image is pre-warmed on openShare → call navigator.share SYNCHRONOUSLY to keep iOS user-activation
+    if(cardBlobCache){
+      var file=new File([cardBlobCache],"apiou-apple-shareholder.png",{type:"image/png"});
+      if(!tryShare(file,cardBlobCache)) doDownload(cardBlobCache);
+      return;
+    }
     var btn=$("smShare"); btn.disabled=true; msg("生成圖片中…");
-    (cardBlobCache?Promise.resolve(cardBlobCache):buildCard()).then(function(b){
-      var file=new File([b],"apiou-apple-shareholder.png",{type:"image/png"});
-      if(navigator.canShare && navigator.canShare({files:[file]})){
-        return navigator.share({files:[file],text:shareText()}).then(function(){ msg(""); })
-          .catch(function(e){ if(e&&e.name==="AbortError"){msg("");return;} throw e; });
-      }
-      // fallback: no file-share support (most desktops) → download + hint
-      var url=URL.createObjectURL(b), a=document.createElement("a");
-      a.href=url; a.download="apiou-apple-shareholder.png"; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function(){ URL.revokeObjectURL(url); },2000);
-      msg("此裝置不支援直接分享，已幫你下載圖片，可上傳到 IG 限動");
-    }).catch(function(){ msg("分享失敗，請改用「下載圖片」或直接截圖"); })
+    buildCard().then(function(b){
+      var f=new File([b],"apiou-apple-shareholder.png",{type:"image/png"});
+      if(!tryShare(f,b)) doDownload(b);
+    }).catch(function(){ msg("分享失敗，請改用「下載圖片」或長按上方圖片存檔"); })
       .then(function(){ btn.disabled=false; });
   }
 
@@ -882,7 +897,9 @@
   $("smClose").addEventListener("click",closeShare);
   $("smShare").addEventListener("click",shareCard);
   $("smDownload").addEventListener("click",downloadCard);
-  $("claimBtn").addEventListener("click",function(){ alert("原型階段：這裡之後會顯示 APIOU 股東股利折扣碼。"); });
+  function goCoupon(){ window.open(COUPON_URL,"_blank","noopener"); }
+  $("claimBtn").addEventListener("click",goCoupon);
+  $("smCoupon").addEventListener("click",goCoupon);
 })();
 </script>
 </body>
