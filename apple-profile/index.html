@@ -823,7 +823,7 @@
     c.fillStyle=LINE; c.fillRect(cx-150,hy+240,300,2);
     T("PR "+R.pct+" · 贏過 "+R.pct+"% 的股東",cx,hy+312,32,{family:MONO,color:GOLD,align:"center",spacing:2});
     // stats grid (moved up to close the gap)
-    var gy=724, cols=[["果齡",R.appleYears],["裝置",R.devs.length],["類別",R.catCount]];
+    var gy=700, cols=[["果齡",R.appleYears],["裝置",R.devs.length],["類別",R.catCount]];
     c.fillStyle=LINE; c.fillRect(P,gy-54,cw,2); c.fillRect(P,gy+94,cw,2);
     cols.forEach(function(col,i){ var gx=P+cw*(i+0.5)/3;
       T(col[0],gx,gy-14,26,{family:MONO,color:SOFT,align:"center",spacing:3});
@@ -834,7 +834,7 @@
     function drawTile(im,tx,ty,tile,rad){
       c.fillStyle="#faf7f0"; rr(tx,ty,tile,tile,rad); c.fill();
       c.strokeStyle="#e8e1d2"; c.lineWidth=1.5; rr(tx,ty,tile,tile,rad); c.stroke();
-      if(im){ var pad=tile*0.12, aw=tile-2*pad, ah=tile-2*pad, s=Math.min(aw/im.width,ah/im.height);
+      if(im){ var pad=tile*0.06, aw=tile-2*pad, ah=tile-2*pad, s=Math.min(aw/im.width,ah/im.height);
         c.drawImage(im, tx+(tile-im.width*s)/2, ty+(tile-im.height*s)/2, im.width*s, im.height*s); }
     }
     function drawBadge(tx,ty,tile,n){
@@ -854,8 +854,8 @@
       order.forEach(function(cat){ var inC=cdevs.filter(function(d){return d[3]===cat;});
         if(inC.length) cells.push({slug:imgFor(inC[0][3],inC[0][0],inC[0][1]), n:inC.length}); });
     }
-    T("我的收藏 · THE COLLECTION",P,862,26,{family:MONO,color:SOFT,spacing:3});
-    var CY=898, AVH=1794-CY, GAP=24, maxTile=440, n=cells.length;
+    T("我的收藏 · THE COLLECTION",P,836,26,{family:MONO,color:SOFT,spacing:3});
+    var CY=874, AVH=1796-CY, GAP=18, maxTile=500, n=cells.length;
     // pick the column count that makes tiles as big as possible (full width when it fits the height)
     var COLS=1, TILE=0;
     for(var cc=1;cc<=6;cc++){ var r=Math.ceil(n/cc),
