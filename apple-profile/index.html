@@ -363,9 +363,7 @@
     <div class="smHint">長按圖片存到相簿，或用下方按鈕分享</div>
     <div class="cardwrap"><img class="cardimg" id="cardImg" alt="你的果粉身家卡"><div class="cardspin" id="cardSpin">生成中…</div></div>
     <div class="smActions">
-      <button class="cta" id="smShare">分享圖卡（限動 / Threads）</button>
-      <button class="cta ghost" id="smDownload">下載圖片</button>
-      <a class="cta ghost" id="smThreads" target="_blank" rel="noopener">用 Threads 發文（純文字＋連結）</a>
+      <button class="cta" id="smShare">分享到限動 / Threads</button>
       <button class="cta" id="smCoupon">前往股東股利 · 優惠專區</button>
       <button class="cta ghost" id="smClose">關閉</button>
     </div>
@@ -790,7 +788,7 @@
   var COUPON_URL="https://www.apeelcase.com/pages/double-10-sale";  // 優惠活動頁
   var COUPON_CODE="1010";  // 結帳折扣碼
   function shareText(){
-    return "我是 APIOU 認證的 Apple 股東。累積投入 "+money(R.total)+"，贏過 "+R.pct+"% 的股東，人格是「"+R.persona.zh+"」。\n測你的 Apple 股東側寫 → "+SHARE_URL;
+    return "這張是我在 Apple 的總花費。…我先去冷靜一下。\n你的呢 → "+SHARE_URL;
   }
   function msg(t){ $("smMsg").textContent=t||""; }
 
@@ -818,7 +816,7 @@
     c.fillStyle=LINE; c.fillRect(P,158,cw,2);
     // hero — total (the main visual) + PR; big black bold label per Eva
     var hy=304;
-    T("你在 APPLE 的總花費（累積投入）",cx,hy,42,{family:MONO,color:INK,weight:700,align:"center",spacing:1});
+    T("我在 APPLE 的總花費（累積投入）",cx,hy,42,{family:MONO,color:INK,weight:700,align:"center",spacing:1});
     T(money(R.total),cx,hy+192,196,{weight:500,align:"center",spacing:-2});
     c.fillStyle=LINE; c.fillRect(cx-150,hy+240,300,2);
     T("PR "+R.pct+" · 贏過 "+R.pct+"% 的股東",cx,hy+312,32,{family:MONO,color:GOLD,align:"center",spacing:2});
@@ -888,7 +886,6 @@
   var previewURL=null;
   function openShare(){
     cardBlobCache=null;
-    $("smThreads").href="https://www.threads.net/intent/post?text="+encodeURIComponent(shareText());
     msg("");
     $("cardSpin").classList.remove("hide"); $("cardImg").removeAttribute("src");
     $("shareModal").classList.add("open");
@@ -906,12 +903,6 @@
     a.href=url; a.download="apiou-apple-shareholder.png"; document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function(){ URL.revokeObjectURL(url); },2000);
     msg("已幫你下載圖片，可到 IG 限動上傳（或長按上方圖片存到相簿）");
-  }
-  function downloadCard(){
-    if(cardBlobCache){ doDownload(cardBlobCache); return; }
-    var btn=$("smDownload"); btn.disabled=true; msg("生成圖片中…");
-    buildCard().then(function(b){ doDownload(b); }).catch(function(){ msg("圖片生成失敗，請直接長按上方圖片存檔"); })
-      .then(function(){ btn.disabled=false; });
   }
   function tryShare(file,b){
     if(navigator.canShare && navigator.canShare({files:[file]})){
@@ -933,7 +924,7 @@
     buildCard().then(function(b){
       var f=new File([b],"apiou-apple-shareholder.png",{type:"image/png"});
       if(!tryShare(f,b)) doDownload(b);
-    }).catch(function(){ msg("分享失敗，請改用「下載圖片」或長按上方圖片存檔"); })
+    }).catch(function(){ msg("分享失敗，請長按上方圖片存到相簿"); })
       .then(function(){ btn.disabled=false; });
   }
 
@@ -941,7 +932,6 @@
   $("smBack").addEventListener("click",closeShare);
   $("smClose").addEventListener("click",closeShare);
   $("smShare").addEventListener("click",shareCard);
-  $("smDownload").addEventListener("click",downloadCard);
   // coupon (股東股利) reveal
   function openCoupon(){
     $("cmCode").textContent=COUPON_CODE;
