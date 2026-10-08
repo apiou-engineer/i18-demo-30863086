@@ -333,7 +333,7 @@
     <div class="rpad">
       <button class="stepback" id="rBack">← 上一步</button>
       <div class="rtop"><span class="rbrand">APIOU</span><span class="rstamp">APIOU 認證果粉</span></div>
-      <div class="rpk">你的蘋果股東側寫 · Apple Shareholder</div>
+      <div class="rpk">你的果粉側寫 · Apple Fan</div>
       <h1 class="rpersona" id="rPersona">The <em>All-In</em><br>Superfan</h1>
       <div class="rzh" id="rZh">全生態鐵粉</div>
 
@@ -654,8 +654,8 @@
     var num=$("rPRnum"), dot=$("rPRdot"), beat=$("rPRbeat"), t=R.pct, s=null;
     if(!num) return;
     (function step(ts){ if(s==null)s=ts; var k=Math.min(1,(ts-s)/1200); var e=1-Math.pow(1-k,3); var v=t*e;
-      num.textContent=Math.round(v); dot.style.left=v+"%"; beat.textContent="贏過 "+Math.round(v)+"% 的股東";
-      if(k<1)requestAnimationFrame(step); else{ num.textContent=t; dot.style.left=t+"%"; beat.textContent="贏過 "+t+"% 的股東"; }
+      num.textContent=Math.round(v); dot.style.left=v+"%"; beat.textContent="贏過 "+Math.round(v)+"% 的果粉";
+      if(k<1)requestAnimationFrame(step); else{ num.textContent=t; dot.style.left=t+"%"; beat.textContent="贏過 "+t+"% 的果粉"; }
     })(performance.now());
   }
 
@@ -665,7 +665,7 @@
     $("prog").style.width="90%";
     $("pName").innerHTML=p.en[0]+" <em>"+p.en[1]+"</em>"+(p.en[2]?"<br>"+p.en[2]:"");
     $("pZh").textContent=p.zh;
-    $("pRank").innerHTML='稀有度 <b>'+R.tier+'</b>&nbsp;·&nbsp;贏過 <b>'+R.pct+'%</b> 的股東';
+    $("pRank").innerHTML='稀有度 <b>'+R.tier+'</b>&nbsp;·&nbsp;贏過 <b>'+R.pct+'%</b> 的果粉';
     $("pDesc").textContent=R.desc;
     var chips=[];
     if(R.firstDev) chips.push(["首台",R.firstDev[0]+" · "+R.firstDev[1]]);
@@ -769,9 +769,9 @@
     // --- full-screen flex page (the thing users screenshot / show off) ---
     $("rPersona").innerHTML=p.en[0]+" <em>"+p.en[1]+"</em>"+(p.en[2]?"<br>"+p.en[2]:"");
     $("rZh").textContent=p.zh+" · "+R.tier;
-    $("rPR").innerHTML='<div class="prline">你的股東排名 PR <b id="rPRnum">0</b></div>'+
+    $("rPR").innerHTML='<div class="prline">你的果粉排名 PR <b id="rPRnum">0</b></div>'+
       '<div class="prgauge"><span class="prdot" id="rPRdot"></span></div>'+
-      '<div class="prfoot"><span>後段班</span><span class="beat" id="rPRbeat">贏過 0% 的股東</span><span>頂尖股東</span></div>';
+      '<div class="prfoot"><span>後段班</span><span class="beat" id="rPRbeat">贏過 0% 的果粉</span><span>頂尖果粉</span></div>';
     $("rStats").innerHTML=
       '<div class="rs"><div class="k">果齡</div><div class="v">'+R.appleYears+'</div></div>'+
       '<div class="rs"><div class="k">裝置</div><div class="v">'+R.devs.length+'</div></div>'+
@@ -819,7 +819,7 @@
     T("我在 APPLE 的總花費（累積投入）",cx,hy,42,{family:MONO,color:INK,weight:700,align:"center",spacing:1});
     T(money(R.total),cx,hy+192,196,{weight:500,align:"center",spacing:-2});
     c.fillStyle=LINE; c.fillRect(cx-150,hy+240,300,2);
-    T("PR "+R.pct+" · 贏過 "+R.pct+"% 的股東",cx,hy+312,32,{family:MONO,color:GOLD,align:"center",spacing:2});
+    T("PR "+R.pct+" · 贏過 "+R.pct+"% 的果粉",cx,hy+312,32,{family:MONO,color:GOLD,align:"center",spacing:2});
     // stats grid (moved up to close the gap)
     var gy=700, cols=[["果齡",R.appleYears],["裝置",R.devs.length],["類別",R.catCount]];
     c.fillStyle=LINE; c.fillRect(P,gy-54,cw,2); c.fillRect(P,gy+94,cw,2);
