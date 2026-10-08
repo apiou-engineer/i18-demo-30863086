@@ -250,7 +250,7 @@
   .card .ccab .more{aspect-ratio:1;border:1px dashed #cfc7b6;border-radius:2.4cqw;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:2cqw;color:var(--soft)}
   .card .cfoot{font-family:var(--mono);font-size:1.9cqw;letter-spacing:.18em;color:var(--soft);margin-top:2.2cqh;text-align:left;text-transform:uppercase}
   .card .cdis{font-family:var(--mono);font-size:1.6cqw;letter-spacing:.1em;color:#a49c88;margin-top:1.8cqh;text-align:left}
-  /* ---------- coupon (股東股利) modal ---------- */
+  /* ---------- coupon (果粉福利) modal ---------- */
   .couponModal{position:fixed;inset:0;z-index:70;display:none}
   .couponModal.open{display:block}
   .cmBack{position:absolute;inset:0;background:rgba(12,11,9,.82);backdrop-filter:blur(3px)}
@@ -348,7 +348,7 @@
 
       <div class="ractions">
         <button class="cta" id="shareBtn">生成我的果粉身家卡 · 分享</button>
-        <button class="cta ghost" id="claimBtn">領取股東股利（優惠）</button>
+        <button class="cta ghost" id="claimBtn">領取果粉福利（優惠）</button>
         <button class="cta ghost" id="againBtn">重新測一次</button>
       </div>
       <div class="rfoot">APIOU · apeelcase.com　·　以上市價估算，Apple 等為 Apple Inc. 商標，僅供型號對照</div>
@@ -364,18 +364,18 @@
     <div class="cardwrap"><img class="cardimg" id="cardImg" alt="你的果粉身家卡"><div class="cardspin" id="cardSpin">生成中…</div></div>
     <div class="smActions">
       <button class="cta" id="smShare">分享到限動 / Threads</button>
-      <button class="cta" id="smCoupon">前往股東股利 · 優惠專區</button>
+      <button class="cta" id="smCoupon">前往果粉福利 · 優惠專區</button>
       <button class="cta ghost" id="smClose">關閉</button>
     </div>
     <div class="smMsg" id="smMsg"></div>
   </div>
 </div>
 
-<!-- COUPON MODAL: the 股東股利 reward -->
+<!-- COUPON MODAL: the 果粉福利 reward -->
 <div class="couponModal" id="couponModal" aria-hidden="true">
   <div class="cmBack" id="cmBack"></div>
   <div class="cmCard">
-    <div class="cmEye">果粉股東股利 · SHAREHOLDER DIVIDEND</div>
+    <div class="cmEye">果粉福利 · FAN PERK</div>
     <div class="cmTitle">雙 10 回饋</div>
     <div class="cmOffer">全館滿 <b>$1,010</b><br>折 <b>$100</b></div>
     <div class="cmCodeRow"><span>結帳折扣碼</span><b class="cmCode" id="cmCode">1010</b></div>
@@ -932,7 +932,7 @@
   $("smBack").addEventListener("click",closeShare);
   $("smClose").addEventListener("click",closeShare);
   $("smShare").addEventListener("click",shareCard);
-  // coupon (股東股利) reveal
+  // coupon (果粉福利) reveal
   function openCoupon(){
     $("cmCode").textContent=COUPON_CODE;
     $("cmGo").href=COUPON_URL; $("cmCopy").textContent="點我複製折扣碼";
