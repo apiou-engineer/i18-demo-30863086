@@ -201,10 +201,11 @@
   document.body.classList.toggle("light", !!state.color.neg);
   document.getElementById("cname").textContent=state.color.en;
 
-  // continue → carry the chosen colour to the bundle finder
+  // Duo goes straight to its accessory category (no APIOU bundle flow); others run the finder
+  if(mid==="duo"){ document.getElementById("cont").innerHTML="選購 Duo 配件&nbsp;&nbsp;&rarr;"; }
   document.getElementById("cont").addEventListener("click",function(){
     document.querySelector(".ui").style.transition="opacity .35s"; document.querySelector(".ui").style.opacity="0";
-    var next = (mid==="duo") ? "https://www.apeelcase.com/categories/for-iphone"   // Duo has no APIOU bundle flow yet (placeholder)
+    var next = (mid==="duo") ? "https://www.apeelcase.com/categories/iphone-duo"
                              : "../finder/?c="+state.color.id+"&m="+mid;
     setTimeout(function(){ location.href=next; }, 300);
   });

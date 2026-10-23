@@ -158,7 +158,7 @@
 (function(){
   var reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
   var MODELS=[
-    {id:"duo", nm:"iPhone Duo", soon:true, chip:"即將推出", foot:"先選購配件", url:"https://www.apeelcase.com/categories/iphone-duo"},
+    {id:"duo", nm:"iPhone Duo", chip:"現正發售", cta:"選擇顏色", foot:"探索 Duo 配色"},
     {id:"pro", nm:"iPhone 18 Pro / Pro Max", chip:"現正預購", cta:"選擇配置", foot:"點擊進入配件推薦系列"}
   ];
   var ARR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -171,7 +171,7 @@
       : '<span class="chip live"><span class="dot"></span>'+m.chip+'</span>';
     var foot = '<div class="c-foot center"><span class="txt">'+m.foot+'</span><span class="arr">&rarr;</span></div>';
     c.innerHTML='<div class="c-top">'+top+'</div><div class="c-mid"><h2 class="m-name">'+m.nm+'</h2></div>'+foot;
-    // Duo looks unavailable (dimmed + lock) but still links out to its accessory category; Pro runs the selection flow
+    // both models run the selection flow now (Duo → colour → Duo accessory category; Pro → colour → finder → offer)
     c.addEventListener("click",function(){ if(m.url){ location.href=m.url; } else { selectModel(m,c); } });
     gridEl.appendChild(c);
   });
